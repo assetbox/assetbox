@@ -1,0 +1,23 @@
+{
+  "name": "@assetbox/cli",
+  "type": "module",
+  "files": [
+    "bin",
+    "package.json"
+  ],
+  "bin": {
+    "assetbox": "./bin/main.cjs"
+  },
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.1.0",
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^5.2.0",
+    "source-map-support": "^0.5.21"
+  }
+}

@@ -13,6 +13,7 @@ coverage
 
 # Dependency directories
 node_modules/
+bin/
 
 # Optional npm cache directory
 .npm

@@ -25,8 +25,11 @@
     "source-map-support": "^0.5.21"
   },
   "dependencies": {
-    "@assetbox/tools": "workspace:^0.1.0",
+    "vite": "^4.2.0",
+    "@assetbox/tools": "workspace:^0.0.0",
     "prompts": "^2.4.2",
-    "workspace-tools": "^0.30.0"
+    "workspace-tools": "^0.30.0",
+    "chalk": "^5.2.0",
+    "express": "^4.18.2"
   }
 }

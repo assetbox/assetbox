@@ -4,5 +4,5 @@
         "moduleResolution": "node",
         "outDir": "bin"
     },
-    "include": ["src/**/*", "../core/src/checkAsset.ts"]
+    "include": ["src/**/*"]
 }

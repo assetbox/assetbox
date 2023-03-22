@@ -1,20 +1,32 @@
 import fs from 'fs/promises'
-import prt from 'prompts'
-import { checkAsset } from './checkAsset'
+import prompts from 'prompts'
+import { text } from 'stream/consumers'
+import { findAssetPath } from './findAssetPath'
 
 export const initialize = async () => {
-    const response = await prt({
-        type: 'text',
-        name: 'path',
-        message: 'Where is the standard directory?',
+    var assetPath = []
+    const response = await prompts({
+        type: 'toggle',
+        name: 'ans',
+        message: 'Set assetPath to the default.',
+        initial: true,
+        active: 'yes',
+        inactive: 'no',
     })
-    console.log('response:' + response.path)
-    if (response.path.length === 0) {
-        response.path = './src/assets/**/*'
+    if (response.ans === true) {
+        assetPath = ['./src/assets/**/*']
+    } else {
+        await prompts({
+            type: 'confirm',
+            name: 'ans',
+            message: 'Please write assetbox.config.json yourself.',
+            initial: true,
+        })
     }
     await fs.writeFile(
         './assetbox.config.json',
-        `{\n\t"path":"${response.path}"\n}`
+        JSON.stringify({ assetPaths: [assetPath] }, null, 2)
     )
-    console.log(await checkAsset())
+
+    console.log(await findAssetPath())
 }

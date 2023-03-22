@@ -2,7 +2,7 @@ import { createServer as createViteServer } from 'vite'
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
-import { render } from '@assetbox/manager'
+import { render } from '../ssr/entry-server'
 
 export const createServer = async () => {
     const app = express()

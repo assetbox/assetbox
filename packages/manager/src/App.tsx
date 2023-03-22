@@ -1,5 +1,12 @@
-function App() {
-  return <div>Hello World</div>;
-}
+import { useState } from "react";
 
-export default App;
+export function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      Count {count}
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </div>
+  );
+}

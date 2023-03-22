@@ -1,1 +1,1 @@
-export * from './util/render'
+export * from './App'

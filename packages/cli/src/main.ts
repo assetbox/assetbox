@@ -14,7 +14,6 @@ switch (prefixArgv) {
     }
     case 'init': {
         initialize()
-
         break
     }
 }

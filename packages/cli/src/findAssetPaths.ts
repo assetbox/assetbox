@@ -1,21 +1,22 @@
 import fs from 'fs/promises'
-import { config } from 'process'
-import { ASSET_EXTENSIONS, CONFIG_NAME } from './common/const'
+import { ASSET_EXTENSIONS } from './common/const'
 import glob from 'glob'
 import { findPackageRoot } from 'workspace-tools'
-import path from 'path'
+import { resolve } from 'path'
 
 export const findAssetPaths = async () => {
-    const configPath = path.resolve(findPackageRoot(__dirname), CONFIG_NAME)
-    console.log(configPath)
+    const configPath = resolve(
+        findPackageRoot(process.cwd())!,
+        'assetbox.config.json'
+    )
     const data = await fs.readFile(configPath)
     const json = JSON.parse(data.toString())
+
     const fileList = await Promise.all(
-        json.assetPaths.map((assetPath) => glob(assetPath))
+        json.assetPaths.map((assetPath: string) => glob(assetPath))
     )
-    const result = fileList.flat().filter((file) => {
+    return fileList.flat().filter((file) => {
         const fileExtension = file.split('.').pop().toLowerCase()
         return ASSET_EXTENSIONS.includes(fileExtension)
     })
-    return result
 }

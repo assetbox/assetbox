@@ -2,13 +2,20 @@ import { createServer as createViteServer } from 'vite'
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
-import { render } from '../ssr/entry-server'
 
 export const createServer = async () => {
     const app = express()
     const vite = await createViteServer({
         server: { middlewareMode: true },
         appType: 'custom',
+        resolve: {
+            alias: {
+                '@assetbox/manager': path.resolve(
+                    __dirname,
+                    '../../manager/dist/entry.mjs'
+                ),
+            },
+        },
     })
 
     app.use(vite.middlewares)
@@ -21,8 +28,10 @@ export const createServer = async () => {
                 'utf-8'
             )
             template = await vite.transformIndexHtml(url, template)
+            const { render } = await vite.ssrLoadModule(
+                path.resolve(__dirname, '../src/ssr/entry-server.tsx')
+            )
             const appHtml = await render(url)
-
             const html = template.replace(`<!--ssr-outlet-->`, appHtml)
 
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html)

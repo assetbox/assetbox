@@ -2,11 +2,12 @@ import fs from 'fs/promises'
 import { config } from 'process'
 import { ASSET_EXTENSIONS, CONFIG_NAME } from './common/const'
 import glob from 'glob'
-import wst from 'workspace-tools'
+import { findPackageRoot } from 'workspace-tools'
+import path from 'path'
 
-export const findAssetPath = async () => {
-    const assetExtensions = ASSET_EXTENSIONS
-    const configPath = wst.findPackageRoot(__dirname) + CONFIG_NAME
+export const findAssetPaths = async () => {
+    const configPath = path.resolve(findPackageRoot(__dirname), CONFIG_NAME)
+    console.log(configPath)
     const data = await fs.readFile(configPath)
     const json = JSON.parse(data.toString())
     const fileList = await Promise.all(

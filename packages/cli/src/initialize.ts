@@ -1,8 +1,8 @@
 import fs from 'fs/promises'
 import prompts from 'prompts'
 import { text } from 'stream/consumers'
-import { findAssetPath } from './findAssetPath'
-import wst from 'workspace-tools'
+import { findAssetPaths } from './findAssetPaths'
+import { findPackageRoot } from 'workspace-tools'
 
 export const initialize = async () => {
     var assetPath = ''
@@ -25,9 +25,9 @@ export const initialize = async () => {
         })
     }
     await fs.writeFile(
-        `${wst.findPackageRoot(__dirname)}/assetbox.config.json`,
+        `${findPackageRoot(__dirname)}/assetbox.config.json`,
         JSON.stringify({ assetPaths: [assetPath] }, null, 2)
     )
 
-    console.log(await findAssetPath())
+    console.log(await findAssetPaths())
 }

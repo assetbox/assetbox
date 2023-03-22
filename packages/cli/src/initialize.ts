@@ -2,9 +2,10 @@ import fs from 'fs/promises'
 import prompts from 'prompts'
 import { text } from 'stream/consumers'
 import { findAssetPath } from './findAssetPath'
+import wst from 'workspace-tools'
 
 export const initialize = async () => {
-    var assetPath = []
+    var assetPath = ''
     const response = await prompts({
         type: 'toggle',
         name: 'ans',
@@ -14,7 +15,7 @@ export const initialize = async () => {
         inactive: 'no',
     })
     if (response.ans === true) {
-        assetPath = ['./src/assets/**/*']
+        assetPath = './src/assets/**/*'
     } else {
         await prompts({
             type: 'confirm',
@@ -24,7 +25,7 @@ export const initialize = async () => {
         })
     }
     await fs.writeFile(
-        './assetbox.config.json',
+        `${wst.findPackageRoot(__dirname)}/assetbox.config.json`,
         JSON.stringify({ assetPaths: [assetPath] }, null, 2)
     )
 

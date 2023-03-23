@@ -6,7 +6,9 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install || true",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "test:type": "turbo test:type",
+    "lint": "eslint . --ext .ts,.tsx,.js,.json --fix"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
@@ -20,6 +22,8 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.2",
+    "prettier": "^2.8.6",
+    "turbo": "^1.8.5",
     "typescript": "^4.9.5"
   },
   "husky": {
@@ -32,5 +36,6 @@
       "eslint --fix",
       "git add"
     ]
-  }
+  },
+  "packageManager": "pnpm@7.30.0"
 }

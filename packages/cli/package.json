@@ -1,31 +1,32 @@
 {
-    "name": "@assetbox/cli",
-    "type": "module",
-    "files": [
-        "bin",
-        "package.json"
-    ],
-    "bin": {
-        "assetbox": "./bin/main.cjs"
-    },
-    "scripts": {
-        "build": "node esbuild.config.js"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "version": "0.1.0",
-    "license": "MIT",
-    "devDependencies": {
-        "@types/node": "^18.15.3",
-        "@types/prompts": "^2.4.3",
-        "chalk": "^5.2.0",
-        "glob": "^9.3.0",
-        "source-map-support": "^0.5.21"
-    },
-    "dependencies": {
-        "@assetbox/tools": "workspace:^0.1.0",
-        "prompts": "^2.4.2",
-        "workspace-tools": "^0.30.0"
-    }
+  "name": "@assetbox/cli",
+  "type": "module",
+  "files": [
+    "bin",
+    "package.json"
+  ],
+  "bin": {
+    "assetbox": "./bin/main.cjs"
+  },
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "test:type": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.1.0",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@types/prompts": "^2.4.3",
+    "chalk": "^5.2.0",
+    "glob": "^9.3.0",
+    "source-map-support": "^0.5.21"
+  },
+  "dependencies": {
+    "@assetbox/tools": "workspace:^0.1.0",
+    "prompts": "^2.4.2",
+    "workspace-tools": "^0.30.0"
+  }
 }

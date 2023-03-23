@@ -1,1 +1,1 @@
-export * from './findAssetPaths'
+export * from "./findAssetPaths";

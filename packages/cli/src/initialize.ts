@@ -31,7 +31,7 @@ export const initialize = async () => {
     }
 
     await fs.writeFile(
-        resolve(packageRoot, '/assetbox.config.json'),
+        resolve(packageRoot, 'assetbox.config.json'),
         JSON.stringify({ assetPaths: [assetPath] }, null, 2)
     )
 }

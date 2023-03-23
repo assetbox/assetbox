@@ -24,7 +24,7 @@ jobs:
         - run: pnpm install
 
         - name: Type Check
-          run: pnpm tsc --noEmit
+          run: pnpm test:type
 
         - name: Lint Check
-          run: pnpm eslint .
+          run: pnpm lint

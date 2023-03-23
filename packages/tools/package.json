@@ -1,0 +1,21 @@
+{
+    "name": "@assetbox/tools",
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "version": "0.1.0",
+    "scripts": {
+        "build": "tsc && node esbuild.config.js"
+    },
+    "dependencies": {
+        "glob": "^9.3.0",
+        "workspace-tools": "^0.30.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18.15.3"
+    }
+}

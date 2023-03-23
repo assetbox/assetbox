@@ -1,4 +1,5 @@
 import { build } from "esbuild";
+
 import packagesJson from "./package.json" assert { type: "json" };
 
 build({

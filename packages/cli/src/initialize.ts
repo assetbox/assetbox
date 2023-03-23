@@ -17,12 +17,7 @@ export const initialize = async () => {
     if (shouldDefault) {
         assetPath = './src/assets/**/*'
     } else {
-        await prompts({
-            type: 'confirm',
-            name: 'ans',
-            message: 'Please write assetbox.config.json yourself.',
-            initial: true,
-        })
+        console.log('Please write assetbox.config.json yourself.')
     }
 
     const packageRoot = findPackageRoot(process.cwd())

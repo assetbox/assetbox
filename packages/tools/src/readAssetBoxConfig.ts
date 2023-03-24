@@ -4,7 +4,6 @@ import { findPackageRoot } from "workspace-tools";
 import type { AssetBoxConfig } from "./types";
 
 export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
-  // all keys are optional
   const options = {
     stopDir: findPackageRoot(process.cwd()),
     searchPlaces: ["assetbox.config.js", "assetbox.config.cjs"],

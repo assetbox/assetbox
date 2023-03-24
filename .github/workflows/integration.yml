@@ -23,6 +23,9 @@ jobs:
             cache: 'pnpm'
         - run: pnpm install
 
+        - name: Build
+          run: pnpm build
+
         - name: Type Check
           run: pnpm test:type
 

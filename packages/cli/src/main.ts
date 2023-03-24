@@ -1,26 +1,44 @@
 #!/usr/bin/env node
 
-import pc from "picocolors";
+import { Command } from "commander";
 
-import packagesJson from "../package.json" assert { type: "json" };
+import { version as packageVersion } from "../package.json";
 import { initialize } from "./initialize";
-import { log } from "./utils/console";
 import { createServer } from "./utils/createServer";
 
-const argv = process.argv.slice(2);
-const prefixArgv = argv[0];
+const program = new Command();
 
-switch (prefixArgv) {
-  case "version": {
-    log("assetbox version", pc.green(packagesJson.version));
-    break;
-  }
-  case "init": {
-    initialize();
-    break;
-  }
-  case "dev": {
-    createServer();
-    break;
-  }
-}
+program
+  .name("assetbox")
+  .description(
+    "Assets (svg, img, etc.) management tools to help you develop the web"
+  )
+  .version(packageVersion, "-v, --version", "output the current version");
+
+program
+  .command("init")
+  .description("Create asset.config.js for the project")
+  .action(async () => {
+    try {
+      await initialize();
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
+    }
+  });
+
+program
+  .command("dev")
+  .description("Open the development server of the assetbox")
+  .action(async () => {
+    try {
+      await createServer();
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
+    }
+  });
+
+program.parse();

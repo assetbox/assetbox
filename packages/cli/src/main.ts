@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import chalk from "chalk";
+import pc from "picocolors";
 
 import packagesJson from "../package.json" assert { type: "json" };
 import { initialize } from "./initialize";
@@ -12,7 +12,7 @@ const prefixArgv = argv[0];
 
 switch (prefixArgv) {
   case "version": {
-    log("assetbox version", chalk.green(packagesJson.version));
+    log("assetbox version", pc.green(packagesJson.version));
     break;
   }
   case "init": {

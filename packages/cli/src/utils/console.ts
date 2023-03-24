@@ -1,5 +1,5 @@
-import chalk from "chalk";
+import pc from "picocolors";
 
-export const log = (message?: any, ...optionalParams: any[]) => {
-  console.log(chalk.blue(["📦", message].join(" "), optionalParams));
+export const log = (...messages: string[]) => {
+  console.log(pc.blue(["📦", ...messages].join(" ")));
 };

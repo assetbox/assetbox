@@ -8,7 +8,10 @@ build({
   minify: true,
   sourcemap: true,
   format: "cjs",
-  //   external: Object.keys(packagesJson.dependencies),
+  external: Object.keys({
+    ...packagesJson.dependencies,
+    ...packagesJson.devDependencies,
+  }),
   platform: "node",
   outfile: "./bin/main.cjs",
 });

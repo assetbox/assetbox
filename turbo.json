@@ -1,6 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "test:type": {}
+    "test:type": {},
+    "build": {
+      "outputs": ["dist/**", "bin/**"]
+    }
   }
 }

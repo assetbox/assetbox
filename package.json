@@ -8,6 +8,7 @@
     "prepare": "husky install || true",
     "preinstall": "npx only-allow pnpm",
     "test:type": "turbo test:type",
+    "build": "turbo build",
     "lint": "eslint . --ext .ts,.tsx,.js,.json --fix"
   },
   "devDependencies": {

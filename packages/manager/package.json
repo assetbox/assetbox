@@ -6,13 +6,14 @@
   "types": "./dist/entry.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/entry.cjs"
+      "require": "./dist/entry.cjs",
+      "import": "./dist/entry.mjs"
     }
   },
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build": "esbuild ./src/entry.ts --bundle --outfile=./dist/entry.cjs --platform=node && tsc --project tsconfig.build.json",
+    "build": "tsc --project tsconfig.build.json && node esbuild.config.js",
     "test:type": "tsc --noEmit"
   },
   "dependencies": {

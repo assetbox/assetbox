@@ -1,7 +1,7 @@
 import { lilconfig } from "lilconfig";
 import { findPackageRoot } from "workspace-tools";
 
-import type { AssetBoxConfig } from "./types";
+import type { AssetBoxConfig } from "./types/types";
 
 export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   const options = {

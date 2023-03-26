@@ -22,5 +22,5 @@ bin/
 .eslintcache
 
 dist
-assetbox.config.json
+assetbox.config.*
 packages/cli/src/assets/

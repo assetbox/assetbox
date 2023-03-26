@@ -17,7 +17,7 @@ export const initialize = async () => {
   if (shouldDefault) {
     assetPath = "./src/assets/**/*";
   } else {
-    console.log("Please write assetbox.config.json yourself.");
+    console.log("Please write assetbox.config.js yourself.");
   }
 
   const packageRoot = findPackageRoot(process.cwd());
@@ -26,7 +26,10 @@ export const initialize = async () => {
   }
 
   await fs.writeFile(
-    resolve(packageRoot, "assetbox.config.json"),
-    JSON.stringify({ assetPaths: [assetPath] }, null, 2)
+    resolve(packageRoot, "assetbox.config.cjs"),
+    `module.exports = {
+  assetPaths: [${`"${assetPath}"`}],
+};
+`
   );
 };

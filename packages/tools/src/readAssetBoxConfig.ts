@@ -1,7 +1,8 @@
 import { lilconfig } from "lilconfig";
+import { resolve } from "path";
 import { findPackageRoot } from "workspace-tools";
 
-import type { AssetBoxConfig } from "./types/types";
+import type { AssetBoxConfig } from "./types";
 
 export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   const options = {
@@ -14,9 +15,8 @@ export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   if (!value) {
     throw new Error("Couldn't find assetbox.config.js.");
   }
-
   return {
-    filepath: value.config,
+    filePaths: [resolve(options.stopDir!, value.config.assetPaths[0])],
     ...value.config,
   };
 };

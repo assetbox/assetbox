@@ -4,10 +4,9 @@ import { ASSET_EXTENSIONS } from "./common/const";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 
 export const findAssetPaths = async () => {
-  const { assetPaths } = await readAssetBoxConfig();
-
+  const { filePaths } = await readAssetBoxConfig();
   const fileList = await Promise.all(
-    assetPaths.map((assetPath: string) => glob(assetPath))
+    filePaths.map((filePath: string) => glob(filePath))
   );
   return fileList.flat().filter((file) => {
     const fileExtension = file.split(".").pop()?.toLowerCase();

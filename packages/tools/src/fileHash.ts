@@ -1,11 +1,9 @@
-import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 
 import crypto from "crypto";
 
-import { findAssetPaths } from "./findAssetPaths";
-
-const createFileHash = (file: string) => {
-  const data = readFileSync(file);
+const createFileHash = async (file: string) => {
+  const data = await readFile(file);
   const hash = crypto
     .createHash("md5")
     .update(data as unknown as string, "utf-8")
@@ -31,12 +29,9 @@ const compareHash = (fileHashMap: Record<string, string>) => {
   return output;
 };
 
-export const createFileHashMap = async () => {
-  const assetFiles = await findAssetPaths();
-  console.log(assetFiles);
-
+export const findUniqueFileSet = async (assetFiles: string[]) => {
   const fileHashes = await Promise.all(
-    assetFiles.map((file) => ({ [file]: createFileHash(file) }))
+    assetFiles.map(async (file) => ({ [file]: await createFileHash(file) }))
   );
   const filehashMap = fileHashes.reduce(
     (result, fileHash) => ({

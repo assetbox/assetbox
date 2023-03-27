@@ -1,23 +1,20 @@
-// eslint-disable-next-line simple-import-sort/imports
+import { readFileSync } from "node:fs";
+
 import crypto from "crypto";
-import { readFile } from "node:fs/promises";
+
 import { findAssetPaths } from "./findAssetPaths";
 
-const createFileHash = async (file: string) => {
-  try {
-    const data = await readFile(file);
-    const hash = crypto
-      .createHash("md5")
-      .update(data as unknown as string, "utf-8")
-      .digest("hex");
-    return { [file]: hash };
-  } catch (error) {
-    console.error(error);
-  }
+const createFileHash = (file: string) => {
+  const data = readFileSync(file);
+  const hash = crypto
+    .createHash("md5")
+    .update(data as unknown as string, "utf-8")
+    .digest("hex");
+  return hash;
 };
 
-const compareHash = async (file: any) => {
-  const input = file;
+const compareHash = (fileHashMap: Record<string, string>) => {
+  const input = fileHashMap;
   const output = [];
 
   const uniqueHashes = new Set(Object.values(input));
@@ -27,26 +24,27 @@ const compareHash = async (file: any) => {
       (fileName) => input[fileName] === hash
     );
 
-    if (fileNames.length !== 1) {
+    if (fileNames.length > 1) {
       output.push(fileNames);
     }
   }
   return output;
 };
 
-export const fileHash = async () => {
-  const assetFile = await findAssetPaths();
-  let result;
+export const createFileHashMap = async () => {
+  const assetFiles = await findAssetPaths();
+  console.log(assetFiles);
 
-  Promise.all(assetFile.map((file) => createFileHash(file)))
-    .then(async (res) => {
-      const sortObject = res.reduce((acc, curr) => {
-        return { ...acc, ...curr };
-      }, {});
-      result = await compareHash(sortObject);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  return result;
+  const fileHashes = await Promise.all(
+    assetFiles.map((file) => ({ [file]: createFileHash(file) }))
+  );
+  const filehashMap = fileHashes.reduce(
+    (result, fileHash) => ({
+      ...result,
+      ...fileHash,
+    }),
+    {} as Record<string, string>
+  );
+
+  return compareHash(filehashMap);
 };

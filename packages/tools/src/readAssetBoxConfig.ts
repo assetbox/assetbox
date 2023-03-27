@@ -14,6 +14,7 @@ export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   if (!value) {
     throw new Error("Couldn't find assetbox.config.js.");
   }
+
   return {
     filepath: value.config,
     ...value.config,

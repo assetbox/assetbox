@@ -15,41 +15,39 @@ export const Gallery = () => {
   });
 
   return (
-    <>
+    <div
+      ref={parentRef}
+      style={{
+        height: `580px`,
+        overflow: "auto",
+      }}
+    >
       <div
-        ref={parentRef}
         style={{
-          height: `580px`,
-          overflow: "auto",
+          height: `${rowVirtualizer.getTotalSize()}px`,
+          width: "100%",
+          position: "relative",
         }}
       >
-        <div
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: "100%",
-            position: "relative",
-          }}
-        >
-          {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-            <div
-              key={virtualItem.key}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: `${virtualItem.size}px`,
-                transform: `translateY(${virtualItem.start}px)`,
-              }}
-            >
-              <img
-                src={images[virtualItem.index % images.length]}
-                style={{ width: "100%" }}
-              />
-            </div>
-          ))}
-        </div>
+        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+          <div
+            key={virtualItem.key}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: `${virtualItem.size}px`,
+              transform: `translateY(${virtualItem.start}px)`,
+            }}
+          >
+            <img
+              src={images[virtualItem.index % images.length]}
+              style={{ width: "100%" }}
+            />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };

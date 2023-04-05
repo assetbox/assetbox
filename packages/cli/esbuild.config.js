@@ -33,10 +33,10 @@ const build = async () => {
     esbuild({
       entryPoints: ["./src/ssr/entryServer.tsx"],
       bundle: true,
-      format: "cjs",
+      format: "esm",
       external: ["react", "react-dom", "react-router-dom", "@assetbox/manager"],
       platform: "node",
-      outfile: "./bin/ssr/entryServer.cjs",
+      outfile: "./bin/ssr/entryServer.mjs",
     }),
     esbuild({
       entryPoints: ["./src/ssr/entryClient.tsx"],

@@ -4,7 +4,7 @@ import { Command } from "commander";
 
 import { version as packageVersion } from "../package.json";
 import { initialize } from "./initialize";
-import { createServer } from "./utils/createServer";
+import { createServer } from "./ssr/createServer";
 
 const program = new Command();
 

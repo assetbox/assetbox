@@ -8,29 +8,30 @@ export const createServer = async () => {
   const vite = await createViteServer({
     server: { middlewareMode: true },
     appType: "custom",
-    resolve: {
-      alias: {
-        "@assetbox/manager": path.resolve(
-          __dirname,
-          "../../manager/dist/entry.mjs"
-        ),
-      },
-    },
   });
 
   app.use(vite.middlewares);
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
-
     try {
-      let template = fs.readFileSync(
-        path.resolve(__dirname, "../index.html"),
-        "utf-8"
-      );
+      let template = fs
+        .readFileSync(
+          path.resolve(__dirname, "ssr", "templates", "index.html"),
+          "utf-8"
+        )
+        .replace(
+          "<!--entry-client-outlet-->",
+          path.resolve(__dirname, "ssr", "entryClient.mjs")
+        );
       template = await vite.transformIndexHtml(url, template);
-      const { render } = await vite.ssrLoadModule(
-        path.resolve(__dirname, "../src/ssr/entry-server.tsx")
+
+      const entryServerModulePath = path.resolve(
+        __dirname,
+        "ssr",
+        "entryServer.mjs"
       );
+
+      const { render } = await vite.ssrLoadModule(entryServerModulePath);
       const appHtml = await render(url);
       const html = template.replace(`<!--ssr-outlet-->`, appHtml);
 

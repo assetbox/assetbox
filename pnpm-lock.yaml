@@ -49,9 +49,6 @@ importers:
 
   example/react:
     dependencies:
-      '@assetbox/cli':
-        specifier: workspace:^
-        version: link:../../packages/cli
       '@tanstack/react-virtual':
         specifier: 3.0.0-beta.54
         version: 3.0.0-beta.54(react@18.2.0)
@@ -62,6 +59,12 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
+      '@assetbox/cli':
+        specifier: workspace:^
+        version: link:../../packages/cli
+      '@assetbox/manager':
+        specifier: workspace:^
+        version: link:../../packages/manager
       '@types/react':
         specifier: ^18.0.28
         version: 18.0.28

@@ -6,16 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "assetbox": "assetbox dev"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@assetbox/cli": "workspace:^",
     "@tanstack/react-virtual": "3.0.0-beta.54",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@assetbox/cli": "workspace:^",
+    "@assetbox/manager": "workspace:^",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.0.0",

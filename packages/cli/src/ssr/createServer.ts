@@ -1,7 +1,8 @@
 import express from "express";
 import fs from "fs";
-import path from "path";
 import { createServer as createViteServer } from "vite";
+
+import { resolveCliRoot } from "../utils/path";
 
 export const createServer = async () => {
   const app = express();
@@ -15,21 +16,14 @@ export const createServer = async () => {
     const url = req.originalUrl;
     try {
       let template = fs
-        .readFileSync(
-          path.resolve(__dirname, "ssr", "templates", "index.html"),
-          "utf-8"
-        )
+        .readFileSync(resolveCliRoot("ssr", "templates", "index.html"), "utf-8")
         .replace(
           "<!--entry-client-outlet-->",
-          path.resolve(__dirname, "ssr", "entryClient.mjs")
+          resolveCliRoot("ssr", "entryClient.mjs")
         );
       template = await vite.transformIndexHtml(url, template);
 
-      const entryServerModulePath = path.resolve(
-        __dirname,
-        "ssr",
-        "entryServer.mjs"
-      );
+      const entryServerModulePath = resolveCliRoot("ssr", "entryServer.mjs");
 
       const { render } = await vite.ssrLoadModule(entryServerModulePath);
       const appHtml = await render(url);

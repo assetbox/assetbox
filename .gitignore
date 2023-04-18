@@ -22,7 +22,7 @@ bin/
 .eslintcache
 
 dist
-packages/cli/src/assets/
+assetbox-dist
 
 .turbo
 

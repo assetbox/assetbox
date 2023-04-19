@@ -5,6 +5,7 @@ import { Command } from "commander";
 import { version as packageVersion } from "../package.json";
 import { initialize } from "./initialize";
 import { createServer } from "./ssr/createServer";
+import { staticBuild } from "./ssr/staticBuild";
 
 const program = new Command();
 
@@ -30,10 +31,25 @@ program
 
 program
   .command("dev")
-  .description("Open the development server of the assetbox")
+  .description("Open the development server of the assetbox.")
   .action(async () => {
     try {
       await createServer();
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
+    }
+  });
+
+program
+  .command("static-build")
+  .description(
+    "Generate an icon/image viewer static site. The site is in read-only mode."
+  )
+  .action(async () => {
+    try {
+      await staticBuild();
     } catch (e) {
       if (e instanceof Error) {
         console.error(e.message);

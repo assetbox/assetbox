@@ -3,6 +3,11 @@ import { copy } from "esbuild-plugin-copy";
 
 import packagesJson from "./package.json" assert { type: "json" };
 
+const ENTRY_COMMON_OPTIONS = {
+  bundle: true,
+  external: ["react", "react-dom", "react-router-dom", "@assetbox/manager"],
+};
+
 const build = async () => {
   Promise.all([
     esbuild({
@@ -20,11 +25,11 @@ const build = async () => {
       minify: true,
       sourcemap: true,
       format: "cjs",
+      platform: "node",
       external: Object.keys({
         ...packagesJson.dependencies,
         ...packagesJson.devDependencies,
       }),
-      platform: "node",
       outfile: "./bin/main.cjs",
       define: {
         "import.meta.env.ESBUILD_PROD": '"true"',
@@ -32,17 +37,22 @@ const build = async () => {
     }),
     esbuild({
       entryPoints: ["./src/ssr/entryServer.tsx"],
-      bundle: true,
+      ...ENTRY_COMMON_OPTIONS,
       format: "esm",
-      external: ["react", "react-dom", "react-router-dom", "@assetbox/manager"],
       platform: "node",
       outfile: "./bin/ssr/entryServer.mjs",
     }),
     esbuild({
+      entryPoints: ["./src/ssr/entryServer.tsx"],
+      ...ENTRY_COMMON_OPTIONS,
+      format: "cjs",
+      platform: "node",
+      outfile: "./bin/ssr/entryServer.cjs",
+    }),
+    esbuild({
       entryPoints: ["./src/ssr/entryClient.tsx"],
-      bundle: true,
+      ...ENTRY_COMMON_OPTIONS,
       format: "esm",
-      external: ["react", "react-dom", "react-router-dom", "@assetbox/manager"],
       platform: "browser",
       outfile: "./bin/ssr/entryClient.mjs",
     }),

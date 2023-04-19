@@ -6,7 +6,6 @@ import { build } from "vite";
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
 
 export const staticBuild = async () => {
-  console.log(__dirname, process.cwd());
   let template = await readFile(
     resolveCliRoot("ssr", "templates", "index.html"),
     "utf-8"
@@ -29,8 +28,8 @@ export const staticBuild = async () => {
   const entryServerModulePath = resolve(__dirname, "ssr", "entryServer.cjs");
 
   const { render } = await import(entryServerModulePath);
-
   const appHtml = await render("/");
+
   template = await readFile(
     resolveProjectRoot("assetbox-dist", "index.html"),
     "utf-8"

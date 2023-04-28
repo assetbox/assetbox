@@ -16,7 +16,7 @@ export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   }
 
   return {
-    filepath: value.config,
+    filePath: value.filepath,
     ...value.config,
   };
 };

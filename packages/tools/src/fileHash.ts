@@ -29,7 +29,7 @@ const compareHash = (fileHashMap: Record<string, string>) => {
   return output;
 };
 
-export const findUniqueFileSet = async (assetFiles: string[]) => {
+export const findDupeFileSet = async (assetFiles: string[]) => {
   const fileHashes = await Promise.all(
     assetFiles.map(async (file) => ({ [file]: await createFileHash(file) }))
   );

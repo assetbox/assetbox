@@ -27,6 +27,8 @@
     "source-map-support": "^0.5.21"
   },
   "dependencies": {
+    "@assetbox/trpc": "workspace:^1.0.0",
+    "@trpc/server": "10.21.3-alpha.3",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "commander": "^10.0.0",

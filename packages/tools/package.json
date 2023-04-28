@@ -7,6 +7,7 @@
       "require": "./dist/index.cjs"
     }
   },
+  "types": "./dist/index.d.ts",
   "version": "0.1.0",
   "scripts": {
     "build": "tsc --emitDeclarationOnly && node esbuild.config.js",

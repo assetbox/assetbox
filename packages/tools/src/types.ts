@@ -1,4 +1,4 @@
 export type AssetBoxConfig = {
-  filePath: string;
+  configFilePath: string;
   assetPaths: string[];
 };

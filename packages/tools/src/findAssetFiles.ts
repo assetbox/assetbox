@@ -4,7 +4,7 @@ import { findPackageRoot } from "workspace-tools";
 
 import { ASSET_EXTENSIONS } from "./common/const";
 
-export const findAssetPaths = async (assetPaths: string[]) => {
+export const findAssetFiles = async (assetPaths: string[]) => {
   const files = await Promise.all(
     assetPaths.map((assetPath: string) => glob(assetPath))
   );

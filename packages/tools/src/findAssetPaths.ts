@@ -3,10 +3,8 @@ import { resolve } from "path";
 import { findPackageRoot } from "workspace-tools";
 
 import { ASSET_EXTENSIONS } from "./common/const";
-import { readAssetBoxConfig } from "./readAssetBoxConfig";
 
-export const findAssetPaths = async () => {
-  const { assetPaths } = await readAssetBoxConfig();
+export const findAssetPaths = async (assetPaths: string[]) => {
   const files = await Promise.all(
     assetPaths.map((assetPath: string) => glob(assetPath))
   );

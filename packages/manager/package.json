@@ -19,6 +19,7 @@
   "dependencies": {
     "@assetbox/trpc": "workspace:^1.0.0",
     "@trpc/client": "^10.21.2",
+    "@trpc/server": "10.21.3-alpha.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0"

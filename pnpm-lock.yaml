@@ -162,7 +162,10 @@ importers:
         version: link:../trpc
       '@trpc/client':
         specifier: ^10.21.2
-        version: 10.21.2
+        version: 10.21.2(@trpc/server@10.21.3-alpha.3)
+      '@trpc/server':
+        specifier: 10.21.3-alpha.3
+        version: 10.21.3-alpha.3
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -1150,10 +1153,12 @@ packages:
     resolution: {integrity: sha512-jtkwqdP2rY2iCCDVAFuaNBH3fiEi29aTn2RhtIoky8DTTiCdc48plpHHreLwmv1PICJ4AJUUESaq3xa8fZH8+g==}
     dev: false
 
-  /@trpc/client@10.21.2:
+  /@trpc/client@10.21.2(@trpc/server@10.21.3-alpha.3):
     resolution: {integrity: sha512-It5NjrdOqT9UyrJPzpSfT9SAECFt2QxTM/XOX7PQ2s/CnvFCc4420UITV7lYJiWLsD8zdG1CLLO6KdFvDL11FQ==}
     peerDependencies:
       '@trpc/server': 10.21.2
+    dependencies:
+      '@trpc/server': 10.21.3-alpha.3
     dev: false
 
   /@trpc/server@10.21.3-alpha.3:

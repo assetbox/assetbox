@@ -90,6 +90,12 @@ importers:
 
   packages/cli:
     dependencies:
+      '@assetbox/trpc':
+        specifier: workspace:^1.0.0
+        version: link:../trpc
+      '@trpc/server':
+        specifier: ^10.23.0
+        version: 10.23.0
       '@types/react-dom':
         specifier: ^18.0.11
         version: 18.0.11
@@ -128,7 +134,7 @@ importers:
         version: 0.30.0
     devDependencies:
       '@assetbox/manager':
-        specifier: workspace:^0.0.0
+        specifier: workspace:^
         version: link:../manager
       '@types/express':
         specifier: ^4.17.17
@@ -151,6 +157,12 @@ importers:
 
   packages/manager:
     dependencies:
+      '@trpc/client':
+        specifier: ^10.23.0
+        version: 10.23.0(@trpc/server@10.23.0)
+      '@trpc/server':
+        specifier: ^10.23.0
+        version: 10.23.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -161,6 +173,12 @@ importers:
         specifier: ^6.9.0
         version: 6.9.0(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
+      '@assetbox/trpc':
+        specifier: workspace:^1.0.0
+        version: link:../trpc
+      '@types/node':
+        specifier: ^18.15.3
+        version: 18.15.3
       '@types/react':
         specifier: ^18.0.28
         version: 18.0.28
@@ -189,6 +207,22 @@ importers:
         specifier: ^0.30.0
         version: 0.30.0
     devDependencies:
+      '@types/node':
+        specifier: ^18.15.3
+        version: 18.15.3
+
+  packages/trpc:
+    dependencies:
+      esbuild:
+        specifier: ^0.17.11
+        version: 0.17.11
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@trpc/server':
+        specifier: 10.21.3-alpha.3
+        version: 10.21.3-alpha.3
       '@types/node':
         specifier: ^18.15.3
         version: 18.15.3
@@ -1120,6 +1154,22 @@ packages:
 
   /@tanstack/virtual-core@3.0.0-beta.54:
     resolution: {integrity: sha512-jtkwqdP2rY2iCCDVAFuaNBH3fiEi29aTn2RhtIoky8DTTiCdc48plpHHreLwmv1PICJ4AJUUESaq3xa8fZH8+g==}
+    dev: false
+
+  /@trpc/client@10.23.0(@trpc/server@10.23.0):
+    resolution: {integrity: sha512-7hTh9OjVIx4Co3kUyIu94SjbUIuS2WKl3E5BMseYbNOHfeY5rqwkCsw0N5EHWszhIVttUMDE0oCf10tNhYEq1A==}
+    peerDependencies:
+      '@trpc/server': 10.23.0
+    dependencies:
+      '@trpc/server': 10.23.0
+    dev: false
+
+  /@trpc/server@10.21.3-alpha.3:
+    resolution: {integrity: sha512-ICZbOLocqd570lHpiOt7XaE5vfLXyalNPl7JPtsP5jQ1WUaORB34R6sgvfvv/boruzM9ArpYTG7KRhBqM0SJoA==}
+    dev: true
+
+  /@trpc/server@10.23.0:
+    resolution: {integrity: sha512-0CPfGZK3v3gfAL8ylV5vDJVBQtPp47EB4Vgx6WItSXmwYQlLC39ZC3gkZ4I5cGpQKl4l3QrNNeUvIcse4hlMxA==}
     dev: false
 
   /@tsconfig/node10@1.0.9:
@@ -4187,3 +4237,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod@3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false

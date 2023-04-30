@@ -2,7 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "test:type": {},
+    "@assetbox/trpc#build": {
+      "outputs": ["dist/**"]
+    },
     "build": {
+      "dependsOn": ["@assetbox/trpc#build"],
       "outputs": ["dist/**", "bin/**"]
     }
   }

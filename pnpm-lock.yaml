@@ -176,6 +176,9 @@ importers:
         specifier: ^6.9.0
         version: 6.9.0(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
+      '@types/node':
+        specifier: ^18.15.3
+        version: 18.15.3
       '@types/react':
         specifier: ^18.0.28
         version: 18.0.28
@@ -190,7 +193,7 @@ importers:
         version: 4.9.5
       vite:
         specifier: ^4.2.0
-        version: 4.2.0
+        version: 4.2.0(@types/node@18.15.3)
 
   packages/tools:
     dependencies:
@@ -4158,7 +4161,6 @@ packages:
       rollup: 3.19.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: false
 
   /which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}

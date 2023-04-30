@@ -19,7 +19,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@trpc/server": ["node_modules/@trpc/server"]
+      "@trpc/server": ["node_modules/@trpc/server"],
+      "@assetbox/trpc/types": ["../trpc/src/types.ts"]
     }
   },
   "include": ["src/entry.ts"],

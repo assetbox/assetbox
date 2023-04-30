@@ -13,7 +13,6 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "sync": "lopm sync",
     "build": "tsc --project tsconfig.build.json && node esbuild.config.js",
     "test:type": "tsc --noEmit"
   },

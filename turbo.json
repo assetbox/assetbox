@@ -2,9 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "test:type": {},
-    "sync": {},
+    "@assetbox/trpc#build": {
+      "outputs": ["dist/**"]
+    },
     "build": {
-      "dependsOn": ["sync"],
+      "dependsOn": ["@assetbox/trpc#build"],
       "outputs": ["dist/**", "bin/**"]
     }
   }

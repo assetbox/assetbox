@@ -20,7 +20,7 @@
     "baseUrl": ".",
     "paths": {
       "@trpc/server": ["node_modules/@trpc/server"],
-      "@assetbox/trpc/types": ["../trpc/src/types.ts"]
+      "@assetbox/trpc/types": ["../trpc/dist/types.d.ts"]
     }
   },
   "include": ["src/entry.ts"],

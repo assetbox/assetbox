@@ -17,7 +17,7 @@
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "jsx": "react-jsx",
-    "baseUrl": ".", // This must be specified if "paths" is.
+    "baseUrl": ".",
     "paths": {
       "@trpc/server": ["node_modules/@trpc/server"]
     }

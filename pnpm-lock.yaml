@@ -174,8 +174,8 @@ importers:
         version: 6.9.0(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@assetbox/trpc':
-        specifier: ^1.0.0
-        version: link:../trpc
+        specifier: workspace:^1.0.0
+        version: file:packages/trpc(@trpc/server@10.23.0)
       '@types/node':
         specifier: ^18.15.3
         version: 18.15.3
@@ -1173,7 +1173,6 @@ packages:
 
   /@trpc/server@10.23.0:
     resolution: {integrity: sha512-0CPfGZK3v3gfAL8ylV5vDJVBQtPp47EB4Vgx6WItSXmwYQlLC39ZC3gkZ4I5cGpQKl4l3QrNNeUvIcse4hlMxA==}
-    dev: false
 
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -4243,4 +4242,16 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-    dev: false
+
+  file:packages/trpc(@trpc/server@10.23.0):
+    resolution: {directory: packages/trpc, type: directory}
+    id: file:packages/trpc
+    name: '@assetbox/trpc'
+    version: 1.0.0
+    peerDependencies:
+      '@trpc/server': '*'
+    dependencies:
+      '@trpc/server': 10.23.0
+      esbuild: 0.17.11
+      zod: 3.21.4
+    dev: true

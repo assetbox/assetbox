@@ -1,3 +1,3 @@
 export * from "./fileHash";
-export * from "./findAssetPaths";
+export * from "./findAssetFiles";
 export * from "./readAssetBoxConfig";

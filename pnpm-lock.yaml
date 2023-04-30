@@ -90,6 +90,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@assetbox/manager':
+        specifier: workspace:^0.0.0
+        version: link:../manager
       '@assetbox/trpc':
         specifier: workspace:^1.0.0
         version: link:../trpc
@@ -133,9 +136,6 @@ importers:
         specifier: ^0.30.0
         version: 0.30.0
     devDependencies:
-      '@assetbox/manager':
-        specifier: workspace:^0.0.0
-        version: link:../manager
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17

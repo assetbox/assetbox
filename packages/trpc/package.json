@@ -4,6 +4,10 @@
   "description": "",
   "type": "module",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "exports": {
     ".": {
       "require": "./dist/index.cjs",

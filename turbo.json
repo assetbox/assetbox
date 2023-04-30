@@ -2,7 +2,9 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "test:type": {},
+    "sync": {},
     "build": {
+      "dependsOn": ["sync"],
       "outputs": ["dist/**", "bin/**"]
     }
   }

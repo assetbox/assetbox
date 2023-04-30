@@ -28,3 +28,4 @@ export const appRouter = t.router({
       return true;
     }),
 });
+export type AppRouter = typeof appRouter;

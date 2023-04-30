@@ -1,11 +1,14 @@
 import { appRouter } from "@assetbox/trpc";
-import { inferAsyncReturnType, initTRPC } from "@trpc/server";
-import * as trpcExpress from "@trpc/server/adapters/express";
+import {
+  type CreateExpressContextOptions,
+  createExpressMiddleware,
+} from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
 
 import { resolveCliRoot } from "../utils/path";
+
 export const createServer = async () => {
   const app = express();
   const vite = await createViteServer({
@@ -14,15 +17,12 @@ export const createServer = async () => {
   });
   app.use(vite.middlewares);
 
-  const createContext = ({
-    req,
-    res,
-  }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
-  type Context = inferAsyncReturnType<typeof createContext>;
+  const createContext = ({ req, res }: CreateExpressContextOptions) => ({}); // no context
+
   app.use(express.json());
   app.use(
     "/trpc",
-    trpcExpress.createExpressMiddleware({
+    createExpressMiddleware({
       router: appRouter,
       createContext,
     })

@@ -1,12 +1,20 @@
-import glob from "glob";
+import glob, { GlobOptionsWithFileTypesUnset } from "glob";
 import { resolve } from "path";
 import { findPackageRoot } from "workspace-tools";
 
 import { ASSET_EXTENSIONS } from "./common/const";
 
-export const findAssetFiles = async (assetPaths: string[]) => {
+export const findAssetFiles = async (
+  assetPaths: string[],
+  options?: GlobOptionsWithFileTypesUnset
+) => {
   const files = await Promise.all(
-    assetPaths.map((assetPath: string) => glob(assetPath))
+    assetPaths.map((assetPath: string) => {
+      return glob(assetPath, {
+        cwd: findPackageRoot(process.cwd())!,
+        ...options,
+      });
+    })
   );
 
   return files

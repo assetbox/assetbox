@@ -11,14 +11,24 @@
   "version": "0.1.0",
   "scripts": {
     "build": "tsc --emitDeclarationOnly && node esbuild.config.js",
-    "test:type": "tsc --noEmit"
+    "test:type": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {
     "glob": "^9.3.0",
-    "lilconfig": "^2.1.0",
     "workspace-tools": "^0.30.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.3"
+    "@babel/core": "^7.21.5",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-typescript": "^7.21.5",
+    "@jest/globals": "^29.5.0",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^18.15.3",
+    "babel-jest": "^29.5.0",
+    "jest": "^29.5.0",
+    "lilconfig": "^2.1.0",
+    "memfs": "^3.5.1",
+    "ts-jest": "^29.1.0"
   }
 }

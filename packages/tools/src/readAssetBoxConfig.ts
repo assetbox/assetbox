@@ -3,6 +3,10 @@ import { findPackageRoot } from "workspace-tools";
 
 import type { AssetBoxConfig } from "./types";
 
+// export const getStopDir = () => {
+//   return findPackageRoot(process.cwd());
+// };
+
 export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   const options = {
     stopDir: findPackageRoot(process.cwd()),

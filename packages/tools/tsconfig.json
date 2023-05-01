@@ -5,5 +5,12 @@
     "outDir": "dist",
     "declaration": true
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "__mocks__",
+    "__mocks__",
+    "__mock__",
+    "__mock__",
+    "__mock__"
+  ]
 }

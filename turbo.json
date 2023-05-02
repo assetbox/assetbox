@@ -2,6 +2,9 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "test:type": {},
+    "test": {
+      "inputs": ["packages/tools/**/*.ts", "packages/tools/src/*.ts"]
+    },
     "build": {
       "outputs": ["dist/**", "bin/**"]
     }

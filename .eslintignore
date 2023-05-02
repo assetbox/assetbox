@@ -1,2 +1,2 @@
 dist
-tools/__mocks__/
+packages/tools/__mocks__/

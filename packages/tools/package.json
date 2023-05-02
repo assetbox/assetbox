@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc --emitDeclarationOnly && node esbuild.config.js",
     "test:type": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "glob": "^9.3.0",

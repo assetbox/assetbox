@@ -9,7 +9,8 @@
     "preinstall": "npx only-allow pnpm",
     "test:type": "turbo test:type",
     "build": "turbo build --filter='./packages/*'",
-    "lint": "eslint . --ext .ts,.tsx,.js,.json --fix"
+    "lint": "eslint . --ext .ts,.tsx,.js,.json --fix",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",

@@ -1,3 +1,8 @@
+import {
+  findAssetFiles,
+  findDupeFileSet,
+  readAssetBoxConfig,
+} from "@assetbox/tools";
 import { appRouter } from "@assetbox/trpc";
 import {
   type CreateExpressContextOptions,
@@ -5,6 +10,7 @@ import {
 } from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
+import { relative } from "path";
 import { createServer as createViteServer } from "vite";
 
 import { resolveCliRoot } from "../utils/path";
@@ -41,9 +47,21 @@ export const createServer = async () => {
 
       const entryServerModulePath = resolveCliRoot("ssr", "entryServer.mjs");
 
+      const { assetPaths } = await readAssetBoxConfig();
+      const assetFiles = (await findAssetFiles(assetPaths)).map((assetFile) =>
+        relative(process.cwd(), assetFile)
+      );
+      const dupeFiles = await findDupeFileSet(assetFiles);
+
       const { render } = await vite.ssrLoadModule(entryServerModulePath);
-      const appHtml = await render(url);
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+      const appHtml = await render(url, { assetFiles, dupeFiles });
+
+      const html = template
+        .replace("<!--ssr-outlet-->", appHtml)
+        .replace(
+          "<!--data-outlet-->",
+          JSON.stringify({ assetFiles, dupeFiles })
+        );
 
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {

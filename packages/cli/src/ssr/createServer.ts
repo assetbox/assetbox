@@ -15,11 +15,26 @@ import { createServer as createViteServer } from "vite";
 
 import { resolveCliRoot } from "../utils/path";
 
+const getAssetBoxData = async () => {
+  const { assetPaths } = await readAssetBoxConfig();
+
+  const assetFiles = await findAssetFiles(assetPaths);
+  const dupeFiles = await findDupeFileSet(assetFiles);
+
+  return {
+    assetFiles: assetFiles.map((assetFile) =>
+      relative(process.cwd(), assetFile)
+    ),
+    dupeFiles,
+  };
+};
+
 export const createServer = async () => {
   const app = express();
   const vite = await createViteServer({
     server: { middlewareMode: true },
     appType: "custom",
+    publicDir: false,
   });
   app.use(vite.middlewares);
 
@@ -47,21 +62,14 @@ export const createServer = async () => {
 
       const entryServerModulePath = resolveCliRoot("ssr", "entryServer.mjs");
 
-      const { assetPaths } = await readAssetBoxConfig();
-      const assetFiles = (await findAssetFiles(assetPaths)).map((assetFile) =>
-        relative(process.cwd(), assetFile)
-      );
-      const dupeFiles = await findDupeFileSet(assetFiles);
+      const ssrData = await getAssetBoxData();
 
       const { render } = await vite.ssrLoadModule(entryServerModulePath);
-      const appHtml = await render(url, { assetFiles, dupeFiles });
+      const appHtml = await render(url, ssrData);
 
       const html = template
         .replace("<!--ssr-outlet-->", appHtml)
-        .replace(
-          "<!--data-outlet-->",
-          JSON.stringify({ assetFiles, dupeFiles })
-        );
+        .replace("<!--data-outlet-->", JSON.stringify(ssrData));
 
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {

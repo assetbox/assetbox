@@ -1,49 +1,65 @@
-// jest.mock("fs");
-// import memfs, { vol } from "memfs";
-// import process from "process";
+jest.mock("fs");
+import memfs, { vol } from "memfs";
+import process from "process";
 
-// import { readAssetBoxConfig } from "../readAssetBoxConfig";
-// import {
-//   dupAssetCase,
-//   noAssetboxConfig,
-//   noAssetPaths,
-//   normalCase,
-// } from "./utils/mockRepository";
-// const spy = jest.spyOn(process, "cwd");
-// spy.mockReturnValue("/test");
-// jest.create;
+import { readAssetBoxConfig } from "../readAssetBoxConfig";
+import {
+  createNoAssetboxConfigMockRepositry,
+  createNoAssetPathsMockRepositry,
+  createNormalMockRepositry,
+} from "./utils/mockRepository";
+const spy = jest.spyOn(process, "cwd");
+spy.mockReturnValue("/test");
 
-// beforeEach(() => {
-//   vol.fromJSON(normalCase, "/test/normal");
-//   vol.fromJSON(noAssetPaths, "/test/noAssetPaths");
-//   vol.fromJSON(noAssetPaths, "/test/noAssetboxConfig");
-//   vol.fromJSON(dupAssetCase, "/test/dupAssetCase");
-// });
+describe("readAssetBoxConfig Test", () => {
+  describe("Normal Repository", () => {
+    beforeEach(() => {
+      spy.mockClear();
+      spy.mockReturnValue("/test/normal");
+      createNormalMockRepositry("/test/normal");
+    });
+    test("readAssetBox config", async () => {
+      const config = await readAssetBoxConfig();
+      expect(config).toStrictEqual({
+        assetPaths: ["./public/**/*", "./src/assets/**/*"],
+        filePath: "/test/normal/assetbox.config.cjs",
+      });
+    });
+    afterEach(() => {
+      vol.rmdirSync("/test/normal/", { recursive: true });
+    });
+  });
 
-// describe("Inital Test Settings", () => {
-//   test(`Is the test internal repository well created?`, () => {
-//     expect(vol.existsSync("/test/normal")).toBe(true);
-//     expect(vol.existsSync("/test/noAssetPaths")).toBe(true);
-//     expect(vol.existsSync("/test/noAssetboxConfig")).toBe(true);
-//     expect(vol.existsSync("/test/dupAssetCase")).toBe(true);
-//   });
-//   test(`find assetboxconfig.js `, () => {
-//     expect(vol.existsSync("/test/normal/assetbox.config.cjs")).toBe(true);
-//     expect(vol.existsSync("/test/noAssetPaths/assetbox.config.cjs")).toBe(true);
-//     expect(vol.existsSync("/test/noAssetboxConfig/assetbox.config.cjs")).toBe(
-//       true
-//     );
-//     expect(vol.existsSync("/test/dupAssetCase/assetbox.config.cjs")).toBe(true);
-//   });
-// });
+  describe("noAssetPaths Repository", () => {
+    beforeEach(() => {
+      spy.mockClear();
+      spy.mockReturnValue("/test/noAssetPaths");
+      createNoAssetPathsMockRepositry("/test/noAssetPaths");
+    });
+    test("readAssetBox config", async () => {
+      const config = await readAssetBoxConfig();
+      expect(config).toStrictEqual({
+        assetPaths: ["./public/**/*", "./src/assets/**/*"],
+        filePath: "/test/noAssetPaths/assetbox.config.cjs",
+      });
+    });
+    afterEach(() => {
+      vol.rmdirSync("/test/noAssetPaths/", { recursive: true });
+    });
+  });
 
-// describe("readAssetBoxConfig", () => {
-//   test("readsassetbox.config.cjs", async () => {
-//     const config = await readAssetBoxConfig();
-//     console.log("config", config);
-//     expect(config).toStrictEqual({
-//       filePath: "/test/assetbox.config.cjs",
-//       assetPaths: ["./public/**/*", "./src/assets/**/*"],
-//     });
-//   });
-// });
+  describe("noAssetboxConfig Repository", () => {
+    beforeEach(() => {
+      spy.mockClear();
+      spy.mockReturnValue("/test/noAssetboxConfig");
+      createNoAssetboxConfigMockRepositry("/test/noAssetboxConfig");
+    });
+    test("readAssetBox config", async () => {
+      try {
+        const config = await readAssetBoxConfig();
+      } catch (e) {
+        expect(e.message).toBe("Couldn't find assetbox.config.js.");
+      }
+    });
+  });
+});

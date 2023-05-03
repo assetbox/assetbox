@@ -1,5 +1,5 @@
 import glob from "glob";
-import { resolve } from "path";
+import { relative } from "path";
 import { findPackageRoot } from "workspace-tools";
 
 import { ASSET_EXTENSIONS } from "./common/const";
@@ -11,7 +11,7 @@ export const findAssetFiles = async (assetPaths: string[]) => {
 
   return files
     .flat()
-    .map((file) => resolve(findPackageRoot(process.cwd())!, file))
+    .map((file) => relative(findPackageRoot(process.cwd())!, file))
     .filter((file) => {
       const fileExtension = file.split(".").pop()?.toLowerCase();
       return fileExtension && ASSET_EXTENSIONS.includes(fileExtension);

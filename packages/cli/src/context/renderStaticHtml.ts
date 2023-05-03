@@ -3,7 +3,6 @@ import {
   findDupeFileSet,
   readAssetBoxConfig,
 } from "@assetbox/tools";
-import { relative } from "path";
 import { resolveCliRoot } from "src/utils/path";
 
 export const getAssetBoxData = async () => {
@@ -13,9 +12,7 @@ export const getAssetBoxData = async () => {
   const dupeFiles = await findDupeFileSet(assetFiles);
 
   return {
-    assetFiles: assetFiles.map((assetFile) =>
-      relative(process.cwd(), assetFile)
-    ),
+    assetFiles,
     dupeFiles,
   };
 };

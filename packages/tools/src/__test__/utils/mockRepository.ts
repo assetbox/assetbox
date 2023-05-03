@@ -9,10 +9,40 @@
 
 import { vol } from "memfs";
 
+type MockRepositoryOptions = {
+  assetBoxConfig: boolean | Record<string, string[] | string>;
+};
+export const createMockRepository = (
+  cwd: string,
+  options: MockRepositoryOptions
+) => {
+  vol.fromJSON(
+    {
+      ...(options.assetBoxConfig === true && {
+        "./assetbox.config.json": `{"assetPaths": ["./public/**/*", "./src/assets/**/*"]}`,
+      }),
+      ...(typeof options.assetBoxConfig === "object" && options.assetBoxConfig),
+
+      "./public/a.png": "1",
+      "./public/b.png": "2",
+      "./src/assets/c.png": "3",
+      "./src/assets/d.png": "4",
+      "./public/mock.md": "i am mock data",
+      "./src/assets/mock.md": "i am mock data",
+      "./package.json": `
+      {
+        "name": "test",
+        "version": "1.0.0",
+      }`,
+      "./pnpm-lock.yaml": ``,
+    },
+    cwd
+  );
+};
 export const createNormalMockRepositry = (cwd: string) => {
   vol.fromJSON(
     {
-      "./assetbox.config.cjs": `module.exports = {
+      "./assetbox.config.json": `module.exports = {
           assetPaths: ["./public/**/*", "./src/assets/**/*"],
           };`,
       "./public/a.png": "1",
@@ -35,7 +65,7 @@ export const createNormalMockRepositry = (cwd: string) => {
 export const createNoAssetPathsMockRepositry = (cwd: string) => {
   vol.fromJSON(
     {
-      "./assetbox.config.cjs": `module.exports = {
+      "./assetbox.config.json": `module.exports = {
         assetPaths: [],
             };`,
       "./public/a.png": "1",

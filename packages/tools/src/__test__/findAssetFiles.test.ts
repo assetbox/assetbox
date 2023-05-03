@@ -5,11 +5,7 @@ import process from "process";
 
 import { findAssetFiles } from "../findAssetFiles";
 import { readAssetBoxConfig } from "../readAssetBoxConfig";
-import {
-  createNoAssetboxConfigMockRepositry,
-  createNoAssetPathsMockRepositry,
-  createNormalMockRepositry,
-} from "./utils/mockRepository";
+import { createMockRepository } from "./utils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 spy.mockReturnValue("/test");
@@ -19,8 +15,9 @@ describe("fileAssetFiles Test", () => {
     beforeEach(() => {
       spy.mockClear();
       spy.mockReturnValue("/test/normal");
-      createNormalMockRepositry("/test/normal");
+      createMockRepository("/test/normal", { assetBoxConfig: true });
     });
+
     test("findAssetFiles Test", async () => {
       const config = await readAssetBoxConfig();
       const result = await findAssetFiles(config.assetPaths, {
@@ -33,6 +30,7 @@ describe("fileAssetFiles Test", () => {
         "/test/normal/src/assets/c.png",
       ]);
     });
+
     afterEach(() => {
       vol.rmdirSync("/test/normal/", { recursive: true });
     });
@@ -42,7 +40,13 @@ describe("fileAssetFiles Test", () => {
     beforeEach(() => {
       spy.mockClear();
       spy.mockReturnValue("/test/noAssetPaths");
-      createNoAssetPathsMockRepositry("/test/noAssetPaths");
+      createMockRepository("/test/noAssetPaths", {
+        assetBoxConfig: {
+          "./assetbox.config.json": ` {
+          "assetPaths": []
+          }`,
+        },
+      });
     });
     test("findAssetFiles Test", async () => {
       const config = await readAssetBoxConfig();
@@ -52,6 +56,7 @@ describe("fileAssetFiles Test", () => {
       });
       expect(result).toStrictEqual([]);
     });
+
     afterEach(() => {
       vol.rmdirSync("/test/noAssetPaths/", { recursive: true });
     });

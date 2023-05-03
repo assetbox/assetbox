@@ -1,8 +1,3 @@
-import {
-  findAssetFiles,
-  findDupeFileSet,
-  readAssetBoxConfig,
-} from "@assetbox/tools";
 import { appRouter } from "@assetbox/trpc";
 import {
   type CreateExpressContextOptions,
@@ -10,26 +5,13 @@ import {
 } from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
-import { relative } from "path";
+import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { createServer as createViteServer } from "vite";
 
 import { resolveCliRoot } from "../utils/path";
 
-const getAssetBoxData = async () => {
-  const { assetPaths } = await readAssetBoxConfig();
-
-  const assetFiles = await findAssetFiles(assetPaths);
-  const dupeFiles = await findDupeFileSet(assetFiles);
-
-  return {
-    assetFiles: assetFiles.map((assetFile) =>
-      relative(process.cwd(), assetFile)
-    ),
-    dupeFiles,
-  };
-};
-
-export const createServer = async () => {
+// Create Asset Manager Server
+export const manage = async () => {
   const app = express();
   const vite = await createViteServer({
     server: { middlewareMode: true },
@@ -60,17 +42,7 @@ export const createServer = async () => {
         );
       template = await vite.transformIndexHtml(url, template);
 
-      const entryServerModulePath = resolveCliRoot("ssr", "entryServer.mjs");
-
-      const ssrData = await getAssetBoxData();
-
-      const { render } = await vite.ssrLoadModule(entryServerModulePath);
-      const appHtml = await render(url, ssrData);
-
-      const html = template
-        .replace("<!--ssr-outlet-->", appHtml)
-        .replace("<!--data-outlet-->", JSON.stringify(ssrData));
-
+      const html = await renderStaticHtml(template, url);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       vite.ssrFixStacktrace(e as any);

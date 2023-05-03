@@ -3,9 +3,8 @@
 import { Command } from "commander";
 
 import { version as packageVersion } from "../package.json";
+import { manage, staticBuild } from "./commands";
 import { initialize } from "./initialize";
-import { createServer } from "./ssr/createServer";
-import { staticBuild } from "./ssr/staticBuild";
 
 const program = new Command();
 
@@ -34,7 +33,7 @@ program
   .description("Open the development server of the assetbox.")
   .action(async () => {
     try {
-      await createServer();
+      await manage();
     } catch (e) {
       if (e instanceof Error) {
         console.error(e.message);

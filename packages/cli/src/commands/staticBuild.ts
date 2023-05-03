@@ -1,6 +1,6 @@
 import react from "@vitejs/plugin-react-swc";
 import { readFile, writeFile } from "fs/promises";
-import { resolve } from "path";
+import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { build } from "vite";
 
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
@@ -14,7 +14,6 @@ export const staticBuild = async () => {
     "<!--entry-client-outlet-->",
     resolveCliRoot("ssr", "entryClient.mjs")
   );
-
   await writeFile(resolveCliRoot("ssr", "templates", "index.html"), template);
 
   await build({
@@ -25,16 +24,10 @@ export const staticBuild = async () => {
     },
   });
 
-  const entryServerModulePath = resolve(__dirname, "ssr", "entryServer.cjs");
-
-  const { render } = await import(entryServerModulePath);
-  const appHtml = await render("/");
-
   template = await readFile(
     resolveProjectRoot("assetbox-dist", "index.html"),
     "utf-8"
   );
-  template = template.replace(`<!--ssr-outlet-->`, appHtml);
-
-  await writeFile(resolveProjectRoot("assetbox-dist", "index.html"), template);
+  const html = await renderStaticHtml(template, "/");
+  await writeFile(resolveProjectRoot("assetbox-dist", "index.html"), html);
 };

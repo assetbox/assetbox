@@ -1,3 +1,8 @@
+import { appRouter } from "@assetbox/trpc";
+import {
+  type CreateExpressContextOptions,
+  createExpressMiddleware,
+} from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
@@ -10,8 +15,19 @@ export const createServer = async () => {
     server: { middlewareMode: true },
     appType: "custom",
   });
-
   app.use(vite.middlewares);
+
+  const createContext = ({ req, res }: CreateExpressContextOptions) => ({}); // no context
+
+  app.use(express.json());
+  app.use(
+    "/trpc",
+    createExpressMiddleware({
+      router: appRouter,
+      createContext,
+    })
+  );
+
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     try {

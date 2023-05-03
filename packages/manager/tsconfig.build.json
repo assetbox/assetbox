@@ -16,8 +16,13 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@trpc/server": ["node_modules/@trpc/server"]
+    }
   },
+  "exclude": ["node_modules"],
   "include": ["src/entry.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

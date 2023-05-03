@@ -33,7 +33,7 @@ export const findDupeFileSet = async (assetFiles: string[]) => {
   const fileHashes = await Promise.all(
     assetFiles.map(async (file) => ({ [file]: await createFileHash(file) }))
   );
-  const filehashMap = fileHashes.reduce(
+  const fileHashMap = fileHashes.reduce(
     (result, fileHash) => ({
       ...result,
       ...fileHash,
@@ -41,5 +41,5 @@ export const findDupeFileSet = async (assetFiles: string[]) => {
     {} as Record<string, string>
   );
 
-  return compareHash(filehashMap);
+  return compareHash(fileHashMap);
 };

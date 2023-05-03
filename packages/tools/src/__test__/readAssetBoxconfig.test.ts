@@ -39,10 +39,11 @@ describe("readAssetBoxConfig Test", () => {
     test("readAssetBox config", async () => {
       const config = await readAssetBoxConfig();
       expect(config).toStrictEqual({
-        assetPaths: ["./public/**/*", "./src/assets/**/*"],
+        assetPaths: [],
         filePath: "/test/noAssetPaths/assetbox.config.cjs",
       });
     });
+
     afterEach(() => {
       vol.rmdirSync("/test/noAssetPaths/", { recursive: true });
     });

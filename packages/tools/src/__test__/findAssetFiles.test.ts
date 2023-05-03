@@ -10,29 +10,50 @@ import {
   createNoAssetPathsMockRepositry,
   createNormalMockRepositry,
 } from "./utils/mockRepository";
+
 const spy = jest.spyOn(process, "cwd");
 spy.mockReturnValue("/test");
 
-describe("Normal repository", () => {
-  beforeEach(() => {
-    spy.mockClear();
-    spy.mockReturnValue("/test/normal");
-    createNormalMockRepositry("/test/normal");
-  });
-  test(`Is the Mock Repository well made?`, () => {
-    expect(vol.existsSync("/test/normal")).toBe(true);
+describe("fileAssetFiles Test", () => {
+  describe("Normal Repository", () => {
+    beforeEach(() => {
+      spy.mockClear();
+      spy.mockReturnValue("/test/normal");
+      createNormalMockRepositry("/test/normal");
+    });
+    test("findAssetFiles Test", async () => {
+      const config = await readAssetBoxConfig();
+      const result = await findAssetFiles(config.assetPaths, {
+        fs: memfs,
+      });
+      expect(result).toStrictEqual([
+        "/test/normal/public/b.png",
+        "/test/normal/public/a.png",
+        "/test/normal/src/assets/d.png",
+        "/test/normal/src/assets/c.png",
+      ]);
+    });
+    afterEach(() => {
+      vol.rmdirSync("/test/normal/", { recursive: true });
+    });
   });
 
-  test("Testing fileAssetFiles.ts", async () => {
-    const config = await readAssetBoxConfig();
-    const result = await findAssetFiles(config.assetPaths, {
-      fs: memfs,
+  describe("noAssetPaths Repository", () => {
+    beforeEach(() => {
+      spy.mockClear();
+      spy.mockReturnValue("/test/noAssetPaths");
+      createNoAssetPathsMockRepositry("/test/noAssetPaths");
     });
-    expect(result).toStrictEqual([
-      "/test/normal/public/b.png",
-      "/test/normal/public/a.png",
-      "/test/normal/src/assets/d.png",
-      "/test/normal/src/assets/c.png",
-    ]);
+    test("findAssetFiles Test", async () => {
+      const config = await readAssetBoxConfig();
+
+      const result = await findAssetFiles(config.assetPaths, {
+        fs: memfs,
+      });
+      expect(result).toStrictEqual([]);
+    });
+    afterEach(() => {
+      vol.rmdirSync("/test/noAssetPaths/", { recursive: true });
+    });
   });
 });

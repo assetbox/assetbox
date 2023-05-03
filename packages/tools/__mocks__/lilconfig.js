@@ -8,12 +8,24 @@ lilconfig.lilconfig = function () {
   return {
     search: async () =>
       vol.existsSync(path.resolve(process.cwd(), "assetbox.config.cjs"))
-        ? {
-            filepath: path.resolve(process.cwd(), "assetbox.config.cjs"),
-            config: {
-              assetPaths: ["./public/**/*", "./src/assets/**/*"],
-            },
-          }
+        ? vol
+            .readFileSync(
+              path.resolve(process.cwd(), "assetbox.config.cjs"),
+              "utf-8"
+            )
+            .slice(27, 41) === "assetPaths: []"
+          ? {
+              filepath: path.resolve(process.cwd(), "assetbox.config.cjs"),
+              config: {
+                assetPaths: [],
+              },
+            }
+          : {
+              filepath: path.resolve(process.cwd(), "assetbox.config.cjs"),
+              config: {
+                assetPaths: ["./public/**/*", "./src/assets/**/*"],
+              },
+            }
         : null,
   };
 };

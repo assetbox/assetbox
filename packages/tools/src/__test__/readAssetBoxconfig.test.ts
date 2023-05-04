@@ -1,5 +1,5 @@
 jest.mock("fs");
-import memfs, { vol } from "memfs";
+import { vol } from "memfs";
 import process from "process";
 
 import { readAssetBoxConfig } from "../readAssetBoxConfig";
@@ -8,7 +8,7 @@ const spy = jest.spyOn(process, "cwd");
 
 describe("readAssetBoxConfig Test", () => {
   describe("Normal Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/normal");
       createMockRepository("/test/normal", { assetBoxConfig: true });
     });
@@ -21,14 +21,14 @@ describe("readAssetBoxConfig Test", () => {
       });
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
       vol.rmdirSync("/test/normal/", { recursive: true });
     });
   });
 
   describe("noAssetPaths Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/noAssetPaths");
       createMockRepository("/test/noAssetPaths", {
         assetBoxConfig: {
@@ -40,9 +40,6 @@ describe("readAssetBoxConfig Test", () => {
     });
 
     test("readAssetBox config", async () => {
-      const str = vol
-        .readFileSync("/test/noAssetPaths/assetbox.config.json", "utf-8")
-        .toString();
       const config = await readAssetBoxConfig();
       expect(config).toStrictEqual({
         assetPaths: [],
@@ -50,7 +47,7 @@ describe("readAssetBoxConfig Test", () => {
       });
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
       vol.rmdirSync("/test/noAssetPaths/", { recursive: true });
     });
@@ -64,7 +61,7 @@ describe("readAssetBoxConfig Test", () => {
 
     test("readAssetBox config", async () => {
       try {
-        const config = await readAssetBoxConfig();
+        await readAssetBoxConfig();
       } catch (e) {
         if (e instanceof Error) {
           expect(e.message).toBe("Couldn't find assetbox.config.js.");

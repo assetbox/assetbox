@@ -26,7 +26,6 @@ describe("Creating Mock Repository", () => {
 
     afterAll(() => {
       spy.mockClear();
-
       vol.rmdirSync("/test/normal", { recursive: true });
     });
   });
@@ -34,7 +33,6 @@ describe("Creating Mock Repository", () => {
   describe("No AssetPaths Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/noAssetPaths");
-
       createMockRepository("/test/noAssetPaths", {
         assetBoxConfig: {
           "./assetbox.config.json": ` {
@@ -57,7 +55,6 @@ describe("Creating Mock Repository", () => {
 
     afterAll(() => {
       spy.mockClear();
-
       vol.rmdirSync("/test/noAssetPaths", { recursive: true });
     });
   });
@@ -65,11 +62,10 @@ describe("Creating Mock Repository", () => {
   describe("No AssetboxConfig Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/noAssetboxConfig");
+      createMockRepository("/test/noAssetboxConfig", { assetBoxConfig: false });
     });
 
     test("No AssetboxConfig Repository", () => {
-      createMockRepository("/test/noAssetboxConfig", { assetBoxConfig: false });
-
       expect(vol.existsSync("/test/noAssetboxConfig")).toBe(true);
       expect(vol.readdirSync("/test/noAssetboxConfig")).toStrictEqual([
         "package.json",
@@ -81,7 +77,6 @@ describe("Creating Mock Repository", () => {
 
     afterAll(() => {
       spy.mockClear();
-
       vol.rmdirSync("/test/noAssetboxConfig", { recursive: true });
     });
   });

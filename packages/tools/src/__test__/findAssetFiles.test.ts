@@ -13,7 +13,6 @@ describe("fileAssetFiles Test", () => {
   describe("Normal Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/normal");
-
       createMockRepository("/test/normal", { assetBoxConfig: true });
     });
 
@@ -40,7 +39,6 @@ describe("fileAssetFiles Test", () => {
   describe("noAssetPaths Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/noAssetPaths");
-
       createMockRepository("/test/noAssetPaths", {
         assetBoxConfig: {
           "./assetbox.config.json": ` {
@@ -61,7 +59,6 @@ describe("fileAssetFiles Test", () => {
 
     afterAll(() => {
       spy.mockClear();
-
       vol.rmdirSync("/test/noAssetPaths", { recursive: true });
     });
   });

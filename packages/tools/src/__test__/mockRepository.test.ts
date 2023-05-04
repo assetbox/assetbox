@@ -1,4 +1,4 @@
-import { after, afterEach, beforeEach } from "node:test";
+import { afterEach, beforeEach } from "node:test";
 
 import { vol } from "memfs";
 
@@ -10,11 +10,10 @@ describe("Creating Mock Repository", () => {
   describe("Normal Repository", () => {
     beforeEach(() => {
       spy.mockReturnValue("/test/normal");
+      createMockRepository("/test/normal", { assetBoxConfig: true });
     });
 
     test("Normal Repository", () => {
-      createMockRepository("/test/normal", { assetBoxConfig: true });
-
       expect(vol.existsSync("/test/normal")).toBe(true);
       expect(vol.readdirSync("/test/normal")).toStrictEqual([
         "assetbox.config.json",
@@ -27,16 +26,15 @@ describe("Creating Mock Repository", () => {
 
     afterEach(() => {
       spy.mockClear();
+
+      vol.rmdirSync("/test/normal", { recursive: true });
     });
   });
+
   describe("No AssetPaths Repository", () => {
     beforeEach(() => {
       spy.mockReturnValue("/test/noAssetPaths");
-    });
 
-    test("No AssetPaths Repository", () => {
-      spy.mockClear();
-      spy.mockReturnValue("/test/noAssetPaths");
       createMockRepository("/test/noAssetPaths", {
         assetBoxConfig: {
           "./assetbox.config.json": ` {
@@ -44,6 +42,9 @@ describe("Creating Mock Repository", () => {
           }`,
         },
       });
+    });
+
+    test("No AssetPaths Repository", () => {
       expect(vol.existsSync("/test/noAssetPaths")).toBe(true);
       expect(vol.readdirSync("/test/noAssetPaths")).toStrictEqual([
         "assetbox.config.json",
@@ -56,18 +57,19 @@ describe("Creating Mock Repository", () => {
 
     afterEach(() => {
       spy.mockClear();
+
+      vol.rmdirSync("/test/noAssetPaths", { recursive: true });
     });
   });
 
   describe("No AssetboxConfig Repository", () => {
     beforeEach(() => {
-      spy.mockReturnValue("/test/noAssetPaths");
+      spy.mockReturnValue("/test/noAssetboxConfig");
     });
 
     test("No AssetboxConfig Repository", () => {
-      spy.mockClear();
-      spy.mockReturnValue("/test/noAssetboxConfig");
       createMockRepository("/test/noAssetboxConfig", { assetBoxConfig: false });
+
       expect(vol.existsSync("/test/noAssetboxConfig")).toBe(true);
       expect(vol.readdirSync("/test/noAssetboxConfig")).toStrictEqual([
         "package.json",
@@ -79,6 +81,8 @@ describe("Creating Mock Repository", () => {
 
     afterEach(() => {
       spy.mockClear();
+
+      vol.rmdirSync("/test/noAssetboxConfig", { recursive: true });
     });
   });
 });

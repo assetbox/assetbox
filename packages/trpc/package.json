@@ -1,0 +1,34 @@
+{
+  "name": "@assetbox/trpc",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsc && node esbuild.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.17.11",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@trpc/server": "10.21.3-alpha.3",
+    "@types/node": "^18.15.3"
+  },
+  "peerDependencies": {
+    "@trpc/server": "*"
+  }
+}

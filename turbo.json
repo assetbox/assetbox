@@ -2,7 +2,14 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "test:type": {},
+    "test": {
+      "cache": false
+    },
+    "@assetbox/trpc#build": {
+      "outputs": ["dist/**"]
+    },
     "build": {
+      "dependsOn": ["@assetbox/trpc#build"],
       "outputs": ["dist/**", "bin/**"]
     }
   }

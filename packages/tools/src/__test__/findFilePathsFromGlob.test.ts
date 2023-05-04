@@ -9,14 +9,14 @@ import { createMockRepository } from "./utils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 
-describe("fileAssetFiles Test", () => {
+describe("findFilePathsFromGlob Test", () => {
   describe("Normal Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/normal");
       createMockRepository("/test/normal", { assetBoxConfig: true });
     });
 
-    test("findAssetFiles Test", async () => {
+    test("findFilePathsFromGlob Test", async () => {
       const config = await readAssetBoxConfig();
       const result = await findFilePathsFromGlob(config.assetPaths, {
         fs: memfs,
@@ -50,7 +50,7 @@ describe("fileAssetFiles Test", () => {
       });
     });
 
-    test("findAssetFiles Test", async () => {
+    test("findFilePathsFromGlob Test", async () => {
       const config = await readAssetBoxConfig();
       const result = await findFilePathsFromGlob(config.assetPaths, {
         fs: memfs,

@@ -3,7 +3,7 @@
   "pipeline": {
     "test:type": {},
     "test": {
-      "inputs": ["packages/tools/**/*.ts"]
+      "cache": false
     },
     "@assetbox/trpc#build": {
       "outputs": ["dist/**"]

@@ -10,7 +10,7 @@
     "test:type": "turbo test:type",
     "build": "turbo build --filter='./packages/*'",
     "lint": "eslint . --ext .ts,.tsx,.js,.json --fix",
-    "test": "turbo run test"
+    "test": "turbo test --filter='./packages/*'"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",

@@ -11,7 +11,7 @@ const spy = jest.spyOn(process, "cwd");
 
 describe("fileAssetFiles Test", () => {
   describe("Normal Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/normal");
 
       createMockRepository("/test/normal", { assetBoxConfig: true });
@@ -31,14 +31,14 @@ describe("fileAssetFiles Test", () => {
       ]);
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
       vol.rmdirSync("/test/normal", { recursive: true });
     });
   });
 
   describe("noAssetPaths Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/noAssetPaths");
 
       createMockRepository("/test/noAssetPaths", {
@@ -59,7 +59,7 @@ describe("fileAssetFiles Test", () => {
       expect(result).toStrictEqual([]);
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
 
       vol.rmdirSync("/test/noAssetPaths", { recursive: true });

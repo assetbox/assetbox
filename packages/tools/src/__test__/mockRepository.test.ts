@@ -8,7 +8,7 @@ const spy = jest.spyOn(process, "cwd");
 
 describe("Creating Mock Repository", () => {
   describe("Normal Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/normal");
       createMockRepository("/test/normal", { assetBoxConfig: true });
     });
@@ -24,7 +24,7 @@ describe("Creating Mock Repository", () => {
       ]);
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
 
       vol.rmdirSync("/test/normal", { recursive: true });
@@ -32,7 +32,7 @@ describe("Creating Mock Repository", () => {
   });
 
   describe("No AssetPaths Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/noAssetPaths");
 
       createMockRepository("/test/noAssetPaths", {
@@ -55,7 +55,7 @@ describe("Creating Mock Repository", () => {
       ]);
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
 
       vol.rmdirSync("/test/noAssetPaths", { recursive: true });
@@ -63,7 +63,7 @@ describe("Creating Mock Repository", () => {
   });
 
   describe("No AssetboxConfig Repository", () => {
-    beforeEach(() => {
+    beforeAll(() => {
       spy.mockReturnValue("/test/noAssetboxConfig");
     });
 
@@ -79,7 +79,7 @@ describe("Creating Mock Repository", () => {
       ]);
     });
 
-    afterEach(() => {
+    afterAll(() => {
       spy.mockClear();
 
       vol.rmdirSync("/test/noAssetboxConfig", { recursive: true });

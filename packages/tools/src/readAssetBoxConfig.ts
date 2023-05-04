@@ -6,7 +6,11 @@ import type { AssetBoxConfig } from "./types";
 export const readAssetBoxConfig = async (): Promise<AssetBoxConfig> => {
   const options = {
     stopDir: findPackageRoot(process.cwd()),
-    searchPlaces: ["assetbox.config.js", "assetbox.config.cjs"],
+    searchPlaces: [
+      "assetbox.config.js",
+      "assetbox.config.cjs",
+      "assetbox.config.json",
+    ],
     ignoreEmptySearchPlaces: false,
   };
 

@@ -5,17 +5,34 @@ import { findPackageRoot } from "workspace-tools";
 
 export const initialize = async () => {
   let assetPath = "";
-  const { shouldDefault } = await prompts({
+  let trackingPath = "";
+
+  const { isAssetPathDefault } = await prompts({
     type: "toggle",
-    name: "shouldDefault",
+    name: "isAssetPathDefault",
     message: "Set assetPaths to the default.",
     initial: true,
     active: "Yes",
     inactive: "No",
   });
 
-  if (shouldDefault) {
+  const { isTrackingPathDefault } = await prompts({
+    type: "toggle",
+    name: "isTrackingPathDefault",
+    message: "Set trackingPaths to the default.",
+    initial: true,
+    active: "Yes",
+    inactive: "No",
+  });
+
+  if (isAssetPathDefault) {
     assetPath = "./src/assets/**/*";
+  } else {
+    console.log("Please write assetbox.config.js yourself.");
+  }
+
+  if (isTrackingPathDefault) {
+    trackingPath = "./src/**/*.*";
   } else {
     console.log("Please write assetbox.config.js yourself.");
   }
@@ -29,6 +46,7 @@ export const initialize = async () => {
     resolve(packageRoot, "assetbox.config.cjs"),
     `module.exports = {
   assetPaths: [${`"${assetPath}"`}],
+  trackingPaths: [${`"${trackingPath}"`}],
 };
 `
   );

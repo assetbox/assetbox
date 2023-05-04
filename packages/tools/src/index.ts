@@ -1,3 +1,4 @@
 export * from "./fileHash";
-export * from "./findAssetFiles";
+export * from "./findFilePathsFromGlob";
+export * from "./importExtract";
 export * from "./readAssetBoxConfig";

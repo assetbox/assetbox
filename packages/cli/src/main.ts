@@ -29,7 +29,7 @@ program
   });
 
 program
-  .command("dev")
+  .command("manage")
   .description("Open the development server of the assetbox.")
   .action(async () => {
     try {

@@ -10,8 +10,15 @@ export const convertAssetStat = async (assetFile: string) => {
 
   const { size, birthtimeMs } = await fs.stat(assetFile);
 
+  let data: string | null = null;
+
+  if (["svg", "json"].includes(extension)) {
+    data = await fs.readFile(assetFile, "utf-8");
+  }
+
   return {
     filename: relative(findPackageRoot(process.cwd())!, assetFile),
+    data,
     timestamp: birthtimeMs,
     type: extension === "svg" ? "icon" : "image",
     extension,

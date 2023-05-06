@@ -18,9 +18,9 @@ export const convertAssetStat = async (assetFile: string) => {
 
   return {
     filename: relative(findPackageRoot(process.cwd())!, assetFile),
-    data,
     timestamp: birthtimeMs,
     type: extension === "svg" ? "icon" : "image",
+    data,
     extension,
     size,
   };

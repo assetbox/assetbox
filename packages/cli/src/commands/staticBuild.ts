@@ -19,6 +19,7 @@ export const staticBuild = async () => {
   await build({
     root: resolveCliRoot("ssr", "templates"),
     plugins: [react()],
+    publicDir: false,
     build: {
       outDir: resolveProjectRoot("assetbox-dist"),
     },

@@ -1,18 +1,20 @@
 import { InlineSVG } from "./components/InlineSVG";
 
+export interface AssetBoxData {
+  assetFiles: {
+    filename: string;
+    data: string;
+    timestamp: number;
+    type: string;
+    extension: string;
+    size: number;
+  }[];
+  dupeFiles: string[][];
+}
+
 // TODO: not yet scheme
 interface AppProps {
-  data: {
-    assetFiles: {
-      filename: string;
-      data: string;
-      timestamp: number;
-      type: string;
-      extension: string;
-      size: number;
-    }[];
-    dupeFiles: string[][];
-  };
+  data: AssetBoxData;
 }
 
 export function App({ data }: AppProps) {

@@ -11,6 +11,7 @@ import { vol } from "memfs";
 
 type MockRepositoryOptions = {
   assetBoxConfig: boolean | Record<string, string[] | string>;
+  isDupe?: boolean;
 };
 
 export const createMockRepository = (
@@ -20,16 +21,21 @@ export const createMockRepository = (
   vol.fromJSON(
     {
       ...(options.assetBoxConfig === true && {
-        "./assetbox.config.json": `{"assetPaths": ["./public/**/*", "./src/assets/**/*"]}`,
+        "./assetbox.config.json": `{"assetPaths": ["./public/**/*", "./src/assets/**/*"],"trackingPaths": ["./src/**/*.*"]}`,
       }),
       ...(typeof options.assetBoxConfig === "object" && options.assetBoxConfig),
 
+      ...(options.isDupe && {
+        "./public/a_copy.png": "1",
+        "./src/assets/a.png": "1",
+        "./public/b_copy.png": "2",
+      }),
       "./public/a.png": "1",
       "./public/b.png": "2",
       "./src/assets/c.png": "3",
       "./src/assets/d.png": "4",
       "./public/mock.md": "i am mock data",
-      "./src/assets/mock.md": "i am mock data",
+      "./src/assets/mock.md": "i am mock data2",
       "./package.json": `
       {
         "name": "test",

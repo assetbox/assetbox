@@ -14,7 +14,10 @@ describe("findDupeFileFromGlob Test", () => {
   describe("Dupe Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/basic");
-      createMockRepository("/test/basic", { assetBoxConfig: true, Dupe: true });
+      createMockRepository("/test/basic", {
+        assetBoxConfig: true,
+        isDupe: true,
+      });
     });
 
     test("findFilePathsFromGlob Test", async () => {
@@ -46,7 +49,7 @@ describe("findDupeFileFromGlob Test", () => {
       spy.mockReturnValue("/test/basic");
       createMockRepository("/test/basic", {
         assetBoxConfig: true,
-        Dupe: false,
+        isDupe: false,
       });
     });
 

@@ -11,7 +11,7 @@ import { vol } from "memfs";
 
 type MockRepositoryOptions = {
   assetBoxConfig: boolean | Record<string, string[] | string>;
-  Dupe?: boolean;
+  isDupe?: boolean;
 };
 
 export const createMockRepository = (
@@ -25,7 +25,7 @@ export const createMockRepository = (
       }),
       ...(typeof options.assetBoxConfig === "object" && options.assetBoxConfig),
 
-      ...(options.Dupe && {
+      ...(options.isDupe && {
         "./public/a_copy.png": "1",
         "./src/assets/a.png": "1",
         "./public/b_copy.png": "2",

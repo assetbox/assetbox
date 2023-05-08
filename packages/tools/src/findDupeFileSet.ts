@@ -1,6 +1,5 @@
-import { readFile } from "node:fs/promises";
-
 import crypto from "crypto";
+import { readFile } from "fs/promises";
 
 const createFileHash = async (file: string) => {
   const data = await readFile(file);
@@ -31,7 +30,9 @@ const compareHash = (fileHashMap: Record<string, string>) => {
 
 export const findDupeFileSet = async (assetFiles: string[]) => {
   const fileHashes = await Promise.all(
-    assetFiles.map(async (file) => ({ [file]: await createFileHash(file) }))
+    assetFiles.map(async (file) => ({
+      [file]: await createFileHash(file),
+    }))
   );
   const fileHashMap = fileHashes.reduce(
     (result, fileHash) => ({

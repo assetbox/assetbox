@@ -18,6 +18,7 @@ describe("readAssetBoxConfig Test", () => {
       expect(config).toStrictEqual({
         assetPaths: ["./public/**/*", "./src/assets/**/*"],
         configFilePath: "/test/normal/assetbox.config.json",
+        trackingPaths: ["./src/**/*.*"],
       });
     });
 
@@ -27,13 +28,14 @@ describe("readAssetBoxConfig Test", () => {
     });
   });
 
-  describe("noAssetPaths Repository", () => {
+  describe("emptyConfig Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/noAssetPaths");
       createMockRepository("/test/noAssetPaths", {
         assetBoxConfig: {
           "./assetbox.config.json": ` {
-            "assetPaths": []
+            "assetPaths": [],
+            "trackingPaths": []
             }`,
         },
       });
@@ -44,6 +46,7 @@ describe("readAssetBoxConfig Test", () => {
       expect(config).toStrictEqual({
         assetPaths: [],
         configFilePath: "/test/noAssetPaths/assetbox.config.json",
+        trackingPaths: [],
       });
     });
 

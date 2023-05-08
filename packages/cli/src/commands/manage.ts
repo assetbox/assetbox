@@ -5,15 +5,18 @@ import {
 } from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
+import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { createServer as createViteServer } from "vite";
 
 import { resolveCliRoot } from "../utils/path";
 
-export const createServer = async () => {
+// Create Asset Manager Server
+export const manage = async () => {
   const app = express();
   const vite = await createViteServer({
     server: { middlewareMode: true },
     appType: "custom",
+    publicDir: false,
   });
   app.use(vite.middlewares);
 
@@ -39,12 +42,7 @@ export const createServer = async () => {
         );
       template = await vite.transformIndexHtml(url, template);
 
-      const entryServerModulePath = resolveCliRoot("ssr", "entryServer.mjs");
-
-      const { render } = await vite.ssrLoadModule(entryServerModulePath);
-      const appHtml = await render(url);
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml);
-
+      const html = await renderStaticHtml(template, url);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       vite.ssrFixStacktrace(e as any);

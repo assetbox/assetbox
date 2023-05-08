@@ -17,7 +17,7 @@ describe("readAssetBoxConfig Test", () => {
       const config = await readAssetBoxConfig();
       expect(config).toStrictEqual({
         assetPaths: ["./public/**/*", "./src/assets/**/*"],
-        filePath: "/test/normal/assetbox.config.json",
+        configFilePath: "/test/normal/assetbox.config.json",
       });
     });
 
@@ -43,7 +43,7 @@ describe("readAssetBoxConfig Test", () => {
       const config = await readAssetBoxConfig();
       expect(config).toStrictEqual({
         assetPaths: [],
-        filePath: "/test/noAssetPaths/assetbox.config.json",
+        configFilePath: "/test/noAssetPaths/assetbox.config.json",
       });
     });
 

@@ -22,7 +22,7 @@
       "@trpc/server": ["node_modules/@trpc/server"]
     }
   },
-  "exclude": ["node_modules"],
-  "include": ["src/entry.ts"],
+  "exclude": ["node_modules", "src/main.tsx"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

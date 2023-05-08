@@ -5,6 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 ReactDOM.hydrateRoot(
   document.getElementById("root") as Element,
   <BrowserRouter>
-    <App />
+    <App data={window.__ASSET_DATA__} />
   </BrowserRouter>
 );

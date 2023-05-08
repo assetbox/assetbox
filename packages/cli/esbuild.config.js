@@ -38,13 +38,6 @@ const build = async () => {
     esbuild({
       entryPoints: ["./src/ssr/entryServer.tsx"],
       ...ENTRY_COMMON_OPTIONS,
-      format: "esm",
-      platform: "node",
-      outfile: "./bin/ssr/entryServer.mjs",
-    }),
-    esbuild({
-      entryPoints: ["./src/ssr/entryServer.tsx"],
-      ...ENTRY_COMMON_OPTIONS,
       format: "cjs",
       platform: "node",
       outfile: "./bin/ssr/entryServer.cjs",

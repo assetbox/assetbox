@@ -10,6 +10,7 @@ export const findFilePathsFromGlob = async (
     globPatterns.map((pattern: string) => {
       return glob(pattern, {
         cwd: findPackageRoot(process.cwd())!,
+        nodir: true,
         ...options,
       });
     })

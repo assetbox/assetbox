@@ -1,8 +1,8 @@
 import crypto from "crypto";
-import fs from "fs";
+import { readFile } from "fs/promises";
 
 const createFileHash = async (file: string) => {
-  const data = await fs.promises.readFile(file);
+  const data = await readFile(file);
   const hash = crypto
     .createHash("md5")
     .update(data as unknown as string, "utf-8")

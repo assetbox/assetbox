@@ -1,7 +1,11 @@
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 
-// https://vitejs.dev/config/
+import postcss from "./postcss.config.js";
+
 export default defineConfig({
   plugins: [react()],
+  css: {
+    postcss,
+  },
 });

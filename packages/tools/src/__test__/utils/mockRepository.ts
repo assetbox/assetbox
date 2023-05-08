@@ -20,7 +20,7 @@ export const createMockRepository = (
   vol.fromJSON(
     {
       ...(options.assetBoxConfig === true && {
-        "./assetbox.config.json": `{"assetPaths": ["./public/**/*", "./src/assets/**/*"]}`,
+        "./assetbox.config.json": `{"assetPaths": ["./public/**/*", "./src/assets/**/*"],"trackingPaths": ["./src/**/*.*"]}`,
       }),
       ...(typeof options.assetBoxConfig === "object" && options.assetBoxConfig),
 

@@ -3,7 +3,10 @@ export default {
   content: [],
   theme: {
     colors: {
-      blue: "#007AFF",
+      blue: {
+        DEFAULT: "#007AFF",
+        light: "#ECF5FF",
+      },
       white: "#FFFFFF",
       black: "#111111",
       gray: {

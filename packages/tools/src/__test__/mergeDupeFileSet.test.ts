@@ -1,6 +1,7 @@
 jest.mock("fs");
 jest.mock("fs/promises");
-import { vol } from "memfs";
+
+import memfs, { vol } from "memfs";
 import process from "process";
 
 import { findDupeFileSet } from "../findDupeFileSet";
@@ -15,21 +16,30 @@ describe("mergeDupeFileSet Test", () => {
     spy.mockReturnValue("/test/dupe");
     createMockRepository("/test/dupe", {
       assetBoxConfig: true,
-      isDupe: false,
+      isDupe: true,
     });
   });
 
   test("Dupe Repository", async () => {
     const config = await readAssetBoxConfig();
+
     const assetFiles = await findFilePathsFromGlob(config.assetPaths, {
       fs: memfs,
     });
-    const dupeFileSetFromAssetFiles = await findDupeFileSet(assetFiles);
-    const mergedDupFileSet = await mergeDupeFileSet(dupeFileSetFromAssetFiles);
 
-    expect(mergedDupFileSet).toStrictEqual([
-      ["/test/dupe/public/b_copy_merged.png"],
-      ["/test/basic/public/a_copy_merged.png"],
+    const dupeFileSetFromAssetFiles = await findDupeFileSet(assetFiles);
+
+    const mergedDupFileSet = await mergeDupeFileSet(dupeFileSetFromAssetFiles);
+    expect(mergedDupFileSet).toEqual({ isMerged: true });
+    expect(vol.readdirSync("/test/dupe/public")).toStrictEqual([
+      "a_copy_merged.png",
+      "b_copy_merged.png",
+      "mock.md",
+    ]);
+    expect(vol.readdirSync("/test/dupe/src/assets")).toStrictEqual([
+      "c.png",
+      "d.png",
+      "mock.md",
     ]);
   });
 

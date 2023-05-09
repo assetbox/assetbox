@@ -5,11 +5,8 @@
     "test": {
       "cache": false
     },
-    "@assetbox/trpc#build": {
-      "outputs": ["dist/**"]
-    },
     "build": {
-      "dependsOn": ["@assetbox/trpc#build"],
+      "dependsOn": ["^build"],
       "outputs": ["dist/**", "bin/**"]
     }
   }

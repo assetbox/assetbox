@@ -22,7 +22,7 @@ export const CheckBox = ({
   const [id] = useState(() => nanoid());
 
   return (
-    <div className={cn("flex items-center", className)} {...rest}>
+    <div className={cn("inline-flex items-center", className)} {...rest}>
       <Checkbox.Root checked={checked} onCheckedChange={onToggle} id={id}>
         <Checkbox.Indicator forceMount>
           {checked === true ? <Checked /> : <UnChecked />}

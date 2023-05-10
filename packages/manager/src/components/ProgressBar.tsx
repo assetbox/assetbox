@@ -12,7 +12,7 @@ export const ProgressBar = ({ rate, format, className }: ProgressBarProps) => {
       <div className="relative flex items-center w-full h-full bg-opacity-50 rounded bg-gray">
         <div
           style={{ width: `${rate}%` }}
-          className={`absolute h-full  bg-blue rounded`}
+          className={`absolute h-full bg-blue rounded`}
         />
         <p className="absolute m-2 text-xs text-white">
           {format.replace("{rate}", String(rate))}

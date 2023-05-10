@@ -8,12 +8,13 @@
     ".": {
       "require": "./dist/entry.cjs",
       "import": "./dist/entry.mjs"
-    }
+    },
+    "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build": "tsc --project tsconfig.build.json && node esbuild.config.js",
+    "build": "tsc --project tsconfig.build.json && node esbuild.config.js && tailwindcss -i ./src/input.css -o ./dist/index.css --minify",
     "test:type": "tsc --noEmit"
   },
   "dependencies": {
@@ -21,7 +22,7 @@
     "@trpc/client": "^10.23.0",
     "@trpc/server": "^10.23.0",
     "isomorphic-dompurify": "^1.3.0",
-    "nanoid": "^4.0.2",
+    "nanoid": "^3.3.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0"

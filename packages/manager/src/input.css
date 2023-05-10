@@ -8,3 +8,8 @@ html {
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 }
+
+body {
+  color: #111;
+  background-color: #f3f6fa;
+}

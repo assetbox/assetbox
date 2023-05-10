@@ -2,9 +2,9 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { nanoid } from "nanoid/non-secure";
 import { useState } from "react";
 
+import { cn } from "../../utils";
 import { ReactComponent as Checked } from "../assets/checked.svg";
 import { ReactComponent as UnChecked } from "../assets/un-checked.svg";
-import { cn } from "../utils";
 
 interface CheckBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;

@@ -1,4 +1,4 @@
-import { InlineSVG } from "./components/InlineSVG";
+import { InlineSVG } from "./components/ui/InlineSVG";
 
 export interface AssetBoxData {
   assetFiles: {
@@ -17,7 +17,7 @@ interface AppProps {
   data: AssetBoxData;
 }
 
-export function App({ data }: AppProps) {
+export const App = ({ data }: AppProps) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {data.assetFiles
@@ -37,4 +37,4 @@ export function App({ data }: AppProps) {
         ))}
     </div>
   );
-}
+};

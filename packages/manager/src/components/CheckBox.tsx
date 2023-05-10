@@ -1,42 +1,36 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
+import { nanoid } from "nanoid/non-secure";
 import { useState } from "react";
 
 import { ReactComponent as Checked } from "../assets/checked.svg";
 import { ReactComponent as UnChecked } from "../assets/un-checked.svg";
+import { cn } from "../utils";
+
+interface CheckBoxProps extends React.HTMLAttributes<HTMLDivElement> {
+  label: string;
+  onToggle?: () => void;
+  checked: boolean;
+}
 
 export const CheckBox = ({
   label,
   onToggle,
-  isChecked,
-}: {
-  label: string;
-  onToggle?: () => void;
-  isChecked: boolean;
-}) => {
-  const [checked, setChecked] =
-    useState<Checkbox.CheckedState>("indeterminate");
+  checked,
+  className,
+  ...rest
+}: CheckBoxProps) => {
+  const [id] = useState(() => nanoid());
 
   return (
-    <form>
-      <div className="flex items-center">
-        <Checkbox.Root
-          checked={checked}
-          onCheckedChange={() =>
-            checked === "indeterminate"
-              ? setChecked(true)
-              : setChecked("indeterminate")
-          }
-          id="c1"
-        >
-          <Checkbox.Indicator>
-            {checked === true && <Checked />}
-            {checked === "indeterminate" && <UnChecked />}
-          </Checkbox.Indicator>
-        </Checkbox.Root>
-        <label className="pl-2" htmlFor="c1">
-          {label}
-        </label>
-      </div>
-    </form>
+    <div className={cn("flex items-center", className)} {...rest}>
+      <Checkbox.Root checked={checked} onCheckedChange={onToggle} id={id}>
+        <Checkbox.Indicator forceMount>
+          {checked === true ? <Checked /> : <UnChecked />}
+        </Checkbox.Indicator>
+      </Checkbox.Root>
+      <label className="pl-2 cursor-pointer select-none text-gray" htmlFor={id}>
+        {label}
+      </label>
+    </div>
   );
 };

@@ -1,4 +1,4 @@
-import { InlineSVG } from "./components/ui/InlineSVG";
+import { InlineSVG } from "./components/ui";
 
 export interface AssetBoxData {
   assetFiles: {

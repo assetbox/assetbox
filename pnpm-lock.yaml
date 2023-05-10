@@ -206,6 +206,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.23)
+      esbuild-plugin-svgr:
+        specifier: ^1.1.0
+        version: 1.1.0
       postcss:
         specifier: ^8.4.23
         version: 8.4.23
@@ -3895,6 +3898,14 @@ packages:
       esbuild: 0.17.11
       fs-extra: 10.1.0
       globby: 11.1.0
+    dev: true
+
+  /esbuild-plugin-svgr@1.1.0:
+    resolution: {integrity: sha512-QvbWmxEi1XUvgtSvKlyNGC6dtjTIqO3e7d07V5whsBW6EIjZ8t34JALLxKVstjJB/vMC+j8CrCmKyVkTIQZkzQ==}
+    dependencies:
+      '@svgr/core': 6.5.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /esbuild@0.17.11:

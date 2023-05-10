@@ -2,9 +2,9 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { nanoid } from "nanoid/non-secure";
 import { useState } from "react";
 
+import CheckedIcon from "../../assets/checked.svg";
+import UnCheckedIcon from "../../assets/un-checked.svg";
 import { cn } from "../../utils";
-import { ReactComponent as Checked } from "../assets/checked.svg";
-import { ReactComponent as UnChecked } from "../assets/un-checked.svg";
 
 interface CheckBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
@@ -25,7 +25,7 @@ export const CheckBox = ({
     <div className={cn("inline-flex items-center", className)} {...rest}>
       <Checkbox.Root checked={checked} onCheckedChange={onToggle} id={id}>
         <Checkbox.Indicator forceMount>
-          {checked === true ? <Checked /> : <UnChecked />}
+          {checked === true ? <CheckedIcon /> : <UnCheckedIcon />}
         </Checkbox.Indicator>
       </Checkbox.Root>
       <label className="pl-2 cursor-pointer select-none text-gray" htmlFor={id}>

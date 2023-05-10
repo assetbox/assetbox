@@ -1,7 +1,7 @@
 import { build } from "esbuild";
+import svgr from "esbuild-plugin-svgr";
 
 import packagesJson from "./package.json" assert { type: "json" };
-
 Promise.all([
   build({
     entryPoints: ["./src/entry.ts"],
@@ -9,6 +9,7 @@ Promise.all([
     minify: true,
     sourcemap: true,
     format: "cjs",
+    plugins: [svgr()],
     external: Object.keys({
       ...packagesJson.dependencies,
       ...packagesJson.devDependencies,
@@ -22,6 +23,7 @@ Promise.all([
     minify: true,
     sourcemap: true,
     format: "esm",
+    plugins: [svgr()],
     external: Object.keys({
       ...packagesJson.dependencies,
       ...packagesJson.devDependencies,

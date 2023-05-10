@@ -1,5 +1,3 @@
-import React from "react";
-
 export const SideBar = () => {
-  return <div>SideBar</div>;
+  return <div className="bg-white">SideBar</div>;
 };

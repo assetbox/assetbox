@@ -3,7 +3,7 @@ import { cn } from "../../utils";
 interface ProgressBarProps {
   rate: number;
   format: string;
-  className: string;
+  className?: string;
 }
 
 export const ProgressBar = ({ rate, format, className }: ProgressBarProps) => {

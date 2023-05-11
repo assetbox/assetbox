@@ -38,12 +38,14 @@ describe("mergeDupeFileSet Test", () => {
       isMerged: true,
       newPathAndName: "/test/dupe/public/merged.png",
     });
+
     expect(vol.readdirSync("/test/dupe/public")).toStrictEqual([
       "a.png",
       "a_copy.png",
       "merged.png",
       "mock.md",
     ]);
+
     expect(vol.readdirSync("/test/dupe/src/assets")).toStrictEqual([
       "a.png",
       "c.png",

@@ -1,5 +1,5 @@
 import fs from "fs";
-import { resolve } from "path";
+
 export const mergeDupeFileSet = async (
   dupeFiles: string[],
   newPathAndName: string

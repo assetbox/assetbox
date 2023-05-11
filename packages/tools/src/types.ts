@@ -1,5 +1,4 @@
 export type AssetBoxConfig = {
-  configFilePath: string;
-  assetPaths: string[];
+  categories: Record<string, string[]>;
   trackingPaths: string[];
 };

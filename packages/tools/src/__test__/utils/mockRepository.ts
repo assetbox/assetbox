@@ -8,9 +8,10 @@
  */
 
 import { vol } from "memfs";
+import detent from "ts-dedent";
 
 type MockRepositoryOptions = {
-  assetBoxConfig: boolean | Record<string, string[] | string>;
+  assetBoxConfig: boolean | "empty" | Record<string, string[] | string>;
   isDupe?: boolean;
 };
 
@@ -21,22 +22,35 @@ export const createMockRepository = (
   vol.fromJSON(
     {
       ...(options.assetBoxConfig === true && {
-        "./assetbox.config.json": `{"assetPaths": ["./public/**/*", "./src/assets/**/*"],"trackingPaths": ["./src/**/*.*"]}`,
+        "./assetbox.config.json": detent`
+        {
+          "categories": {
+            "Icons": ["./src/assets/icons/**/*"],
+            "Images": ["./public/**/*"]
+          },
+          "trackingPaths": ["./src/**/*"]
+        }
+        `,
+      }),
+      ...(options.assetBoxConfig === "empty" && {
+        "./assetbox.config.json": detent`
+        {
+          "categories": {},
+          "trackingPaths": []
+        }
+        `,
       }),
       ...(typeof options.assetBoxConfig === "object" && options.assetBoxConfig),
-
       ...(options.isDupe && {
         "./public/a_copy.png": "1",
-        "./src/assets/a.png": "1",
         "./public/b_copy.png": "2",
+        "./src/assets/a.png": "1",
       }),
       "./public/a.png": "1",
       "./public/b.png": "2",
-      "./src/assets/c.png": "3",
-      "./src/assets/d.png": "4",
-      "./public/mock.md": "i am mock data",
-      "./src/assets/mock.md": "i am mock data2",
-      "./package.json": `
+      "./src/assets/icons/c.svg": "3",
+      "./src/assets/icons/d.svg": "4",
+      "./package.json": detent`
       {
         "name": "test",
         "version": "1.0.0",

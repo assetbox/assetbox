@@ -236,6 +236,9 @@ importers:
       lilconfig:
         specifier: ^2.1.0
         version: 2.1.0
+      ts-dedent:
+        specifier: ^2.2.0
+        version: 2.2.0
       workspace-tools:
         specifier: ^0.30.0
         version: 0.30.0

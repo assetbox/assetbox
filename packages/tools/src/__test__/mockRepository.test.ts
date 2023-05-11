@@ -1,9 +1,6 @@
-import { afterEach, beforeEach } from "node:test";
-
 import { vol } from "memfs";
 
 import { createMockRepository } from "./utils/mockRepository";
-
 const spy = jest.spyOn(process, "cwd");
 
 describe("Creating Mock Repository", () => {
@@ -30,21 +27,17 @@ describe("Creating Mock Repository", () => {
     });
   });
 
-  describe("No AssetPaths Repository", () => {
+  describe("No Categories Repository", () => {
     beforeAll(() => {
-      spy.mockReturnValue("/test/noAssetPaths");
-      createMockRepository("/test/noAssetPaths", {
-        assetBoxConfig: {
-          "./assetbox.config.json": ` {
-          "assetPaths": []
-          }`,
-        },
+      spy.mockReturnValue("/test/noCategories");
+      createMockRepository("/test/noCategories", {
+        assetBoxConfig: "empty",
       });
     });
 
-    test("No AssetPaths Repository", () => {
-      expect(vol.existsSync("/test/noAssetPaths")).toBe(true);
-      expect(vol.readdirSync("/test/noAssetPaths")).toStrictEqual([
+    test("No Categories Repository", () => {
+      expect(vol.existsSync("/test/noCategories")).toBe(true);
+      expect(vol.readdirSync("/test/noCategories")).toStrictEqual([
         "assetbox.config.json",
         "package.json",
         "pnpm-lock.yaml",
@@ -55,7 +48,7 @@ describe("Creating Mock Repository", () => {
 
     afterAll(() => {
       spy.mockClear();
-      vol.rmdirSync("/test/noAssetPaths", { recursive: true });
+      vol.rmdirSync("/test/noCategories", { recursive: true });
     });
   });
 

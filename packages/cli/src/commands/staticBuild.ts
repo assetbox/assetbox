@@ -10,9 +10,10 @@ import { findPackageRoot } from "workspace-tools";
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
 
 export const staticBuild = async () => {
-  const { assetPaths } = await readAssetBoxConfig();
-  const filePaths = await findFilePathsFromGlob(assetPaths);
-  const normalizeFilePaths = filePaths.map((filePath) =>
+  const { categories } = await readAssetBoxConfig();
+  const assetFiles = Object.values(categories).flat();
+
+  const normalizeFilePaths = assetFiles.map((filePath) =>
     relative(findPackageRoot(process.cwd())!, filePath)
   );
 
@@ -31,7 +32,7 @@ export const staticBuild = async () => {
     plugins: [
       react(),
       copy({
-        targets: [{ src: assetPaths, dest: join("assetbox-dist", "assets") }],
+        targets: [{ src: assetFiles, dest: join("assetbox-dist", "assets") }],
         onlyFiles: true,
       }),
     ],

@@ -1,10 +1,10 @@
 jest.mock("fs");
+
 import { expect, jest, test } from "@jest/globals";
-import memfs, { vol } from "memfs";
+import { vol } from "memfs";
 import process from "process";
 
 import { findFilePathsFromGlob } from "../findFilePathsFromGlob";
-import { readAssetBoxConfig } from "../readAssetBoxConfig";
 import { createMockRepository } from "./utils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
@@ -17,51 +17,28 @@ describe("findFilePathsFromGlob Test", () => {
     });
 
     test("findFilePathsFromGlob Test", async () => {
-      const config = await readAssetBoxConfig();
-      const result = await findFilePathsFromGlob(config.assetPaths, {
-        fs: memfs,
-      });
+      const result = await findFilePathsFromGlob([
+        "./public/**/*",
+        "./src/assets/**/*",
+      ]);
 
       expect(result).toStrictEqual([
-        "/test/normal/public/mock.md",
         "/test/normal/public/b.png",
         "/test/normal/public/a.png",
-        "/test/normal/src/assets/mock.md",
-        "/test/normal/src/assets/d.png",
-        "/test/normal/src/assets/c.png",
+        "/test/normal/src/assets/icons/d.svg",
+        "/test/normal/src/assets/icons/c.svg",
       ]);
     });
 
-    afterAll(() => {
-      spy.mockClear();
-      vol.rmdirSync("/test/normal", { recursive: true });
-    });
-  });
-
-  describe("noAssetPaths Repository", () => {
-    beforeAll(() => {
-      spy.mockReturnValue("/test/noAssetPaths");
-      createMockRepository("/test/noAssetPaths", {
-        assetBoxConfig: {
-          "./assetbox.config.json": ` {
-          "assetPaths": []
-          }`,
-        },
-      });
-    });
-
     test("findFilePathsFromGlob Test", async () => {
-      const config = await readAssetBoxConfig();
-      const result = await findFilePathsFromGlob(config.assetPaths, {
-        fs: memfs,
-      });
+      const result = await findFilePathsFromGlob([]);
 
       expect(result).toStrictEqual([]);
     });
 
     afterAll(() => {
       spy.mockClear();
-      vol.rmdirSync("/test/noAssetPaths", { recursive: true });
+      vol.rmdirSync("/test/normal", { recursive: true });
     });
   });
 });

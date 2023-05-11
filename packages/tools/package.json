@@ -17,6 +17,7 @@
   "dependencies": {
     "glob": "^9.3.0",
     "lilconfig": "^2.1.0",
+    "ts-dedent": "^2.2.0",
     "workspace-tools": "^0.30.0"
   },
   "devDependencies": {

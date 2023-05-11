@@ -1,21 +1,25 @@
 import fs from "fs";
 import { resolve } from "path";
-export const mergeDupeFileSet = async (dupFiles: string[][]) => {
+export const mergeDupeFileSet = async (
+  dupeFiles: string[],
+  newPathAndName: string
+) => {
   try {
-    dupFiles.forEach((fileSet) => {
-      const renameFile = fileSet[0].split(".");
-      const fileExtension = renameFile.pop();
+    const fileExtension = dupeFiles[0].split(".").pop();
 
-      fileSet.forEach((file, index) => {
-        if (index == 0) {
-          fs.renameSync(file, renameFile + "_merged." + fileExtension);
-        } else {
-          fs.unlinkSync(file);
-        }
-      });
+    dupeFiles.forEach((fileSet, index) => {
+      if (index == 0) {
+        fs.renameSync(fileSet, newPathAndName + "." + fileExtension);
+      } else {
+        fs.unlinkSync(fileSet);
+      }
     });
+
+    return {
+      isMerged: true,
+      newPathAndName: newPathAndName + "." + fileExtension,
+    };
   } catch (e) {
     throw new Error("Error Occured in mergeDupeFileSet: " + e + "");
   }
-  return { isMerged: true };
 };

@@ -1,4 +1,5 @@
 jest.mock("fs");
+jest.mock("fs/promises");
 import { expect, jest, test } from "@jest/globals";
 import memfs, { vol } from "memfs";
 import process from "process";

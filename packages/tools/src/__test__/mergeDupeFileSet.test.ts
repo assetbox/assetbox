@@ -29,14 +29,23 @@ describe("mergeDupeFileSet Test", () => {
 
     const dupeFileSetFromAssetFiles = await findDupeFileSet(assetFiles);
 
-    const mergedDupFileSet = await mergeDupeFileSet(dupeFileSetFromAssetFiles);
-    expect(mergedDupFileSet).toEqual({ isMerged: true });
+    const mergedDupFileSet = await mergeDupeFileSet(
+      dupeFileSetFromAssetFiles[0],
+      "/test/dupe/public/merged"
+    );
+
+    expect(mergedDupFileSet).toEqual({
+      isMerged: true,
+      newPathAndName: "/test/dupe/public/merged.png",
+    });
     expect(vol.readdirSync("/test/dupe/public")).toStrictEqual([
-      "a_copy_merged.png",
-      "b_copy_merged.png",
+      "a.png",
+      "a_copy.png",
+      "merged.png",
       "mock.md",
     ]);
     expect(vol.readdirSync("/test/dupe/src/assets")).toStrictEqual([
+      "a.png",
       "c.png",
       "d.png",
       "mock.md",

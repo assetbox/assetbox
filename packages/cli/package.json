@@ -41,6 +41,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
+    "ts-dedent": "^2.2.0",
     "vite": "^4.2.0",
     "workspace-tools": "^0.30.0"
   },

@@ -1,20 +1,10 @@
 import fs from "fs/promises";
 import { resolve } from "path";
 import prompts from "prompts";
+import js from "ts-dedent";
 import { findPackageRoot } from "workspace-tools";
-
 export const initialize = async () => {
-  let assetPath = "";
   let trackingPath = "";
-
-  const { isAssetPathDefault } = await prompts({
-    type: "toggle",
-    name: "isAssetPathDefault",
-    message: "Set assetPaths to the default.",
-    initial: true,
-    active: "Yes",
-    inactive: "No",
-  });
 
   const { isTrackingPathDefault } = await prompts({
     type: "toggle",
@@ -24,12 +14,6 @@ export const initialize = async () => {
     active: "Yes",
     inactive: "No",
   });
-
-  if (isAssetPathDefault) {
-    assetPath = "./src/assets/**/*";
-  } else {
-    console.log("Please write assetbox.config.js yourself.");
-  }
 
   if (isTrackingPathDefault) {
     trackingPath = "./src/**/*.*";
@@ -44,8 +28,9 @@ export const initialize = async () => {
 
   await fs.writeFile(
     resolve(packageRoot, "assetbox.config.cjs"),
-    `module.exports = {
-  assetPaths: [${`"${assetPath}"`}],
+    js`
+module.exports = {
+  categories: {},
   trackingPaths: [${`"${trackingPath}"`}],
 };
 `

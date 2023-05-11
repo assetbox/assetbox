@@ -8,7 +8,9 @@ import { resolveCliRoot } from "src/utils/path";
 
 export const getAssetBoxData = async () => {
   const { categories } = await readAssetBoxConfig();
+  console.log(categories);
   const assetFiles = Object.values(categories).flat();
+  console.log(assetFiles);
   const dupeFiles = await findDupeFileSet(assetFiles);
 
   const assetFileStats = await allSettled(assetFiles.map(convertAssetStat));

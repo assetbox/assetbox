@@ -35,7 +35,7 @@ export const readAssetBoxConfig = async () => {
     ignoreEmptySearchPlaces: false,
   };
 
-  const value = await lilconfig("assetBox", options).search(``);
+  const value = await lilconfig("assetBox", options).search();
   if (!value || value.isEmpty) {
     throw new Error("Couldn't find assetbox.config.js.");
   }

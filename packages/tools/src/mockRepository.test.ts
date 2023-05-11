@@ -2,7 +2,7 @@ import { afterEach, beforeEach } from "node:test";
 
 import { vol } from "memfs";
 
-import { createMockRepository } from "./utils/mockRepository";
+import { createMockRepository } from "./testUtils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 

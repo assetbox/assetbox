@@ -4,8 +4,8 @@ jest.mock("fs/promises");
 import { vol } from "memfs";
 import process from "process";
 
-import { readAssetBoxConfig } from "../readAssetBoxConfig";
-import { createMockRepository } from "./utils/mockRepository";
+import { readAssetBoxConfig } from "./readAssetBoxConfig";
+import { createMockRepository } from "./testUtils/mockRepository";
 const spy = jest.spyOn(process, "cwd");
 
 describe("readAssetBoxConfig Test", () => {

@@ -4,9 +4,9 @@ import { expect, jest, test } from "@jest/globals";
 import memfs, { vol } from "memfs";
 import process from "process";
 
-import { findFilePathsFromGlob } from "../findFilePathsFromGlob";
-import { readAssetBoxConfig } from "../readAssetBoxConfig";
-import { createMockRepository } from "./utils/mockRepository";
+import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
+import { readAssetBoxConfig } from "./readAssetBoxConfig";
+import { createMockRepository } from "./testUtils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 

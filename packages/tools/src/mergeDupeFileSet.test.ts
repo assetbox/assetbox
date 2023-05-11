@@ -4,11 +4,11 @@ jest.mock("fs/promises");
 import memfs, { vol } from "memfs";
 import process from "process";
 
-import { findDupeFileSet } from "../findDupeFileSet";
-import { findFilePathsFromGlob } from "../findFilePathsFromGlob";
-import { mergeDupeFileSet } from "../mergeDupeFileSet";
-import { readAssetBoxConfig } from "../readAssetBoxConfig";
-import { createMockRepository } from "./utils/mockRepository";
+import { findDupeFileSet } from "./findDupeFileSet";
+import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
+import { mergeDupeFileSet } from "./mergeDupeFileSet";
+import { readAssetBoxConfig } from "./readAssetBoxConfig";
+import { createMockRepository } from "./testUtils/mockRepository";
 const spy = jest.spyOn(process, "cwd");
 
 describe("mergeDupeFileSet Test", () => {

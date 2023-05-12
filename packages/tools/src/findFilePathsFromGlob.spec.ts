@@ -1,11 +1,11 @@
 jest.mock("fs");
-
+jest.mock("fs/promises");
 import { expect, jest, test } from "@jest/globals";
 import { vol } from "memfs";
 import process from "process";
 
-import { findFilePathsFromGlob } from "../findFilePathsFromGlob";
-import { createMockRepository } from "./utils/mockRepository";
+import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
+import { createMockRepository } from "./test/utils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 

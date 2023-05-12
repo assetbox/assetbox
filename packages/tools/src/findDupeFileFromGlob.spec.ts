@@ -4,9 +4,9 @@ import { expect, jest, test } from "@jest/globals";
 import { vol } from "memfs";
 import process from "process";
 
-import { findDupeFileSet } from "../findDupeFileSet";
-import { readAssetBoxConfig } from "../readAssetBoxConfig";
-import { createMockRepository } from "./utils/mockRepository";
+import { findDupeFileSet } from "./findDupeFileSet";
+import { readAssetBoxConfig } from "./readAssetBoxConfig";
+import { createMockRepository } from "./test/utils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 

@@ -1,6 +1,7 @@
 import { vol } from "memfs";
 
-import { createMockRepository } from "./utils/mockRepository";
+import { createMockRepository } from "./test/utils/mockRepository";
+
 const spy = jest.spyOn(process, "cwd");
 
 describe("Creating Mock Repository", () => {

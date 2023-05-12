@@ -31,12 +31,11 @@ describe("mergeDupeFileSet Test", () => {
 
     const mergedDupFileSet = await mergeDupeFileSet(
       dupeFileSetFromAssetFiles[0],
-      "/test/dupe/public/merged"
+      "/test/dupe/public/merged.png"
     );
 
     expect(mergedDupFileSet).toEqual({
       isMerged: true,
-      newPathAndName: "/test/dupe/public/merged.png",
     });
 
     expect(vol.readdirSync("/test/dupe/public")).toStrictEqual([

@@ -2,14 +2,14 @@ import fs from "fs";
 
 export const mergeDupeFileSet = async (
   dupeFiles: string[],
-  newPathAndName: string
+  savePath: string
 ) => {
   try {
     const fileExtension = dupeFiles[0].split(".").pop();
 
     dupeFiles.forEach((fileSet, index) => {
       if (index == 0) {
-        fs.renameSync(fileSet, newPathAndName + "." + fileExtension);
+        fs.renameSync(fileSet, savePath);
       } else {
         fs.unlinkSync(fileSet);
       }
@@ -17,7 +17,6 @@ export const mergeDupeFileSet = async (
 
     return {
       isMerged: true,
-      newPathAndName: newPathAndName + "." + fileExtension,
     };
   } catch (e) {
     throw new Error("Error Occured in mergeDupeFileSet: " + e + "");

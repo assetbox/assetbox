@@ -1,22 +1,22 @@
 import {
-  allSettled,
-  convertAssetStat,
   findDupeFileSet,
+  getCategoryStats,
   readAssetBoxConfig,
 } from "@assetbox/tools";
 import { resolveCliRoot } from "src/utils/path";
 
+export type AssetBoxData = Awaited<ReturnType<typeof getAssetBoxData>>;
+
 export const getAssetBoxData = async () => {
   const { categories } = await readAssetBoxConfig();
-  console.log(categories);
+
+  const categoryStats = await getCategoryStats(categories);
+
   const assetFiles = Object.values(categories).flat();
-  console.log(assetFiles);
   const dupeFiles = await findDupeFileSet(assetFiles);
 
-  const assetFileStats = await allSettled(assetFiles.map(convertAssetStat));
-
   return {
-    assetFiles: assetFileStats.fulfilled,
+    categories: categoryStats,
     dupeFiles,
   };
 };

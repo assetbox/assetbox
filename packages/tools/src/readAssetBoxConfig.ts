@@ -2,10 +2,10 @@ import { lilconfig } from "lilconfig";
 import { findPackageRoot } from "workspace-tools";
 
 import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
-import type { AssetBoxConfig } from "./types";
+import type { AssetBoxScheme } from "./types";
 
 export const getCategoryFileList = async (
-  category: AssetBoxConfig["categories"]
+  category: AssetBoxScheme["categories"]
 ) => {
   const globEntries = await Promise.all(
     Object.entries(category).map(async ([categoryName, glob]) => {
@@ -40,7 +40,7 @@ export const readAssetBoxConfig = async () => {
     throw new Error("Couldn't find assetbox.config.js.");
   }
 
-  const { categories, trackingPaths }: AssetBoxConfig = value.config;
+  const { categories, trackingPaths }: AssetBoxScheme = value.config;
 
   return {
     configFilePath: value.filepath,

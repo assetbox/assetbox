@@ -1,3 +1,5 @@
+import "@assetbox/manager/dist/index.css";
+
 import { App } from "@assetbox/manager";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";

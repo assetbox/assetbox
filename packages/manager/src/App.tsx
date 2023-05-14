@@ -1,4 +1,5 @@
-import { InlineSVG } from "./components/ui";
+import { InlineSVG, Layout, SideBar } from "./components";
+import { Main } from "./components/layout/Main";
 
 export interface AssetBoxData {
   assetFiles: {
@@ -19,22 +20,24 @@ interface AppProps {
 
 export const App = ({ data }: AppProps) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      {data.assetFiles
-        .filter((assetFile) => assetFile.extension === "svg")
-        .map((v, idx) => (
-          <InlineSVG key={`svg-${idx}`} svgHtml={v.data} />
-        ))}
-
-      {data.assetFiles
-        .filter((assetFile) => assetFile.extension !== "svg")
-        .map((v, idx) => (
-          <img
-            key={`img-${idx}`}
-            src={v.filename}
-            style={{ width: "300px", height: "300px" }}
-          />
-        ))}
-    </div>
+    <Layout>
+      <SideBar />
+      <Main>
+        {data.assetFiles
+          .filter((assetFile) => assetFile.extension === "svg")
+          .map((v, idx) => (
+            <InlineSVG key={`svg-${idx}`} svgHtml={v.data} />
+          ))}
+        {data.assetFiles
+          .filter((assetFile) => assetFile.extension !== "svg")
+          .map((v, idx) => (
+            <img
+              key={`img-${idx}`}
+              src={v.filename}
+              style={{ width: "300px", height: "300px" }}
+            />
+          ))}
+      </Main>
+    </Layout>
   );
 };

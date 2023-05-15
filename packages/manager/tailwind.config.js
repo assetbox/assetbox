@@ -14,6 +14,7 @@ export default {
         DEFAULT: "#838A9A",
         light: "#F3F6FA",
         dark: "#454F5D",
+        border: "#D4D4D4",
       },
     },
     extend: {

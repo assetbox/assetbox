@@ -1,13 +1,12 @@
 jest.mock("fs");
 jest.mock("fs/promises");
 import { expect, jest, test } from "@jest/globals";
-import memfs, { vol } from "memfs";
+import { vol } from "memfs";
 import process from "process";
 
 import { findDupeFileSet } from "./findDupeFileSet";
-import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
-import { createMockRepository } from "./testUtils/mockRepository";
+import { createMockRepository } from "./test/utils/mockRepository";
 
 const spy = jest.spyOn(process, "cwd");
 
@@ -21,21 +20,15 @@ describe("findDupeFileFromGlob Test", () => {
       });
     });
 
-    test("findFilePathsFromGlob Test", async () => {
-      const config = await readAssetBoxConfig();
-      const assetFiles = await findFilePathsFromGlob(config.assetPaths, {
-        fs: memfs,
-      });
+    test("findDupeFileSet Test", async () => {
+      const { categories } = await readAssetBoxConfig();
+      const assetFiles = Object.values(categories).flat();
 
       const result = await findDupeFileSet(assetFiles);
 
       expect(result).toStrictEqual([
         ["/test/basic/public/b_copy.png", "/test/basic/public/b.png"],
-        [
-          "/test/basic/public/a_copy.png",
-          "/test/basic/public/a.png",
-          "/test/basic/src/assets/a.png",
-        ],
+        ["/test/basic/public/a_copy.png", "/test/basic/public/a.png"],
       ]);
     });
 
@@ -45,7 +38,7 @@ describe("findDupeFileFromGlob Test", () => {
     });
   });
 
-  describe("Not Dupe Repository", () => {
+  describe("Dedupe Repository", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/basic");
       createMockRepository("/test/basic", {
@@ -54,11 +47,9 @@ describe("findDupeFileFromGlob Test", () => {
       });
     });
 
-    test("findFilePathsFromGlob Test", async () => {
-      const config = await readAssetBoxConfig();
-      const assetFiles = await findFilePathsFromGlob(config.assetPaths, {
-        fs: memfs,
-      });
+    test("findDupeFileSet Test", async () => {
+      const { categories } = await readAssetBoxConfig();
+      const assetFiles = Object.values(categories).flat();
 
       const result = await findDupeFileSet(assetFiles);
 

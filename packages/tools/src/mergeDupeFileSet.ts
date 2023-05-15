@@ -5,8 +5,6 @@ export const mergeDupeFileSet = async (
   savePath: string
 ) => {
   try {
-    const fileExtension = dupeFiles[0].split(".").pop();
-
     dupeFiles.forEach((fileSet, index) => {
       if (index == 0) {
         fs.renameSync(fileSet, savePath);

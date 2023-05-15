@@ -1,5 +1,8 @@
 // eslint-disable-next-line no-undef
 module.exports = {
-  assetPaths: ["./public/**/*", "./src/assets/**/*"],
-  trackingPaths: ["./src/**/*.*"],
+  categories: {
+    Icons: ["./src/assets/icons/**/*"],
+    Images: ["./public/images/**/*"],
+  },
+  trackingPaths: ["./src/**/*"],
 };

@@ -32,10 +32,7 @@ module.exports = {
   testEnvironment: "jest-environment-node",
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    "<rootDir>/**/*.test.(js|jsx|ts|tsx)",
-    "<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))",
-  ],
+  testMatch: ["<rootDir>/**/*.spec.(js|jsx|ts|tsx)"],
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: ["<rootDir>/node_modules/"],

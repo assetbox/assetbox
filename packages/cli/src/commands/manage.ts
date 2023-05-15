@@ -20,14 +20,12 @@ export const manage = async () => {
   });
   app.use(vite.middlewares);
 
-  const createContext = ({ req, res }: CreateExpressContextOptions) => ({}); // no context
-
   app.use(express.json());
   app.use(
     "/trpc",
     createExpressMiddleware({
       router: appRouter,
-      createContext,
+      createContext: () => ({}),
     })
   );
 

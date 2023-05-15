@@ -5,7 +5,7 @@ import { vol } from "memfs";
 import process from "process";
 
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
-import { createMockRepository } from "./testUtils/mockRepository";
+import { createMockRepository } from "./test/utils/mockRepository";
 const spy = jest.spyOn(process, "cwd");
 
 describe("readAssetBoxConfig Test", () => {
@@ -17,10 +17,20 @@ describe("readAssetBoxConfig Test", () => {
 
     test("readAssetBox config", async () => {
       const config = await readAssetBoxConfig();
+
       expect(config).toStrictEqual({
-        assetPaths: ["./public/**/*", "./src/assets/**/*"],
+        categories: {
+          Icons: [
+            "/test/normal/src/assets/icons/d.svg",
+            "/test/normal/src/assets/icons/c.svg",
+          ],
+          Images: ["/test/normal/public/b.png", "/test/normal/public/a.png"],
+        },
         configFilePath: "/test/normal/assetbox.config.json",
-        trackingPaths: ["./src/**/*.*"],
+        trackingPaths: [
+          "/test/normal/src/assets/icons/d.svg",
+          "/test/normal/src/assets/icons/c.svg",
+        ],
       });
     });
 
@@ -32,29 +42,24 @@ describe("readAssetBoxConfig Test", () => {
 
   describe("emptyConfig Repository", () => {
     beforeAll(() => {
-      spy.mockReturnValue("/test/noAssetPaths");
-      createMockRepository("/test/noAssetPaths", {
-        assetBoxConfig: {
-          "./assetbox.config.json": ` {
-            "assetPaths": [],
-            "trackingPaths": []
-            }`,
-        },
+      spy.mockReturnValue("/test/emptyConfig");
+      createMockRepository("/test/emptyConfig", {
+        assetBoxConfig: "empty",
       });
     });
 
     test("readAssetBox config", async () => {
       const config = await readAssetBoxConfig();
       expect(config).toStrictEqual({
-        assetPaths: [],
-        configFilePath: "/test/noAssetPaths/assetbox.config.json",
+        categories: {},
+        configFilePath: "/test/emptyConfig/assetbox.config.json",
         trackingPaths: [],
       });
     });
 
     afterAll(() => {
       spy.mockClear();
-      vol.rmdirSync("/test/noAssetPaths/", { recursive: true });
+      vol.rmdirSync("/test/emptyConfig", { recursive: true });
     });
   });
 

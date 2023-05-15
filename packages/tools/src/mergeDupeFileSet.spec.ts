@@ -1,14 +1,13 @@
 jest.mock("fs");
 jest.mock("fs/promises");
 
-import memfs, { vol } from "memfs";
+import { vol } from "memfs";
 import process from "process";
 
 import { findDupeFileSet } from "./findDupeFileSet";
-import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
 import { mergeDupeFileSet } from "./mergeDupeFileSet";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
-import { createMockRepository } from "./testUtils/mockRepository";
+import { createMockRepository } from "./test/utils/mockRepository";
 const spy = jest.spyOn(process, "cwd");
 
 describe("mergeDupeFileSet Test", () => {
@@ -21,20 +20,17 @@ describe("mergeDupeFileSet Test", () => {
   });
 
   test("Dupe Repository", async () => {
-    const config = await readAssetBoxConfig();
+    const { categories } = await readAssetBoxConfig();
+    const assetFiles = Object.values(categories).flat();
 
-    const assetFiles = await findFilePathsFromGlob(config.assetPaths, {
-      fs: memfs,
-    });
+    const [dupeFileSetFromAssetFiles] = await findDupeFileSet(assetFiles);
 
-    const dupeFileSetFromAssetFiles = await findDupeFileSet(assetFiles);
-
-    const mergedDupFileSet = await mergeDupeFileSet(
-      dupeFileSetFromAssetFiles[0],
+    const mergedDupeFileSet = await mergeDupeFileSet(
+      dupeFileSetFromAssetFiles,
       "/test/dupe/public/merged.png"
     );
 
-    expect(mergedDupFileSet).toEqual({
+    expect(mergedDupeFileSet).toEqual({
       isMerged: true,
     });
 
@@ -42,19 +38,11 @@ describe("mergeDupeFileSet Test", () => {
       "a.png",
       "a_copy.png",
       "merged.png",
-      "mock.md",
-    ]);
-
-    expect(vol.readdirSync("/test/dupe/src/assets")).toStrictEqual([
-      "a.png",
-      "c.png",
-      "d.png",
-      "mock.md",
     ]);
   });
 
   afterAll(() => {
     spy.mockClear();
-    vol.rmdirSync("/test/dupe/", { recursive: true });
+    vol.rmdirSync("/test/dupe", { recursive: true });
   });
 });

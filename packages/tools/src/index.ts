@@ -2,6 +2,8 @@ export * from "./allSettled";
 export * from "./convertAssetStat";
 export * from "./findDupeFileSet";
 export * from "./findFilePathsFromGlob";
+export * from "./getCategoryStats";
 export * from "./importExtract";
 export * from "./mergeDupeFileSet";
 export * from "./readAssetBoxConfig";
+export * from "./types";

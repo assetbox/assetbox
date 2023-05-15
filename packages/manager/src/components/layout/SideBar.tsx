@@ -1,5 +1,7 @@
+import { Fragment } from "react";
+import { Link, useLocation } from "react-router-dom";
+
 import AlphabetA from "../../assets/alphabet-a.svg";
-import DupeAssetsMenuIcon from "../../assets/dupe-assets-menu.svg";
 import FolderIcon from "../../assets/folder.svg";
 import Logo from "../../assets/logo.svg";
 import { cn } from "../../utils";
@@ -10,15 +12,19 @@ const SectorLine = () => {
 };
 
 interface MenuItemProps extends React.PropsWithChildren {
+  to: string;
   active?: boolean;
   icon: React.ReactElement;
+  className?: string;
 }
 
-const MenuItem = ({ active, icon, children }: MenuItemProps) => {
+const MenuItem = ({ to, active, icon, children, className }: MenuItemProps) => {
   return (
-    <div
+    <Link
+      to={to}
       className={cn(
         "group select-none cursor-pointer rounded flex items-center py-[14px] px-5 gap-[10px] hover:bg-[#ECF5FF]",
+        className,
         active && "bg-[#ECF5FF]"
       )}
     >
@@ -38,11 +44,22 @@ const MenuItem = ({ active, icon, children }: MenuItemProps) => {
       >
         {children}
       </p>
-    </div>
+    </Link>
   );
 };
 
-export const SideBar = () => {
+interface SideBarProps {
+  categories: { label: React.ReactNode; path: string }[];
+  menus: {
+    icon: React.ReactElement;
+    label: React.ReactNode;
+    path: string;
+  }[];
+}
+
+export const SideBar = ({ categories, menus }: SideBarProps) => {
+  const { pathname } = useLocation();
+
   return (
     <div className="h-full px-8 pt-12 bg-white w-80">
       <Logo className="ml-[10px] mb-8" />
@@ -54,15 +71,28 @@ export const SideBar = () => {
       </div>
       <SectorLine />
 
-      <MenuItem active icon={<FolderIcon />}>
-        Icons
-      </MenuItem>
-      <SectorLine />
-      <MenuItem icon={<FolderIcon />}>Images</MenuItem>
-      <SectorLine />
+      {categories.map(({ label, path }) => (
+        <Fragment key={`category-${label}`}>
+          <MenuItem to={path} active={pathname === path} icon={<FolderIcon />}>
+            {label}
+          </MenuItem>
+          <SectorLine />
+        </Fragment>
+      ))}
 
-      <MenuItem icon={<DupeAssetsMenuIcon />}>Duplicated Assets</MenuItem>
-      <SectorLine />
+      {menus.map(({ icon, label, path }) => (
+        <Fragment key={`menu-${label}`}>
+          <MenuItem
+            to={path}
+            active={pathname === path}
+            className="px-[10px]"
+            icon={icon}
+          >
+            {label}
+          </MenuItem>
+          <SectorLine />
+        </Fragment>
+      ))}
     </div>
   );
 };

@@ -126,6 +126,9 @@ importers:
       react-router-dom:
         specifier: ^6.9.0
         version: 6.9.0(react-dom@18.2.0)(react@18.2.0)
+      ts-dedent:
+        specifier: ^2.2.0
+        version: 2.2.0
       vite:
         specifier: ^4.2.0
         version: 4.2.0(@types/node@18.15.3)
@@ -233,6 +236,9 @@ importers:
       lilconfig:
         specifier: ^2.1.0
         version: 2.1.0
+      ts-dedent:
+        specifier: ^2.2.0
+        version: 2.2.0
       workspace-tools:
         specifier: ^0.30.0
         version: 0.30.0
@@ -6891,6 +6897,11 @@ packages:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
     engines: {node: '>=8'}
     dev: true
+
+  /ts-dedent@2.2.0:
+    resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
+    engines: {node: '>=6.10'}
+    dev: false
 
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}

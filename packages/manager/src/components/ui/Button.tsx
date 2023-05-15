@@ -4,7 +4,7 @@ import { cn } from "../../utils";
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: "primary" | "danger";
+  variant?: "primary" | "danger" | "group";
 }
 
 const buttonVariants = cva(
@@ -12,8 +12,6 @@ const buttonVariants = cva(
     "text-white",
     "border",
     "rounded",
-    "py-1",
-    "px-9",
     "transition",
     "hover:bg-opacity-80",
     "active:bg-opacity-50",
@@ -21,8 +19,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: ["bg-blue"],
-        danger: ["bg-red"],
+        primary: ["bg-blue", "py-1", "px-9"],
+        danger: ["bg-red", "py-1", "px-9"],
+        group: ["p-0", "border-none", "rounded-none"],
       },
     },
     defaultVariants: {

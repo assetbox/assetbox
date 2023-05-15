@@ -40,10 +40,7 @@ export const appRouter = t.router({
     )
     .mutation(async (req) => {
       try {
-        const result = mergeDupeFileSet(
-          req.input.fileSet,
-          req.input.newPathAndName
-        );
+        mergeDupeFileSet(req.input.fileSet, req.input.newPathAndName);
       } catch (e) {
         throw new Error("File merge error");
       }

@@ -1,4 +1,4 @@
-import { Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import DupeAssetsMenuIcon from "./assets/dupe-assets-menu.svg";
 import { Layout, SideBar } from "./components";

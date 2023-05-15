@@ -8,43 +8,40 @@ import { useMemo } from "react";
 
 import { cn } from "../../utils";
 
-interface IDropdownProps extends React.HTMLAttributes<HTMLSelectElement> {
-  columns: IColumn[];
+interface DropdownProps extends React.HTMLAttributes<HTMLSelectElement> {
+  columns: string[];
   handleValue: (data: string) => void;
+  selectedValue: string;
 }
-interface IColumn {
-  title: string;
-  value: string;
-}
-
 export const Dropdown = ({
   columns,
   className,
+  selectedValue,
   handleValue,
-}: IDropdownProps) => {
-  const Items = () => {
-    const generatedItems = useMemo(
-      () =>
-        columns.map((elem, idx) => (
-          <>
-            <SelectItem key={idx} value={elem.value} className={className}>
-              {elem.title}
-            </SelectItem>
-            <Select.Separator
-              className={cn(
-                idx !== columns.length - 1 && "h-[1px] bg-gray-light"
-              )}
-            />
-          </>
-        )),
-      []
-    );
-    return <>{generatedItems}</>;
-  };
+}: DropdownProps) => {
+  const items = useMemo(
+    () =>
+      columns.map((elem, idx) => (
+        <>
+          <SelectItem
+            key={`select-${idx}-${elem}`}
+            value={elem}
+            className={className}
+          >
+            {elem}
+          </SelectItem>
+          <Select.Separator className={cn("h-[1px] bg-gray-light last:h-0")} />
+        </>
+      )),
+    []
+  );
 
   return (
     <div className="p-40">
-      <Select.Root onValueChange={(value) => handleValue(value)}>
+      <Select.Root
+        value={selectedValue}
+        onValueChange={(value) => handleValue(value)}
+      >
         <Select.Trigger
           className={cn(
             "flex items-center bg-white px-[20px] rounded",
@@ -53,7 +50,7 @@ export const Dropdown = ({
         >
           <Select.Value className="mr-auto" placeholder={"select"} />
           <Select.Icon className="ml-auto text-lg">
-            <ChevronDownIcon className="" />
+            <ChevronDownIcon />
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
@@ -62,9 +59,7 @@ export const Dropdown = ({
               <ChevronUpIcon />
             </Select.ScrollUpButton>
             <Select.Viewport className="SelectViewport">
-              <Select.Group>
-                <Items />
-              </Select.Group>
+              <Select.Group>{items}</Select.Group>
             </Select.Viewport>
           </Select.Content>
         </Select.Portal>

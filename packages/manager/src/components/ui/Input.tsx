@@ -6,6 +6,7 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   noOutline?: boolean;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
+  value: string;
 }
 
 const inputVariants = cva(
@@ -34,14 +35,19 @@ const inputVariants = cva(
 export const Input = ({
   className,
   noOutline,
+  startAdornment,
   endAdornment,
+  placeholder,
+  value,
   ...rest
 }: InputProps) => {
   return (
     <div className={cn(inputVariants({ noOutline }), className)}>
+      {startAdornment}
       <input
         className="w-full outline-none"
-        placeholder="Search assets"
+        placeholder={placeholder}
+        value={value}
         {...rest}
       />
       {endAdornment}

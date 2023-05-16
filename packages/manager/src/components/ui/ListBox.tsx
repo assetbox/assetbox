@@ -5,7 +5,7 @@ import {
   ListboxOptionsProps,
   Transition,
 } from "@headlessui/react";
-import { ComponentProps, createContext } from "react";
+import { ComponentProps } from "react";
 
 import DownVector from "../../assets/down-vector.svg";
 import { cn } from "../../utils/cn";

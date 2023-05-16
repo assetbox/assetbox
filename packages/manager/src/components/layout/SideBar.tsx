@@ -7,9 +7,14 @@ import Logo from "../../assets/logo.svg";
 import { cn } from "../../utils";
 import { ProgressBar } from "../ui";
 
-const SectorLine = () => {
-  return <div className="border border-[#F3F6FA]" />;
-};
+interface SideBarProps {
+  categories: { label: React.ReactNode; path: string }[];
+  menus: {
+    icon: React.ReactElement;
+    label: React.ReactNode;
+    path: string;
+  }[];
+}
 
 interface MenuItemProps extends React.PropsWithChildren {
   to: string;
@@ -17,6 +22,16 @@ interface MenuItemProps extends React.PropsWithChildren {
   icon: React.ReactElement;
   className?: string;
 }
+
+interface CoverageBarProps extends React.HTMLAttributes<HTMLDivElement> {
+  name: string;
+  count: number;
+  totalCount: number;
+}
+
+const SectorLine = () => {
+  return <div className="border border-[#F3F6FA]" />;
+};
 
 const MenuItem = ({ to, active, icon, children, className }: MenuItemProps) => {
   return (
@@ -48,14 +63,25 @@ const MenuItem = ({ to, active, icon, children, className }: MenuItemProps) => {
   );
 };
 
-interface SideBarProps {
-  categories: { label: React.ReactNode; path: string }[];
-  menus: {
-    icon: React.ReactElement;
-    label: React.ReactNode;
-    path: string;
-  }[];
-}
+const CoverageBar = ({
+  count,
+  totalCount,
+  name,
+  className,
+}: CoverageBarProps) => {
+  const coverage = Math.round((count / totalCount) * 100);
+
+  return (
+    <ProgressBar rate={coverage} className={className}>
+      <div className="flex justify-between">
+        <p className="text-xs font-semibold">{name}</p>
+        <p className="text-xs font-semibold">
+          {coverage} % ({count}/{totalCount})
+        </p>
+      </div>
+    </ProgressBar>
+  );
+};
 
 export const SideBar = ({ categories, menus }: SideBarProps) => {
   const { pathname } = useLocation();
@@ -63,7 +89,19 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
   return (
     <div className="h-full px-8 pt-12 bg-white w-80">
       <Logo className="ml-[10px] mb-8" />
-      <ProgressBar rate={90} format="coverage {rate}%" className="mb-10" />
+      <CoverageBar
+        className="mb-2"
+        name="Unique Coverage"
+        count={48}
+        totalCount={100}
+      />
+
+      <CoverageBar
+        className="mb-10"
+        name="Used Coverage"
+        count={90}
+        totalCount={100}
+      />
 
       <div className="flex items-center gap-2 mb-4">
         <AlphabetA className="ml-[10px]" />

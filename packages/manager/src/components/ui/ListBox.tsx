@@ -5,7 +5,7 @@ import {
   ListboxOptionsProps,
   Transition,
 } from "@headlessui/react";
-import { ComponentProps } from "react";
+import { ComponentProps, createContext } from "react";
 
 import DownVector from "../../assets/down-vector.svg";
 import { cn } from "../../utils/cn";
@@ -23,20 +23,22 @@ ListBox.Button = ({
     <Listbox.Button
       className={(bag) =>
         cn(
-          "w-[165px] h-12 flex items-center rounded bg-white px-[10px] mb-1",
+          "w-[165px] h-12 flex items-center rounded bg-white px-[10px] mb-1 outline-none",
+          "group",
           typeof className === "function" ? className(bag) : className
         )
       }
       {...props}
     >
-      {({ open }) => (
-        <>
-          {children}
-          <DownVector
-            className={cn("ml-auto", open && "rotate-180 transform")}
-          />
-        </>
-      )}
+      <>
+        {children}
+        <DownVector
+          className={cn(
+            "ml-auto",
+            "group-data-[headlessui-state=open]:rotate-180 transform"
+          )}
+        />
+      </>
     </Listbox.Button>
   );
 };
@@ -52,7 +54,7 @@ ListBox.Options = ({ ...props }: ListboxOptionsProps<"ul">) => {
       leaveFrom="transform scale-100 opacity-100"
       leaveTo="transform scale-95 opacity-0"
     >
-      <Listbox.Options {...props} />
+      <Listbox.Options className={"outline-none"} {...props} />
     </Transition>
   );
 };

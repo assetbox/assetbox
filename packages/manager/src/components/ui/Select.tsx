@@ -1,5 +1,5 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps } from "react";
 
 import DownVector from "../../assets/down-vector.svg";
 import { cn } from "../../utils/cn";

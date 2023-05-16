@@ -1,16 +1,19 @@
 import DOMPurify from "isomorphic-dompurify";
 
-interface InlineSVGProps {
+import { cn } from "../../utils";
+
+interface InlineSVGProps extends React.HTMLAttributes<HTMLDivElement> {
   svgHtml: string;
 }
 
-export const InlineSVG = ({ svgHtml }: InlineSVGProps) => {
+export const InlineSVG = ({ svgHtml, className, ...props }: InlineSVGProps) => {
   return (
     <div
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(svgHtml),
       }}
-      style={{ width: "300px", height: "300px", display: "flex" }}
-    ></div>
+      className={cn("flex", className)}
+      {...props}
+    />
   );
 };

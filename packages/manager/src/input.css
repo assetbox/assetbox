@@ -13,3 +13,8 @@ body {
   color: #111;
   background-color: #f3f6fa;
 }
+
+main svg {
+  width: 100% !important;
+  height: 100% !important;
+}

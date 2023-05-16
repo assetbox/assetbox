@@ -1,4 +1,5 @@
-import { readFile } from "node:fs/promises";
+import { readFile } from "fs/promises";
+import { sep } from "path";
 
 const extractImportedFiles = async (file: string) => {
   const fileContent = await readFile(file);
@@ -33,7 +34,7 @@ export const findImportFileSet = async (
     }))
   );
 
-  const assetFileNames = assetFiles.map((v) => v.split("/").pop() as string);
+  const assetFileNames = assetFiles.map((v) => v.split(sep).pop() as string);
 
   const assetToImportedFiles = assetFileNames.reduce((acc, curr) => {
     const filteredFiles = importFiles.filter((importFile) => {

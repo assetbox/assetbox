@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import { relative } from "path";
+import { sep } from "path";
 import { findPackageRoot } from "workspace-tools";
-
 export const convertAssetStat = async (assetFile: string) => {
   const extension = assetFile.split(".").pop();
   if (!extension) {
@@ -17,7 +17,8 @@ export const convertAssetStat = async (assetFile: string) => {
   }
 
   return {
-    filename: relative(findPackageRoot(process.cwd())!, assetFile),
+    filepath: relative(findPackageRoot(process.cwd())!, assetFile),
+    filename: assetFile.split(sep).pop()!,
     timestamp: birthtimeMs,
     type: extension === "svg" ? "icon" : "image",
     data,

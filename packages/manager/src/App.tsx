@@ -4,23 +4,8 @@ import DupeAssetsMenuIcon from "./assets/dupe-assets-menu.svg";
 import { Layout, SideBar } from "./components";
 import { Main } from "./components/layout/Main";
 import { CategoryPage, DupePage } from "./pages";
+import { AssetBoxData } from "./types";
 
-export interface AssetBoxData {
-  categories: Record<
-    string,
-    {
-      filename: string;
-      timestamp: number;
-      type: string;
-      data: string | null;
-      extension: string;
-      size: number;
-    }[]
-  >;
-  dupeFiles: string[][];
-}
-
-// TODO: not yet scheme
 interface AppProps {
   data: AssetBoxData;
 }
@@ -39,7 +24,7 @@ export const App = ({ data }: AppProps) => {
       <SideBar
         categories={Object.keys(data.categories).map((category) => ({
           label: category,
-          path: ["/", category.toLocaleLowerCase()].join(""),
+          path: ["/", category].join(""),
         }))}
         menus={menus}
       />

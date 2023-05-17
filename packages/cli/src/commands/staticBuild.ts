@@ -1,7 +1,8 @@
-import { findFilePathsFromGlob, readAssetBoxConfig } from "@assetbox/tools";
+import { readAssetBoxConfig } from "@assetbox/tools";
 import react from "@vitejs/plugin-react-swc";
 import { readFile, writeFile } from "fs/promises";
 import { join, relative } from "path";
+import { sep } from "path";
 import copy from "rollup-plugin-copy";
 import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { build } from "vite";
@@ -48,7 +49,7 @@ export const staticBuild = async () => {
   );
   const html = await renderStaticHtml(template, "/");
   const staticHtml = normalizeFilePaths.reduce((originHtml, filePath) => {
-    const filename = filePath.split("/").pop();
+    const filename = filePath.split(sep).pop();
     if (!filename) {
       return originHtml;
     }

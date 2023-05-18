@@ -1,24 +1,23 @@
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../utils";
 
-interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
-  noOutline?: boolean;
+type InputVariantProps = VariantProps<typeof inputVariants>;
+type InputProp = React.AllHTMLAttributes<HTMLInputElement> & InputVariantProps;
+
+interface InputProps extends InputProp {
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
-  value: string;
 }
 
 const inputVariants = cva(
   [
-    "flex",
+    "inline-flex",
     "items-center",
     "px-[10px]",
-    "text-gray",
     "rounded",
     "bg-white",
     "border-gray",
-    "border",
     "focus-within:border-blue",
     "outline-none",
   ],
@@ -26,6 +25,7 @@ const inputVariants = cva(
     variants: {
       noOutline: {
         true: ["border-none"],
+        false: ["border", "transition-all"],
       },
     },
     defaultVariants: { noOutline: false },
@@ -39,7 +39,7 @@ export const Input = ({
   endAdornment,
   placeholder,
   value,
-  ...rest
+  ...props
 }: InputProps) => {
   return (
     <div className={cn(inputVariants({ noOutline }), className)}>
@@ -48,7 +48,7 @@ export const Input = ({
         className="w-full outline-none"
         placeholder={placeholder}
         value={value}
-        {...rest}
+        {...props}
       />
       {endAdornment}
     </div>

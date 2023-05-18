@@ -1,11 +1,9 @@
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../utils";
 
-interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  variant?: "primary" | "danger" | "group";
-}
+type ButtonVariantProps = VariantProps<typeof buttonVariants>;
+type ButtonProps = React.HTMLAttributes<HTMLButtonElement> & ButtonVariantProps;
 
 const buttonVariants = cva(
   [

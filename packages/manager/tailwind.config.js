@@ -7,12 +7,14 @@ export default {
         DEFAULT: "#007AFF",
         light: "#ECF5FF",
       },
+      red: "#FF367A",
       white: "#FFFFFF",
       black: "#111111",
       gray: {
         DEFAULT: "#838A9A",
         light: "#F3F6FA",
         dark: "#454F5D",
+        border: "#D4D4D4",
       },
     },
     extend: {

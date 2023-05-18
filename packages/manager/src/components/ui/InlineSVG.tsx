@@ -12,7 +12,7 @@ export const InlineSVG = ({ svgHtml, className, ...props }: InlineSVGProps) => {
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(svgHtml),
       }}
-      className={cn("flex", className)}
+      className={cn("inline-svg flex", className)}
       {...props}
     />
   );

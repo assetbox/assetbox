@@ -6,12 +6,13 @@ import { AssetIcon, AssetImage, AssetView } from "../components";
 
 export const CategoryPage = () => {
   const { category } = useParams();
+
   const { categories } = useAssetBoxStore();
 
   if (!category) {
     return <div>Category not found</div>;
   }
-  const assets = categories[category];
+  const assets = categories[category] ?? [];
 
   return (
     <div className="p-14">

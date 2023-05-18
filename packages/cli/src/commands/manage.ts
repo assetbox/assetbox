@@ -1,8 +1,5 @@
 import { appRouter } from "@assetbox/trpc";
-import {
-  type CreateExpressContextOptions,
-  createExpressMiddleware,
-} from "@trpc/server/adapters/express";
+import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
 import { renderStaticHtml } from "src/context/renderStaticHtml";

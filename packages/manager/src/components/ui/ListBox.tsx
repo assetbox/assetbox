@@ -20,33 +20,35 @@ ListBox.Button = ({
   ...props
 }: ListboxButtonProps<"button">) => {
   return (
-    <Listbox.Button
-      className={(bag) =>
-        cn(
-          "w-[165px] h-12 flex items-center rounded bg-white px-[10px] mb-1 outline-none",
-          "group",
-          typeof className === "function" ? className(bag) : className
-        )
-      }
-      {...props}
-    >
-      <>
-        {children}
-        <DownVector
-          className={cn(
-            "ml-auto",
-            "group-data-[headlessui-state=open]:rotate-180 transform"
-          )}
-        />
-      </>
-    </Listbox.Button>
+    <div>
+      <Listbox.Button
+        className={(bag) =>
+          cn(
+            "w-[165px] h-12 flex items-center rounded bg-white px-[10px] outline-none relative mb-1",
+            "group",
+            typeof className === "function" ? className(bag) : className
+          )
+        }
+        {...props}
+      >
+        <>
+          {children}
+          <DownVector
+            className={cn(
+              "ml-auto",
+              "group-data-[headlessui-state=open]:rotate-180 transform"
+            )}
+          />
+        </>
+      </Listbox.Button>
+    </div>
   );
 };
 
 ListBox.Options = ({ ...props }: ListboxOptionsProps<"ul">) => {
   return (
     <Transition
-      className={"inline-block"}
+      className={"inline-block absolute"}
       enter="transition duration-100 ease-in"
       enterFrom="transform scale-95 opacity-0"
       enterTo="transform scale-100 opacity-100"
@@ -54,7 +56,7 @@ ListBox.Options = ({ ...props }: ListboxOptionsProps<"ul">) => {
       leaveFrom="transform scale-100 opacity-100"
       leaveTo="transform scale-95 opacity-0"
     >
-      <Listbox.Options className={"outline-none"} {...props} />
+      <Listbox.Options className={"outline-none "} {...props} />
     </Transition>
   );
 };

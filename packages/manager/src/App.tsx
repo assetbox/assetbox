@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import DupeAssetsMenuIcon from "./assets/dupe-assets-menu.svg";
 import { Layout, SideBar } from "./components";
 import { Main } from "./components/layout/Main";
 import { CategoryPage, DupePage } from "./pages";
+import { useAssetBoxStore } from "./store";
 import { AssetBoxData } from "./types";
 
 interface AppProps {
@@ -19,6 +21,10 @@ const menus = [
 ];
 
 export const App = ({ data }: AppProps) => {
+  useEffect(() => {
+    useAssetBoxStore.setState(data);
+  }, [data]);
+
   return (
     <Layout>
       <SideBar

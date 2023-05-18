@@ -76,7 +76,7 @@ const CoverageBar = ({
       <div className="flex justify-between">
         <p className="text-xs font-semibold">{name}</p>
         <p className="text-xs font-semibold">
-          {coverage} % ({count}/{totalCount})
+          {coverage}% ({count}/{totalCount})
         </p>
       </div>
     </ProgressBar>

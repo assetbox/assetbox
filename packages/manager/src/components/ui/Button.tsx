@@ -32,10 +32,10 @@ export const Button = ({
   className,
   children,
   variant,
-  ...rest
+  ...props
 }: ButtonProps) => {
   return (
-    <button className={cn(buttonVariants({ variant }), className)} {...rest}>
+    <button className={cn(buttonVariants({ variant }), className)} {...props}>
       {children}
     </button>
   );

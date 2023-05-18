@@ -1,25 +1,31 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
 
+import { cn } from "../../utils";
 import { Button } from "./Button";
 
-interface ButtonGroupProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  defaultValue?: string;
-}
-
-export const ButtonGroup = ({ children, defaultValue }: ButtonGroupProps) => {
+export const ButtonGroup = ({
+  className,
+  ...props
+}: RadioGroup.RadioGroupProps) => {
   return (
-    <RadioGroup.Root defaultValue={defaultValue}>{children}</RadioGroup.Root>
+    <RadioGroup.Root className={cn("inline-block", className)} {...props} />
   );
 };
 
-ButtonGroup.Button = ({ children, ...rest }: ButtonGroupProps) => {
+ButtonGroup.Button = ({
+  children,
+  className,
+  ...props
+}: RadioGroup.RadioGroupItemProps) => {
   return (
     <RadioGroup.Item
-      className="first:rounded-l fisrt:border-r last:rounded-r last:border-r-0 border-r border-gray-border border-collapse data-[state=checked]:bg-blue data-[state=checked]:bg-opacity-100 bg-gray bg-opacity-40"
-      value={children as string}
+      className={cn(
+        "first:rounded-l fisrt:border-r last:rounded-r last:border-r-0 border-r border-gray-border border-collapse data-[state=checked]:bg-blue data-[state=checked]:bg-opacity-100 bg-gray bg-opacity-40 transition",
+        className
+      )}
+      {...props}
     >
-      <Button variant="group" {...rest}>
+      <Button variant={"group"} className={"w-full h-full"}>
         {children}
       </Button>
     </RadioGroup.Item>

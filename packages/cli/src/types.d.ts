@@ -1,4 +1,4 @@
-import { AssetBoxData } from "@assetbox/manager";
+import type { AssetBoxData } from "@assetbox/tools";
 export {};
 
 declare global {

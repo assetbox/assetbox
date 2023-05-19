@@ -1,8 +1,8 @@
 import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import AlphabetA from "../../assets/alphabet-a.svg";
 import FolderIcon from "../../assets/folder.svg";
+import HamburgerIcon from "../../assets/hamburger.svg";
 import Logo from "../../assets/logo.svg";
 import { cn } from "../../utils";
 import { ProgressBar } from "../ui";
@@ -102,8 +102,8 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
       />
 
       <div className="flex items-center gap-2 mb-4">
-        <AlphabetA className="ml-[10px]" />
-        <p className="text-base font-bold text-gray-dark">AssetBox</p>
+        <HamburgerIcon className="ml-[10px]" />
+        <p className="text-base font-bold text-gray-dark">Category</p>
       </div>
       <SectorLine />
 

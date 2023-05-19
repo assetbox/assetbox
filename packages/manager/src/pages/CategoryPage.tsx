@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { useAssetBoxStore } from "src/store";
 
 import { AssetIcon, AssetImage, AssetView } from "../components";
+import { useAssetBoxStore } from "../store";
 
 export const CategoryPage = () => {
   const { category } = useParams();

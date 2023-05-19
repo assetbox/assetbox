@@ -44,7 +44,7 @@ export const readAssetBoxConfig = async () => {
 
   return {
     configFilePath: value.filepath,
-    trackingFiles: await findFilePathsFromGlob(trackingPaths),
+    trackingPaths: await findFilePathsFromGlob(trackingPaths),
     categories: await getCategoryFileList(categories),
   };
 };

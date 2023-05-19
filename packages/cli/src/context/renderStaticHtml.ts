@@ -7,13 +7,13 @@ import {
 import { resolveCliRoot } from "src/utils/path";
 
 export const getAssetBoxData = async () => {
-  const { categories, trackingFiles } = await readAssetBoxConfig();
+  const { categories, trackingPaths } = await readAssetBoxConfig();
 
   const categoryStats = await getCategoryStats(categories);
 
   const assetFiles = Object.values(categories).flat();
   const dupeFiles = await findDupeFileSet(assetFiles);
-  const usedFiles = await findImportFileSet(assetFiles, trackingFiles);
+  const usedFiles = await findImportFileSet(assetFiles, trackingPaths);
 
   const usedCount = Object.values(usedFiles).reduce(
     (acc, files) => (files.length > 0 ? acc + 1 : acc),

@@ -53,10 +53,10 @@ const mapFileReferences = (
 
 export const findImportFileSet = async (
   assetFiles: string[],
-  trackingFiles: string[]
+  trackingPaths: string[]
 ) => {
   const importFiles = await Promise.all(
-    trackingFiles.map(async (file) => ({
+    trackingPaths.map(async (file) => ({
       [relative(cwd(), file)]: await extractImportedFiles(file),
     }))
   );

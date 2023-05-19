@@ -2,9 +2,9 @@ import { appRouter } from "@assetbox/trpc";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
-import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { createServer as createViteServer } from "vite";
 
+import { renderStaticHtml } from "../context/renderStaticHtml";
 import { resolveCliRoot } from "../utils/path";
 
 // Create Asset Manager Server

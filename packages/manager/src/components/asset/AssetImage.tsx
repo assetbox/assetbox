@@ -1,4 +1,5 @@
-import { AssetImageStat } from "../../types";
+import type { AssetImageStat } from "@assetbox/tools";
+
 import { Box } from "../ui";
 
 interface AssetImageProps {

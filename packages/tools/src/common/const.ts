@@ -1,10 +1,8 @@
-export const ASSET_EXTENSIONS = [
-  "jpg",
-  "jpeg",
-  "png",
-  "bmp",
-  "gif",
-  "svg",
-  "webp",
-];
-export const TRACKING_EXTENSIONS = ["js", "jsx", "ts", "tsx"];
+export const EXTENSIONS = {
+  icon: ["svg"],
+  image: ["png", "jpg", "jpeg", "gif", "webp"],
+  animation: ["json"],
+  all: function () {
+    return [...this.icon, ...this.image, ...this.animation];
+  },
+};

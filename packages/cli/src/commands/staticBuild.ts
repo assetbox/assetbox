@@ -1,13 +1,12 @@
-import { readAssetBoxConfig } from "@assetbox/tools";
+import { cwd, readAssetBoxConfig } from "@assetbox/tools";
 import react from "@vitejs/plugin-react-swc";
 import { readFile, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { sep } from "path";
 import copy from "rollup-plugin-copy";
-import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { build } from "vite";
-import { findPackageRoot } from "workspace-tools";
 
+import { renderStaticHtml } from "../context/renderStaticHtml";
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
 
 export const staticBuild = async () => {
@@ -15,7 +14,7 @@ export const staticBuild = async () => {
   const assetFiles = Object.values(categories).flat();
 
   const normalizeFilePaths = assetFiles.map((filePath) =>
-    relative(findPackageRoot(process.cwd())!, filePath)
+    relative(cwd(), filePath)
   );
 
   let template = await readFile(

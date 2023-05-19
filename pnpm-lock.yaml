@@ -200,8 +200,11 @@ importers:
         specifier: ^4.3.8
         version: 4.3.8(react@18.2.0)
     devDependencies:
+      '@assetbox/tools':
+        specifier: workspace:^
+        version: link:../tools
       '@assetbox/trpc':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../trpc
       '@radix-ui/react-radio-group':
         specifier: ^1.1.2

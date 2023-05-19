@@ -27,8 +27,8 @@ describe("findDupeFileFromGlob Test", () => {
       const result = await findDupeFileSet(assetFiles);
 
       expect(result).toStrictEqual([
-        ["/test/basic/public/b_copy.png", "/test/basic/public/b.png"],
-        ["/test/basic/public/a_copy.png", "/test/basic/public/a.png"],
+        ["public/b_copy.png", "public/b.png"],
+        ["public/a_copy.png", "public/a.png"],
       ]);
     });
 

@@ -85,7 +85,7 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
   const { pathname } = useLocation();
 
   return (
-    <div className="h-full px-8 pt-12 bg-white w-80">
+    <div className="h-full px-8 pt-12 bg-white select-none w-80">
       <Logo className="ml-[10px] mb-8" />
       <CoverageBar
         className="mb-2"

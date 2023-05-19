@@ -4,9 +4,9 @@ import { readFile, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { sep } from "path";
 import copy from "rollup-plugin-copy";
-import { renderStaticHtml } from "src/context/renderStaticHtml";
 import { build } from "vite";
 
+import { renderStaticHtml } from "../context/renderStaticHtml";
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
 
 export const staticBuild = async () => {

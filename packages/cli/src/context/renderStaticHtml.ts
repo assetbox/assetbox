@@ -4,7 +4,8 @@ import {
   getCategoryStats,
   readAssetBoxConfig,
 } from "@assetbox/tools";
-import { resolveCliRoot } from "src/utils/path";
+
+import { resolveCliRoot } from "../utils/path";
 
 export const getAssetBoxData = async () => {
   const { categories, trackingPaths } = await readAssetBoxConfig();

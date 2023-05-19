@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAssetBoxStore } from "src/store";
 
 import FolderIcon from "../../assets/folder.svg";
 import HamburgerIcon from "../../assets/hamburger.svg";
 import Logo from "../../assets/logo.svg";
+import { useAssetBoxStore } from "../../store";
 import { cn } from "../../utils";
 import { ProgressBar } from "../ui";
 

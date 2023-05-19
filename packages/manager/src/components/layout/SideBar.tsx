@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAssetBoxStore } from "src/store";
 
 import FolderIcon from "../../assets/folder.svg";
 import HamburgerIcon from "../../assets/hamburger.svg";
@@ -82,6 +83,8 @@ const CoverageBar = ({
 };
 
 export const SideBar = ({ categories, menus }: SideBarProps) => {
+  const { uniqueCoverage, usedCoverage } = useAssetBoxStore();
+
   const { pathname } = useLocation();
 
   return (
@@ -90,15 +93,15 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
       <CoverageBar
         className="mb-2"
         name="Unique Coverage"
-        count={48}
-        totalCount={100}
+        count={uniqueCoverage.count}
+        totalCount={uniqueCoverage.totalCount}
       />
 
       <CoverageBar
         className="mb-10"
         name="Used Coverage"
-        count={90}
-        totalCount={100}
+        count={usedCoverage.count}
+        totalCount={usedCoverage.totalCount}
       />
 
       <div className="flex items-center gap-2 mb-4">

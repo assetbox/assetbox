@@ -11,10 +11,19 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <BrowserRouter>
       <App
         data={{
+          uniqueCoverage: {
+            count: 90,
+            totalCount: 100,
+          },
+          usedCoverage: {
+            count: 28,
+            totalCount: 100,
+          },
           categories: {
             Icons: [],
             Images: [],
           },
+          usedFiles: {},
           dupeFiles: [],
         }}
       />

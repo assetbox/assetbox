@@ -1,3 +1,4 @@
+import type { AssetBoxData } from "@assetbox/tools";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
@@ -6,7 +7,6 @@ import { Layout, SideBar } from "./components";
 import { Main } from "./components/layout/Main";
 import { CategoryPage, DupePage } from "./pages";
 import { useAssetBoxStore } from "./store";
-import { AssetBoxData } from "./types";
 
 interface AppProps {
   data: AssetBoxData;

@@ -30,7 +30,7 @@ export const Modal = ({ open, children, ...props }: DialogProps<"div">) => {
   );
 };
 
-Modal.Panel = ({ children, className, ...props }: DialogPanelProps<"div">) => {
+Modal.Panel = ({ className, ...props }: DialogPanelProps<"div">) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center">
       <Dialog.Panel
@@ -41,9 +41,7 @@ Modal.Panel = ({ children, className, ...props }: DialogPanelProps<"div">) => {
           )
         }
         {...props}
-      >
-        {children}
-      </Dialog.Panel>
+      />
     </div>
   );
 };

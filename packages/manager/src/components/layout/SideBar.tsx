@@ -92,14 +92,14 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
       <Logo className="ml-[10px] mb-8" />
 
       <CoverageBar
-        className="mb-10"
+        className="mb-2"
         name="Used Coverage"
         count={usedCoverage.count}
         totalCount={usedCoverage.totalCount}
       />
 
       <CoverageBar
-        className="mb-2"
+        className="mb-10"
         name="Unique Coverage"
         count={uniqueCoverage.count}
         totalCount={uniqueCoverage.totalCount}

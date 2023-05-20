@@ -5,13 +5,7 @@ import { useParams } from "react-router-dom";
 
 import Empty from "../assets/empty-icon.svg";
 import Search from "../assets/search-icon.svg";
-import {
-  AssetIcon,
-  AssetImage,
-  AssetView,
-  Button,
-  ListBox,
-} from "../components";
+import { AssetIcon, AssetImage, AssetView, ListBox } from "../components";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
 import { useAssetBoxStore } from "../store";
@@ -76,15 +70,9 @@ export const CategoryPage = () => {
             onChange={(e) => setSearch(e.target.value)}
             value={search}
             startAdornment={
-              // <Button
-              //   variant={"primary"}
-              //   className={"w-32 h-full cursor-pointer !py-0 rounded-l-none"}
-              // >
               <div className="flex items-center justify-center">
                 <Search className="w-5 h-5 mr-2" />
-                {/* <p className="text-lg">Search</p> */}
               </div>
-              // </Button>
             }
           />
         </div>
@@ -121,7 +109,6 @@ export const CategoryPage = () => {
         </div>
       </div>
 
-      {/* TODO: AssetView type value => ButtonGroup state */}
       {assets?.length === 0 ? (
         <div className="h-3/4">
           <div className="flex flex-col items-center justify-center h-full gap-y-5">

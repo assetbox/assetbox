@@ -2,15 +2,15 @@ import type { AssetIconStat } from "@assetbox/tools";
 
 import { Box, InlineSVG } from "../ui";
 
-interface AssetIconProps {
+interface AssetIconProps extends React.HTMLAttributes<HTMLDivElement> {
   asset: AssetIconStat;
 }
 
-export const AssetIcon = ({ asset }: AssetIconProps) => {
+export const AssetIcon = ({ asset, ...props }: AssetIconProps) => {
   const [filename] = asset.filename.split(".");
 
   return (
-    <div className="group">
+    <div className="group" {...props}>
       <Box
         className="flex items-center justify-center h-16 transition-shadow cursor-pointer group-hover:shadow-hover"
         key={`icon-${asset.filename}`}

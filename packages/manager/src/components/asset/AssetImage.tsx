@@ -2,15 +2,15 @@ import type { AssetImageStat } from "@assetbox/tools";
 
 import { Box } from "../ui";
 
-interface AssetImageProps {
+interface AssetImageProps extends React.HTMLAttributes<HTMLDivElement> {
   asset: AssetImageStat;
 }
 
-export const AssetImage = ({ asset }: AssetImageProps) => {
+export const AssetImage = ({ asset, ...props }: AssetImageProps) => {
   const [filename] = asset.filename.split(".");
 
   return (
-    <div className="group">
+    <div className="group" {...props}>
       <Box
         className="flex items-center justify-center transition-shadow cursor-pointer h-80 group-hover:shadow-hover"
         key={`icon-${asset.filename}`}

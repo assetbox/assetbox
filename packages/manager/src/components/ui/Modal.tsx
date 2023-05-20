@@ -36,7 +36,7 @@ Modal.Panel = ({ className, ...props }: DialogPanelProps<"div">) => {
       <Dialog.Panel
         className={(bag) =>
           cn(
-            "w-full max-w-sm bg-white rounded-md shadow",
+            "bg-white rounded-md shadow",
             typeof className === "function" ? className(bag) : className
           )
         }

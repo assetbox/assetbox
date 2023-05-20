@@ -12,7 +12,7 @@ export const Asset = ({ asset, disabled, className }: AssetProps) => {
   return (
     <Box
       className={cn(
-        "flex items-center justify-center cursor-pointer h-full",
+        "flex items-center justify-center h-full",
         disabled && "opacity-40",
         className
       )}

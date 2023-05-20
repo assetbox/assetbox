@@ -1,11 +1,11 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
-import { AssetIcon, AssetImage, AssetView, ListBox } from "../components";
+import { AssetItem, AssetView, ListBox } from "../components";
 import { AssetModal } from "../components/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
@@ -89,7 +89,7 @@ export const CategoryPage = () => {
         </div>
         <div className="flex flex-wrap gap-x-5">
           <ButtonGroup
-            defaultValue="Icons"
+            value={assetType}
             onValueChange={setAssetType as RadioGroupProps["onValueChange"]}
           >
             <ButtonGroup.Button value={"Icons"} className="w-24 h-12">
@@ -129,28 +129,14 @@ export const CategoryPage = () => {
           </div>
         </div>
       ) : (
-        <AssetView type={category === "Icons" ? "icon" : "image"}>
-          {assets?.map((asset: AssetStat) => {
-            switch (asset.type) {
-              case "icon": {
-                return (
-                  <AssetIcon
-                    onClick={() => openModal(asset)}
-                    key={`icon-${asset.filename}`}
-                    asset={asset}
-                  />
-                );
-              }
-              case "image":
-                return (
-                  <AssetImage
-                    onClick={() => openModal(asset)}
-                    key={`image-${asset.filename}`}
-                    asset={asset}
-                  />
-                );
-            }
-          })}
+        <AssetView type={mapAssetType[assetType]}>
+          {assets?.map((asset: AssetStat) => (
+            <AssetItem
+              onClick={() => openModal(asset)}
+              key={`asset-${asset.filename}`}
+              asset={asset}
+            />
+          ))}
         </AssetView>
       )}
 

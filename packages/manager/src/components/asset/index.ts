@@ -1,3 +1,3 @@
-export * from "./AssetIcon";
-export * from "./AssetImage";
+export * from "./Asset";
+export * from "./AssetItem";
 export * from "./AssetView";

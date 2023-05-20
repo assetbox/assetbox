@@ -27,7 +27,7 @@ export const AssetModal = ({
 
   return (
     <Modal open={open} onClose={closeModal}>
-      <Modal.Panel className={"w-[820px] p-7"}>
+      <Modal.Panel className={"max-w-6xl p-7"}>
         {data ? (
           <div>
             <div className="flex gap-6 mb-9">
@@ -42,7 +42,7 @@ export const AssetModal = ({
                   />
                 ) : null}
               </div>
-              <div className="flex-1">
+              <div className="w-96">
                 <div className="mb-7">
                   <div className="flex items-center gap-2 mb-2">
                     <CodeIcon />

@@ -1,7 +1,11 @@
 import type { AssetBoxData, AssetStat } from "@assetbox/tools";
 import { create } from "zustand";
 
-export const useAssetBoxStore = create<AssetBoxData>((set, get) => ({
+interface AssetBoxStore extends AssetBoxData {
+  isLoaded: boolean;
+}
+
+export const useAssetBoxStore = create<AssetBoxStore>((set, get) => ({
   categories: {},
   usedFiles: {},
   dupeFiles: [],
@@ -13,7 +17,7 @@ export const useAssetBoxStore = create<AssetBoxData>((set, get) => ({
     count: 0,
     totalCount: 0,
   },
-
+  isLoaded: false,
   appendCategories: (categoryName: string, category: AssetStat) => {
     const { categories } = get();
 

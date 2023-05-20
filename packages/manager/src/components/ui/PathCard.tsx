@@ -8,15 +8,17 @@ export const PathCard = ({ paths, className, ...props }: PathCardProps) => {
   return (
     <div
       className={cn(
-        "grow bg-[#F7F9Fb] rounded-lg p-6 overflow-y-scroll",
+        "grow bg-[#F7F9Fb] rounded-lg p-6 overflow-auto",
         className
       )}
       {...props}
     >
       {paths.map((path, index) => (
-        <div className="text-gray-dark" key={`path-${path}`}>
-          <span className="text-black text-opacity-20 mr-6">{index + 1}</span>
-          {path}
+        <div className="flex flex-nowrap" key={`path-${path}`}>
+          <p className="text-sm w-6 min-w-[24px] text-gray-dark text-opacity-20">
+            {index + 1}
+          </p>
+          <p className="text-sm">{path}</p>
         </div>
       ))}
     </div>

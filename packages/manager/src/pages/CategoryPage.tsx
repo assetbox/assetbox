@@ -3,11 +3,13 @@ import type { RadioGroupProps } from "@radix-ui/react-radio-group";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import Empty from "../assets/empty-icon.svg";
-import Search from "../assets/search-icon.svg";
+import EmptyIcon from "../assets/empty-icon.svg";
+import SearchIcon from "../assets/search-icon.svg";
 import { AssetIcon, AssetImage, AssetView, ListBox } from "../components";
+import { AssetModal } from "../components/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
+import { useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
 import { cn } from "../utils";
 import { compareByName } from "../utils/sort";
@@ -61,6 +63,13 @@ export const CategoryPage = () => {
     }
   }, [categories, filterOption, assetType, category, search]);
 
+  const {
+    data: modalAsset,
+    open,
+    openModal,
+    closeModal,
+  } = useModal<AssetStat>();
+
   return (
     <div className="h-full p-14">
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
@@ -73,7 +82,7 @@ export const CategoryPage = () => {
             value={search}
             startAdornment={
               <div className="flex items-center justify-center mr-[10px]">
-                <Search className="w-5 h-5 group-focus-within:[&>path]:stroke-blue transition" />
+                <SearchIcon className="w-5 h-5 group-focus-within:[&>path]:stroke-blue transition" />
               </div>
             }
           />
@@ -115,7 +124,7 @@ export const CategoryPage = () => {
       {assets?.length === 0 ? (
         <div className="h-3/4">
           <div className="flex flex-col items-center justify-center h-full gap-y-5">
-            <Empty className="w-28 h-28" />
+            <EmptyIcon className="w-28 h-28" />
             <h1 className="text-3xl font-normal">All files are empty</h1>
           </div>
         </div>
@@ -125,17 +134,27 @@ export const CategoryPage = () => {
             switch (asset.type) {
               case "icon": {
                 return (
-                  <AssetIcon key={`icon-${asset.filename}`} asset={asset} />
+                  <AssetIcon
+                    onClick={() => openModal(asset)}
+                    key={`icon-${asset.filename}`}
+                    asset={asset}
+                  />
                 );
               }
               case "image":
                 return (
-                  <AssetImage key={`image-${asset.filename}`} asset={asset} />
+                  <AssetImage
+                    onClick={() => openModal(asset)}
+                    key={`image-${asset.filename}`}
+                    asset={asset}
+                  />
                 );
             }
           })}
         </AssetView>
       )}
+
+      <AssetModal data={modalAsset} closeModal={closeModal} open={open} />
     </div>
   );
 };

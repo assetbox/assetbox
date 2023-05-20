@@ -6,6 +6,7 @@ import InformationIcon from "../assets/information.svg";
 import { ModalProps } from "../hooks";
 import { useAssetBoxStore } from "../store";
 import { Button, InlineSVG, Modal } from "./ui";
+import { PathCard } from "./ui/PathCard";
 
 const InfoItem = ({
   label,
@@ -42,31 +43,37 @@ export const AssetModal = ({
                 ) : null}
               </div>
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <CodeIcon />
-                  <p className="text-sm font-bold">Used Code Path</p>
+                <div className="mb-7">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CodeIcon />
+                    <p className="text-sm font-bold">Used Code Path</p>
+                  </div>
+                  <PathCard
+                    paths={
+                      usedFiles[data.filepath].length > 0
+                        ? usedFiles[data.filepath]
+                        : ["No files found in use."]
+                    }
+                    className="h-48"
+                  />
                 </div>
-                <div className="h-[180px]">
-                  {usedFiles[data.filepath].map((v) => (
-                    <p key={`1-${v}`}>{v}</p>
-                  ))}
-                </div>
+                <div>
+                  <div className="flex items-center gap-1 mb-2">
+                    <InformationIcon />
+                    <p className="text-sm font-bold">Information</p>
+                  </div>
 
-                <div className="flex items-center gap-1 mb-2">
-                  <InformationIcon />
-                  <p className="text-sm font-bold">Information</p>
-                </div>
-
-                <div className="bg-[#F7F9FB] rounded px-5 py-6">
-                  <InfoItem label="File Name">{data.filename}</InfoItem>
-                  <InfoItem label="Used Count">
-                    {usedFiles[data.filepath].length}
-                  </InfoItem>
-                  <InfoItem label="Icon Type">{data.type}</InfoItem>
-                  <InfoItem label="Extension">{data.extension}</InfoItem>
-                  <InfoItem label="Created Time">
-                    {dayjs(data.timestamp).format("YYYY/MM/DD HH:mm:ss")}
-                  </InfoItem>
+                  <div className="bg-[#F7F9FB] rounded px-5 py-6">
+                    <InfoItem label="File Name">{data.filename}</InfoItem>
+                    <InfoItem label="Used Count">
+                      {usedFiles[data.filepath].length}
+                    </InfoItem>
+                    <InfoItem label="Icon Type">{data.type}</InfoItem>
+                    <InfoItem label="Extension">{data.extension}</InfoItem>
+                    <InfoItem label="Created Time">
+                      {dayjs(data.timestamp).format("YYYY/MM/DD HH:mm:ss")}
+                    </InfoItem>
+                  </div>
                 </div>
               </div>
             </div>

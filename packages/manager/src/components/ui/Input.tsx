@@ -19,15 +19,16 @@ const inputVariants = cva(
     "px-[10px]",
     "rounded",
     "bg-white",
-    "border-gray",
+    "border",
     "focus-within:border-blue",
     "outline-none",
+    "transition-all",
   ],
   {
     variants: {
       noOutline: {
-        true: ["border-none"],
-        false: ["border", "transition-all"],
+        true: ["border-white"],
+        false: ["border-gray"],
       },
     },
     defaultVariants: { noOutline: false },

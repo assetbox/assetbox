@@ -67,13 +67,13 @@ export const CategoryPage = () => {
         <div className="w-full lg:w-[550px]">
           <Input
             noOutline
-            className="w-full h-12 !pr-0 pl-4"
+            className="w-full h-12 group"
             placeholder="Search for assets .."
             onChange={(e) => setSearch(e.target.value)}
             value={search}
             startAdornment={
-              <div className="flex items-center justify-center">
-                <Search className="w-5 h-5 mr-2" />
+              <div className="flex items-center justify-center mr-[10px]">
+                <Search className="w-5 h-5 group-focus-within:[&>path]:stroke-blue transition" />
               </div>
             }
           />

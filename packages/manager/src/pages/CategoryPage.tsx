@@ -1,63 +1,93 @@
 import { AssetStat } from "@assetbox/tools";
+import type { RadioGroupProps } from "@radix-ui/react-radio-group";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { compareByName } from "src/utils/sort";
 
 import { AssetIcon, AssetImage, AssetView, ListBox } from "../components";
+import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { useAssetBoxStore } from "../store";
 import { cn } from "../utils";
+import { compareByName } from "../utils/sort";
 
-type ListFilterType = "All" | "Used" | "Not Used";
-const list: ListFilterType[] = ["All", "Used", "Not Used"];
+type AssetViewType = "Icons" | "Images" | "Animations";
+type FilterOption = "All" | "Used" | "Not Used";
+
+const filterOptions: FilterOption[] = ["All", "Used", "Not Used"];
+
+const mapAssetType: Record<AssetViewType, AssetStat["type"]> = {
+  Icons: "icon",
+  Images: "image",
+  Animations: "animation",
+};
 
 export const CategoryPage = () => {
   const { category } = useParams();
 
-  const { categories } = useAssetBoxStore();
-  const [selected, setSelected] = useState<ListFilterType>(list[0]);
+  const { categories, usedFiles } = useAssetBoxStore();
+  const [filterOption, setFilterOption] = useState<FilterOption>(
+    filterOptions[0]
+  );
+  const [assetType, setAssetType] = useState<AssetViewType>("Icons");
 
   if (!category) {
     return <div>Category not found</div>;
   }
+
   const assets = useMemo(() => {
-    switch (selected) {
+    const sortedAssets = categories[category]
+      ?.sort(compareByName("ASC"))
+      .filter((asset) => asset.type === mapAssetType[assetType]);
+
+    switch (filterOption) {
       case "Used": {
-        return categories[category]
-          ?.sort(compareByName("ASC"))
-          .filter((elem) => elem.size > 500);
+        return sortedAssets.filter(
+          (asset) => usedFiles[asset.filepath]?.length > 0
+        );
+      }
+      case "Not Used": {
+        return sortedAssets.filter(
+          (asset) => usedFiles[asset.filepath]?.length == 0
+        );
       }
       default:
       case "All": {
-        return categories[category]?.sort(compareByName("ASC")) ?? [];
+        return sortedAssets;
       }
     }
-  }, [categories[category], selected]);
-
-  const menuHandle = (item: ListFilterType) => {
-    setSelected(item);
-  };
+  }, [categories[category], filterOption, assetType]);
   console.log(assets);
   return (
     <div className="p-14">
-      <ListBox
-        value={selected}
-        onChange={(item: ListFilterType) => menuHandle(item)}
-      >
+      <ListBox value={filterOption} onChange={setFilterOption}>
         <ListBox.Button className={({ open }) => cn(open && "bg-black")}>
-          {selected}
+          {filterOption}
         </ListBox.Button>
         <ListBox.Options>
-          {list.map((elem) => (
-            <ListBox.Option key={`option-${elem}`} value={elem}>
-              {elem}
+          {filterOptions.map((filterOption) => (
+            <ListBox.Option key={`option-${filterOption}`} value={filterOption}>
+              {filterOption}
             </ListBox.Option>
           ))}
         </ListBox.Options>
       </ListBox>
+      <ButtonGroup
+        defaultValue="Icons"
+        onValueChange={setAssetType as RadioGroupProps["onValueChange"]}
+      >
+        <ButtonGroup.Button value={"Icons"} className="w-24 h-12">
+          Icons
+        </ButtonGroup.Button>
+        <ButtonGroup.Button value={"Images"} className="w-24 h-12">
+          Images
+        </ButtonGroup.Button>
+        <ButtonGroup.Button value={"Animations"} className="w-24 h-12">
+          Animations
+        </ButtonGroup.Button>
+      </ButtonGroup>
       {/* TODO: AssetView type value => ButtonGroup state */}
       <AssetView type={category === "Icons" ? "icon" : "image"}>
         {useMemo(() => {
-          return assets.map((asset: AssetStat) => {
+          return assets?.map((asset: AssetStat) => {
             switch (asset.type) {
               case "icon": {
                 return (

@@ -2,7 +2,7 @@ import type { AssetIconStat } from "@assetbox/tools";
 
 import { Box, InlineSVG } from "../ui";
 
-interface AssetIconProps {
+export interface AssetIconProps {
   asset: AssetIconStat;
 }
 

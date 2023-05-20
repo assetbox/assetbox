@@ -22,7 +22,7 @@ const menus = [
 
 export const App = ({ data }: AppProps) => {
   useEffect(() => {
-    useAssetBoxStore.setState(data);
+    useAssetBoxStore.setState({ ...data, isLoaded: true });
   }, [data]);
 
   return (

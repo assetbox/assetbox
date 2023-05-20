@@ -2,7 +2,7 @@ import type { AssetImageStat } from "@assetbox/tools";
 
 import { Box } from "../ui";
 
-interface AssetImageProps {
+export interface AssetImageProps {
   asset: AssetImageStat;
 }
 

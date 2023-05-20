@@ -132,6 +132,7 @@ export const CategoryPage = () => {
         <AssetView type={mapAssetType[assetType]}>
           {assets?.map((asset: AssetStat) => (
             <AssetItem
+              disabled={usedFiles[asset.filepath]?.length === 0}
               onClick={() => openModal(asset)}
               key={`asset-${asset.filename}`}
               asset={asset}

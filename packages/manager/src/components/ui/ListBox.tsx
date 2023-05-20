@@ -48,7 +48,7 @@ ListBox.Button = ({
 ListBox.Options = ({ ...props }: ListboxOptionsProps<"ul">) => {
   return (
     <Transition
-      className={"inline-block absolute"}
+      className={"inline-block absolute z-10"}
       enter="transition duration-100 ease-in"
       enterFrom="transform scale-95 opacity-0"
       enterTo="transform scale-100 opacity-100"

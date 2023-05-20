@@ -5,13 +5,15 @@ import { Box, InlineSVG } from "../ui";
 
 type AssetProps = {
   asset: AssetStat;
+  disabled?: boolean;
 } & React.ComponentProps<typeof Box>;
 
-export const Asset = ({ asset, className }: AssetProps) => {
+export const Asset = ({ asset, disabled, className }: AssetProps) => {
   return (
     <Box
       className={cn(
         "flex items-center justify-center cursor-pointer h-full",
+        disabled && "opacity-40",
         className
       )}
     >

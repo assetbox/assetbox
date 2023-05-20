@@ -1,9 +1,11 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import React from "react";
 
 import { cn } from "../../utils";
 
 type InputVariantProps = VariantProps<typeof inputVariants>;
-type InputProp = React.AllHTMLAttributes<HTMLInputElement> & InputVariantProps;
+type InputProp = React.InputHTMLAttributes<HTMLInputElement> &
+  InputVariantProps;
 
 interface InputProps extends InputProp {
   startAdornment?: React.ReactNode;

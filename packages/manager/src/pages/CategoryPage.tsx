@@ -37,6 +37,7 @@ export const CategoryPage = () => {
     filterOptions[0]
   );
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
+  const [search, setSearch] = useState<string>("");
 
   const assets = useMemo(() => {
     if (!category || !categories[category]) return [];
@@ -61,26 +62,29 @@ export const CategoryPage = () => {
         return sortedAssets;
       }
     }
-  }, [categories, filterOption, assetType]);
+  }, [categories, filterOption, assetType, category]);
 
   return (
-    <div className="p-14">
+    <div className="h-full p-14">
+      {search}
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
-        <div className="w-full lg:w-[600px]">
+        <div className="w-full lg:w-[550px]">
           <Input
             noOutline
             className="w-full h-12 !pr-0 pl-4"
             placeholder="Search for assets .."
-            endAdornment={
-              <Button
-                variant={"primary"}
-                className={"w-32 h-full cursor-pointer !py-0 rounded-l-none"}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <Search className="w-4 h-4" />
-                  <p className="text-lg">Search</p>
-                </div>
-              </Button>
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            startAdornment={
+              // <Button
+              //   variant={"primary"}
+              //   className={"w-32 h-full cursor-pointer !py-0 rounded-l-none"}
+              // >
+              <div className="flex items-center justify-center">
+                <Search className="w-5 h-5 mr-2" />
+                {/* <p className="text-lg">Search</p> */}
+              </div>
+              // </Button>
             }
           />
         </div>
@@ -119,9 +123,11 @@ export const CategoryPage = () => {
 
       {/* TODO: AssetView type value => ButtonGroup state */}
       {assets?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full">
-          <Empty className="w-1/2" />
-          <h1 className="text-2xl font-bold">All files are empty</h1>
+        <div className="h-3/4">
+          <div className="flex flex-col items-center justify-center h-full gap-y-5">
+            <Empty className="w-28 h-28" />
+            <h1 className="text-3xl font-normal">All files are empty</h1>
+          </div>
         </div>
       ) : (
         <AssetView type={category === "Icons" ? "icon" : "image"}>

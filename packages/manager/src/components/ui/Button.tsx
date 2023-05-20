@@ -11,7 +11,6 @@ const buttonVariants = cva(
     "items-center",
     "justify-center",
     "text-white",
-    "border",
     "rounded",
     "transition",
     "hover:bg-opacity-80",
@@ -22,7 +21,7 @@ const buttonVariants = cva(
       variant: {
         primary: ["bg-blue", "py-1", "px-9"],
         danger: ["bg-red", "py-1", "px-9"],
-        group: ["p-0", "border-none", "rounded-none"],
+        group: ["p-0", "rounded-none"],
       },
     },
     defaultVariants: {

@@ -11,7 +11,7 @@ import DownVector from "../../assets/down-vector.svg";
 import { cn } from "../../utils/cn";
 
 export const ListBox = ({ ...props }: ComponentProps<typeof Listbox>) => {
-  return <Listbox {...props} />;
+  return <Listbox {...props} className="relative" as="div" />;
 };
 
 ListBox.Button = ({
@@ -24,7 +24,7 @@ ListBox.Button = ({
       <Listbox.Button
         className={(bag) =>
           cn(
-            "w-[165px] h-12 flex items-center rounded bg-white px-[10px] outline-none relative mb-1",
+            "w-[165px] h-12 flex items-center rounded bg-white px-[10px] outline-none mb-1",
             "group",
             typeof className === "function" ? className(bag) : className
           )

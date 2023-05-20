@@ -1,9 +1,11 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import React from "react";
 
 import { cn } from "../../utils";
 
 type InputVariantProps = VariantProps<typeof inputVariants>;
-type InputProp = React.AllHTMLAttributes<HTMLInputElement> & InputVariantProps;
+type InputProp = React.InputHTMLAttributes<HTMLInputElement> &
+  InputVariantProps;
 
 interface InputProps extends InputProp {
   startAdornment?: React.ReactNode;
@@ -17,15 +19,16 @@ const inputVariants = cva(
     "px-[10px]",
     "rounded",
     "bg-white",
-    "border-gray",
+    "border",
     "focus-within:border-blue",
     "outline-none",
+    "transition-all",
   ],
   {
     variants: {
       noOutline: {
-        true: ["border-none"],
-        false: ["border", "transition-all"],
+        true: ["border-white"],
+        false: ["border-gray"],
       },
     },
     defaultVariants: { noOutline: false },

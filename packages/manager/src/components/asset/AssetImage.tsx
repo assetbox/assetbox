@@ -2,7 +2,7 @@ import type { AssetImageStat } from "@assetbox/tools";
 
 import { Box } from "../ui";
 
-interface AssetImageProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AssetImageProps extends React.HTMLAttributes<HTMLDivElement> {
   asset: AssetImageStat;
 }
 

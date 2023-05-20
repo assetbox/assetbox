@@ -2,7 +2,7 @@ import type { AssetIconStat } from "@assetbox/tools";
 
 import { Box, InlineSVG } from "../ui";
 
-interface AssetIconProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AssetIconProps extends React.HTMLAttributes<HTMLDivElement> {
   asset: AssetIconStat;
 }
 

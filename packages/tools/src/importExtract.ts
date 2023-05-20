@@ -1,36 +1,57 @@
 import { readFile } from "fs/promises";
-import { relative, sep } from "path";
+import { relative, resolve, sep } from "path";
 
 import { cwd } from "./cwd";
 
-const extractImportedFiles = async (file: string) => {
-  const fileContent = await readFile(file);
+const extractImportedFiles = async (
+  assetFiles: string[],
+  assetFileNames: string[],
+  file: string
+) => {
+  const fileContent = await readFile(file, "utf-8");
 
-  const importStatements = fileContent
-    .toString()
-    .match(
-      new RegExp(
-        `import\\s+([^;]*)\\s+from\\s+(['"])(.*\\.(svg|png|jpg|jpeg|bmp|gif|webp))\\2|require\\(['"](.+\\.(svg|png|jpg|jpeg|bmp|gif|webp))['"]\\)|await\\s+import\\(['\\"](.*\\.(svg|png|jpg|jpeg|bmp|gif|webp))['\\"]\\)`,
-        "g"
+  const regex = new RegExp(
+    assetFileNames
+      .map(
+        (assetFileName) =>
+          `"[^"]*${sep}${assetFileName}"|'[^']*${sep}${assetFileName}'`
       )
-    );
-
-  const fileNameRegEx = new RegExp(
-    "(?<=/)[^/]+(?=\\.\\w+$)|(?<=/)[^/]+(?='|\")",
+      .join("|"),
     "g"
   );
 
-  const extractedFileNames =
-    importStatements
-      ?.map((importStatement) => importStatement.match(fileNameRegEx))
-      .flat()
-      .filter(Boolean) ?? [];
-  return extractedFileNames as string[];
+  const matches = (fileContent.match(regex) ?? [])
+    .map((match) => {
+      const normalizeMatch = match.replace(/['"]/g, "");
+      switch (normalizeMatch[0]) {
+        case ".": {
+          const originPath = resolve(
+            file.split(sep).slice(0, -1).join(sep),
+            normalizeMatch
+          );
+
+          return relative(cwd(), originPath);
+        }
+        default:
+        case "/": {
+          const originPath = assetFiles.find((assetFile) =>
+            assetFile.includes(normalizeMatch)
+          );
+          if (!originPath) {
+            return null;
+          }
+          return relative(cwd(), originPath);
+        }
+      }
+    })
+    .filter(Boolean) as string[];
+
+  return matches;
 };
 
 const mapFileReferences = (
   assetFiles: string[],
-  importFiles: Record<string, string[]>
+  importFileMap: Record<string, string[]>
 ) => {
   const fileReferences: Record<string, string[]> = {};
 
@@ -38,8 +59,8 @@ const mapFileReferences = (
     fileReferences[fileName] = [];
   });
 
-  Object.keys(importFiles).forEach((importName) => {
-    const importedFiles = importFiles[importName];
+  Object.keys(importFileMap).forEach((importName) => {
+    const importedFiles = importFileMap[importName];
 
     importedFiles.forEach((fileName) => {
       if (fileReferences[fileName]) {
@@ -55,9 +76,20 @@ export const findImportFileSet = async (
   assetFiles: string[],
   trackingPaths: string[]
 ) => {
+  const normalizeAssetFiles = assetFiles.map((assetFile) =>
+    relative(cwd(), assetFile)
+  );
+  const assetFileNames = assetFiles.map(
+    (assetFile) => assetFile.split(sep).pop() as string
+  );
+
   const importFiles = await Promise.all(
     trackingPaths.map(async (file) => ({
-      [relative(cwd(), file)]: await extractImportedFiles(file),
+      [relative(cwd(), file)]: await extractImportedFiles(
+        assetFiles,
+        assetFileNames,
+        file
+      ),
     }))
   );
   const importFileMap = importFiles.reduce((acc, curr) => {
@@ -67,9 +99,5 @@ export const findImportFileSet = async (
     };
   }, {} as Record<string, string[]>);
 
-  const assetFileNames = assetFiles.map(
-    (file) => file.split(sep).pop() as string
-  );
-
-  return mapFileReferences(assetFileNames, importFileMap);
+  return mapFileReferences(normalizeAssetFiles, importFileMap);
 };

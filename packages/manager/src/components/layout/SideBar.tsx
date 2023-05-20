@@ -1,9 +1,10 @@
 import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import AlphabetA from "../../assets/alphabet-a.svg";
 import FolderIcon from "../../assets/folder.svg";
+import HamburgerIcon from "../../assets/hamburger.svg";
 import Logo from "../../assets/logo.svg";
+import { useAssetBoxStore } from "../../store";
 import { cn } from "../../utils";
 import { ProgressBar } from "../ui";
 
@@ -74,38 +75,39 @@ const CoverageBar = ({
   return (
     <ProgressBar rate={coverage} className={className}>
       <div className="flex justify-between">
-        <p className="text-xs font-semibold">{name}</p>
-        <p className="text-xs font-semibold">
-          {coverage}% ({count}/{totalCount})
-        </p>
+        <p className="text-xs">{name}</p>
+        <p className="text-xs">{coverage}%</p>
       </div>
     </ProgressBar>
   );
 };
 
 export const SideBar = ({ categories, menus }: SideBarProps) => {
+  const { uniqueCoverage, usedCoverage } = useAssetBoxStore();
+
   const { pathname } = useLocation();
 
   return (
-    <div className="h-full px-8 pt-12 bg-white w-80">
+    <div className="h-full px-8 pt-12 bg-white select-none w-80">
       <Logo className="ml-[10px] mb-8" />
-      <CoverageBar
-        className="mb-2"
-        name="Unique Coverage"
-        count={48}
-        totalCount={100}
-      />
 
       <CoverageBar
         className="mb-10"
         name="Used Coverage"
-        count={90}
-        totalCount={100}
+        count={usedCoverage.count}
+        totalCount={usedCoverage.totalCount}
+      />
+
+      <CoverageBar
+        className="mb-2"
+        name="Unique Coverage"
+        count={uniqueCoverage.count}
+        totalCount={uniqueCoverage.totalCount}
       />
 
       <div className="flex items-center gap-2 mb-4">
-        <AlphabetA className="ml-[10px]" />
-        <p className="text-base font-bold text-gray-dark">AssetBox</p>
+        <HamburgerIcon className="ml-[10px]" />
+        <p className="text-base font-bold text-gray-dark">Category</p>
       </div>
       <SectorLine />
 

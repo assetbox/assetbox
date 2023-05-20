@@ -1,5 +1,7 @@
 import { readFile } from "fs/promises";
-import { sep } from "path";
+import { relative, sep } from "path";
+
+import { cwd } from "./cwd";
 
 const extractImportedFiles = async (file: string) => {
   const fileContent = await readFile(file);
@@ -18,38 +20,56 @@ const extractImportedFiles = async (file: string) => {
     "g"
   );
 
-  const extractedFileNames = importStatements
-    ?.map((importStatement) => importStatement.match(fileNameRegEx))
-    .flat();
-  return extractedFileNames;
+  const extractedFileNames =
+    importStatements
+      ?.map((importStatement) => importStatement.match(fileNameRegEx))
+      .flat()
+      .filter(Boolean) ?? [];
+  return extractedFileNames as string[];
+};
+
+const mapFileReferences = (
+  assetFiles: string[],
+  importFiles: Record<string, string[]>
+) => {
+  const fileReferences: Record<string, string[]> = {};
+
+  assetFiles.forEach((fileName) => {
+    fileReferences[fileName] = [];
+  });
+
+  Object.keys(importFiles).forEach((importName) => {
+    const importedFiles = importFiles[importName];
+
+    importedFiles.forEach((fileName) => {
+      if (fileReferences[fileName]) {
+        fileReferences[fileName].push(importName);
+      }
+    });
+  });
+
+  return fileReferences;
 };
 
 export const findImportFileSet = async (
   assetFiles: string[],
-  trackingFiles: string[]
+  trackingPaths: string[]
 ) => {
   const importFiles = await Promise.all(
-    trackingFiles.map(async (file) => ({
-      [file]: await extractImportedFiles(file),
+    trackingPaths.map(async (file) => ({
+      [relative(cwd(), file)]: await extractImportedFiles(file),
     }))
   );
-
-  const assetFileNames = assetFiles.map((v) => v.split(sep).pop() as string);
-
-  const assetToImportedFiles = assetFileNames.reduce((acc, curr) => {
-    const filteredFiles = importFiles.filter((importFile) => {
-      const [[key, value]] = Object.entries(importFile);
-
-      if (value?.includes(curr)) {
-        return key;
-      }
-    });
-
+  const importFileMap = importFiles.reduce((acc, curr) => {
     return {
       ...acc,
-      [curr]: filteredFiles.map((file) => Object.keys(file)).flat(),
+      ...curr,
     };
   }, {} as Record<string, string[]>);
 
-  return assetToImportedFiles;
+  const assetFileNames = assetFiles.map(
+    (file) => file.split(sep).pop() as string
+  );
+
+  return mapFileReferences(assetFileNames, importFileMap);
 };

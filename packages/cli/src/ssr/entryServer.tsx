@@ -1,4 +1,5 @@
-import { App, type AssetBoxData } from "@assetbox/manager";
+import { App } from "@assetbox/manager";
+import type { AssetBoxData } from "@assetbox/tools";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 

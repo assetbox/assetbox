@@ -1,12 +1,13 @@
 import { glob } from "glob";
 import { resolve } from "path";
-import { findPackageRoot } from "workspace-tools";
+
+import { cwd } from "./cwd";
 
 export const findFilePathsFromGlob = async (globPatterns: string[]) => {
   const filePathSet = await Promise.all(
     globPatterns.map((pattern: string) => {
       return glob(pattern, {
-        cwd: findPackageRoot(process.cwd())!,
+        cwd: cwd(),
         nodir: true,
       });
     })
@@ -14,6 +15,6 @@ export const findFilePathsFromGlob = async (globPatterns: string[]) => {
 
   const filePaths = filePathSet
     .flat()
-    .map((filePath) => resolve(findPackageRoot(process.cwd())!, filePath));
+    .map((filePath) => resolve(cwd(), filePath));
   return [...new Set(filePaths)];
 };

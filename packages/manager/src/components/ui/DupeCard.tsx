@@ -16,10 +16,7 @@ interface DupeCardProps {
 const AssetIcon = ({ asset }: AssetIconProps) => {
   return (
     <div>
-      <Box
-        className="flex items-center justify-center w-[122px] h-[84px] transition-shadow"
-        key={`icon-${asset.filename}`}
-      >
+      <Box className="flex items-center justify-center w-[122px] h-[84px] transition-shadow">
         <InlineSVG svgHtml={asset.data} className="w-8 h-8" />
       </Box>
     </div>
@@ -29,10 +26,7 @@ const AssetIcon = ({ asset }: AssetIconProps) => {
 const AssetImage = ({ asset }: AssetImageProps) => {
   return (
     <div>
-      <Box
-        className="flex items-center justify-center transition-shadow"
-        key={`icon-${asset.filename}`}
-      >
+      <Box className="flex items-center justify-center transition-shadow">
         <img
           src={asset.filepath}
           className="flex object-cover w-full h-full rounded-lg"

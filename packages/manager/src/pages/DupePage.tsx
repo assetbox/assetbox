@@ -1,4 +1,5 @@
 import { AssetStat } from "@assetbox/tools";
+import { useMemo } from "react";
 
 import BlueCheckIcon from "../assets/blue-check.svg";
 import { DupeCard } from "../components/ui/DupeCard";
@@ -7,11 +8,15 @@ import { useAssetBoxStore } from "../store";
 export const DupePage = () => {
   const { dupeFiles, categories, isLoaded } = useAssetBoxStore();
 
-  const mapAsset = Object.values(categories)
-    .flat()
-    .reduce((acc, asset) => {
-      return { ...acc, [asset.filepath]: asset };
-    }, {} as Record<string, AssetStat>);
+  const mapAsset = useMemo(
+    () =>
+      Object.values(categories)
+        .flat()
+        .reduce((acc, asset) => {
+          return { ...acc, [asset.filepath]: asset };
+        }, {} as Record<string, AssetStat>),
+    [categories]
+  );
 
   const primaryFiles = dupeFiles.map((dupeFile) => dupeFile[0]);
 

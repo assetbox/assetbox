@@ -31,14 +31,17 @@ export const CategoryPage = () => {
     filterOptions[0]
   );
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState("");
 
   const assets = useMemo(() => {
     if (!category || !categories[category]) return [];
 
     const sortedAssets = categories[category]
       .sort(compareByName("ASC"))
-      .filter((asset) => asset.type === mapAssetType[assetType]);
+      .filter((asset) => asset.type === mapAssetType[assetType])
+      .filter((asset) =>
+        asset.filename.toLowerCase().includes(search.toLowerCase())
+      );
 
     switch (filterOption) {
       case "Used": {
@@ -56,11 +59,10 @@ export const CategoryPage = () => {
         return sortedAssets;
       }
     }
-  }, [categories, filterOption, assetType, category]);
+  }, [categories, filterOption, assetType, category, search]);
 
   return (
     <div className="h-full p-14">
-      {search}
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div className="w-full lg:w-[550px]">
           <Input

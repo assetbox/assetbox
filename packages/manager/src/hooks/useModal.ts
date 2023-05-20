@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-export const useModal = <T = any>() => {
+export const useModal = <T = unknown>() => {
   const [modalData, setModal] = useState<{
     open: boolean;
     data?: T;
@@ -28,4 +28,4 @@ export const useModal = <T = any>() => {
   return { openModal, closeModal, open: modalData.open, data: modalData.data };
 };
 
-export type ModalProps<T = any> = ReturnType<typeof useModal<T>>;
+export type ModalProps<T = unknown> = ReturnType<typeof useModal<T>>;

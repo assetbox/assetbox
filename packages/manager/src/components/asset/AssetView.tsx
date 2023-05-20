@@ -13,7 +13,7 @@ export const AssetView = ({ children, type }: AssetViewProps) => {
         type === "icon" &&
           "grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-7",
         type === "image" &&
-          "grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-7",
+          "grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-11",
         type === "animation" &&
           "grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-7"
       )}

@@ -8,6 +8,8 @@ type ButtonProps = React.HTMLAttributes<HTMLDivElement> & ButtonVariantProps;
 const buttonVariants = cva(
   [
     "flex",
+    "cursor-pointer",
+    "select-none",
     "items-center",
     "justify-center",
     "text-white",

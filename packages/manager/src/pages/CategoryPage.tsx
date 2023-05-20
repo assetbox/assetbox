@@ -6,68 +6,50 @@ import { compareByName } from "src/utils/sort";
 import { AssetIcon, AssetImage, AssetView, ListBox } from "../components";
 import { useAssetBoxStore } from "../store";
 import { cn } from "../utils";
-interface OptionProps {
-  id: number;
-  label: string;
-  value: "all" | "used" | "not-used";
-}
-const list: OptionProps[] = [
-  {
-    id: 1,
-    label: "All",
-    value: "all",
-  },
-  {
-    id: 2,
-    label: "Used",
-    value: "used",
-  },
-  {
-    id: 3,
-    label: "Not Used",
-    value: "not-used",
-  },
-];
+
+type ListFilterType = "All" | "Used" | "Not Used";
+const list: ListFilterType[] = ["All", "Used", "Not Used"];
+
 export const CategoryPage = () => {
   const { category } = useParams();
 
   const { categories } = useAssetBoxStore();
-  const [selected, setSelected] = useState<OptionProps>(list[0]);
+  const [selected, setSelected] = useState<ListFilterType>(list[0]);
 
   if (!category) {
     return <div>Category not found</div>;
   }
   const assets = useMemo(() => {
-    switch (selected.value) {
-      case "used": {
+    switch (selected) {
+      case "Used": {
         return categories[category]
           ?.sort(compareByName("ASC"))
           .filter((elem) => elem.size > 500);
       }
       default:
-      case "all": {
+      case "All": {
         return categories[category]?.sort(compareByName("ASC")) ?? [];
       }
     }
-  }, [categories[category], selected.value]);
+  }, [categories[category], selected]);
 
-  const menuHandle = (item: OptionProps) => {
+  const menuHandle = (item: ListFilterType) => {
     setSelected(item);
   };
-
+  console.log(assets);
   return (
     <div className="p-14">
       <ListBox
         value={selected}
-        onChange={(item: OptionProps) => menuHandle(item)}
+        onChange={(item: ListFilterType) => menuHandle(item)}
       >
         <ListBox.Button className={({ open }) => cn(open && "bg-black")}>
-          {selected.label}
+          {selected}
         </ListBox.Button>
         <ListBox.Options>
           {list.map((elem) => (
-            <ListBox.Option key={elem.id} value={elem}>
-              {elem.label}
+            <ListBox.Option key={`option-${elem}`} value={elem}>
+              {elem}
             </ListBox.Option>
           ))}
         </ListBox.Options>

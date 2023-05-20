@@ -93,6 +93,7 @@ export const CategoryPage = () => {
               Animations
             </ButtonGroup.Button>
           </ButtonGroup>
+
           <ListBox value={filterOption} onChange={setFilterOption}>
             <ListBox.Button className={({ open }) => cn(open && "bg-black")}>
               {filterOption}

@@ -56,7 +56,7 @@ ListBox.Options = ({ ...props }: ListboxOptionsProps<"ul">) => {
       leaveFrom="transform scale-100 opacity-100"
       leaveTo="transform scale-95 opacity-0"
     >
-      <Listbox.Options className={"outline-none "} {...props} />
+      <Listbox.Options className={"outline-none"} {...props} />
     </Transition>
   );
 };

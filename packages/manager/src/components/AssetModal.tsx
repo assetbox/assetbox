@@ -194,19 +194,13 @@ export const AssetModal = ({
 
             <RenameModal
               open={renameOpen}
-              onCancel={() => {
-                closeRenameModal();
-                onClose();
-              }}
+              onCancel={closeRenameModal}
               filepath={data.filepath}
               filename={data.filename}
             />
             <DeleteModal
               open={deleteOpen}
-              onCancel={() => {
-                closeDeleteModal();
-                onClose();
-              }}
+              onCancel={closeDeleteModal}
               filepath={data.filepath}
             />
           </div>

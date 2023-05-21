@@ -18,10 +18,6 @@ export const DupePage = () => {
     [categories]
   );
 
-  const primaryFiles = dupeFiles.map((dupeFile) => dupeFile[0]);
-
-  const assets = primaryFiles.map((primaryFile) => mapAsset[primaryFile]);
-
   if (isLoaded && dupeFiles?.length === 0) {
     return (
       <div className="px-14 py-11">
@@ -40,11 +36,11 @@ export const DupePage = () => {
     <div className="px-14 py-11">
       <p className="text-4xl font-bold pb-9">Duplicated Assets</p>
       <div className="grid grid-cols-2 gap-8">
-        {assets.map((asset, index) => (
+        {dupeFiles.map((paths) => (
           <DupeCard
-            paths={dupeFiles[index]}
-            key={`card-${asset.filename}`}
-            asset={asset}
+            paths={paths}
+            key={`card-${paths[0]}`}
+            asset={mapAsset[paths[0]]}
           />
         ))}
       </div>

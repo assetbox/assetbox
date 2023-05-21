@@ -8,13 +8,13 @@ import { cn } from "../../utils";
 
 interface CheckBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
-  onToggle?: () => void;
+  onCheckedChange?: () => void;
   checked: boolean;
 }
 
 export const CheckBox = ({
   label,
-  onToggle,
+  onCheckedChange,
   checked,
   className,
   ...rest
@@ -23,12 +23,23 @@ export const CheckBox = ({
 
   return (
     <div className={cn("inline-flex items-center", className)} {...rest}>
-      <Checkbox.Root checked={checked} onCheckedChange={onToggle} id={id}>
-        <Checkbox.Indicator forceMount>
+      <Checkbox.Root
+        className="outline-none"
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        id={id}
+      >
+        <Checkbox.Indicator forceMount className="w-4 h-4">
           {checked === true ? <CheckedIcon /> : <UnCheckedIcon />}
         </Checkbox.Indicator>
       </Checkbox.Root>
-      <label className="pl-2 cursor-pointer select-none text-gray" htmlFor={id}>
+      <label
+        className={cn(
+          "pl-2 text-sm cursor-pointer select-none",
+          checked ? "text-black" : "text-gray"
+        )}
+        htmlFor={id}
+      >
         {label}
       </label>
     </div>

@@ -45,7 +45,7 @@ export const manage = async () => {
     }
   });
 
-  app.listen(6000, () => {
-    console.log("📦 AssetBox is running at http://localhost:6000");
+  app.listen(6001, () => {
+    console.log("📦 AssetBox is running at http://localhost:6001");
   });
 };

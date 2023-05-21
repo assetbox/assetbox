@@ -22,7 +22,7 @@ export const DupePage = () => {
 
   const assets = primaryFiles.map((primaryFile) => mapAsset[primaryFile]);
 
-  if (isLoaded && dupeFiles.length === 0) {
+  if (isLoaded && dupeFiles?.length === 0) {
     return (
       <div className="px-14 py-11">
         <p className="text-4xl font-bold pb-9">Duplicated Assets</p>

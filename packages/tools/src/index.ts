@@ -3,6 +3,7 @@ export * from "./convertAssetStat";
 export * from "./cwd";
 export * from "./findDupeFileSet";
 export * from "./findFilePathsFromGlob";
+export * from "./getAssetBoxData";
 export * from "./getCategoryStats";
 export * from "./importExtract";
 export * from "./mergeDupeFileSet";

@@ -1,4 +1,4 @@
-import { mergeDupeFileSet } from "@assetbox/tools";
+import { getAssetBoxData, mergeDupeFileSet } from "@assetbox/tools";
 import { initTRPC } from "@trpc/server";
 import { rename, unlink } from "fs/promises";
 import { z } from "zod";
@@ -46,4 +46,8 @@ export const appRouter = t.router({
       }
       return true;
     }),
+
+  getAssetBoxData: t.procedure.query(async () => {
+    return getAssetBoxData();
+  }),
 });

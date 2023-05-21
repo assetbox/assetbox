@@ -1,6 +1,5 @@
 import { AssetStat } from "@assetbox/tools";
 import dayjs from "dayjs";
-import { sep } from "path";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -8,7 +7,7 @@ import { client } from "../api";
 import CodeIcon from "../assets/code.svg";
 import InformationIcon from "../assets/information.svg";
 import { ModalProps, useModal } from "../hooks";
-import { useAssetBoxStore } from "../store";
+import { syncAssetBox, useAssetBoxStore } from "../store";
 import { Button, InlineSVG, Modal } from "./ui";
 import { ConfirmModal, ConfirmModalProps } from "./ui/ConfirmModal";
 import { Input } from "./ui/Input";
@@ -45,12 +44,15 @@ const RenameModal = ({
               ),
             }),
             {
-              pending: "Deleting...",
-              success: "Deleted!",
-              error: "Failed to delete",
+              pending: "Renaming...",
+              success: "Renamed!",
+              error: "Failed to rename",
             }
           )
-          .then(onCancel);
+          .then(() => {
+            onCancel();
+            syncAssetBox();
+          });
       }}
       cancelVariant="gray"
       open={open}
@@ -62,7 +64,7 @@ const RenameModal = ({
         className="w-full mb-4"
       />
 
-      <div className="p-2 rounded bg-gray-light h-28">
+      <div className="flex flex-col justify-center h-32 px-3 rounded bg-gray-light">
         <div className="mb-2">
           <p className="mb-1 text-sm text-gray">Current File Name</p>
           <p className="text-sm">{filename}</p>
@@ -95,7 +97,10 @@ const DeleteModal = ({
             success: "Deleted!",
             error: "Failed to delete",
           })
-          .then(onCancel);
+          .then(() => {
+            onCancel();
+            syncAssetBox();
+          });
       }}
       open={open}
     >
@@ -151,7 +156,7 @@ export const AssetModal = ({
                   </div>
                   <PathCard
                     paths={
-                      usedFiles[data.filepath].length > 0
+                      usedFiles[data.filepath]?.length > 0
                         ? usedFiles[data.filepath]
                         : ["No files found in use."]
                     }
@@ -167,7 +172,7 @@ export const AssetModal = ({
                   <div className="bg-[#F7F9FB] rounded px-5 py-6">
                     <InfoItem label="File Name">{data.filename}</InfoItem>
                     <InfoItem label="Used Count">
-                      {usedFiles[data.filepath].length}
+                      {usedFiles[data.filepath]?.length}
                     </InfoItem>
                     <InfoItem label="Icon Type">{data.type}</InfoItem>
                     <InfoItem label="Extension">{data.extension}</InfoItem>
@@ -189,13 +194,19 @@ export const AssetModal = ({
 
             <RenameModal
               open={renameOpen}
-              onCancel={closeRenameModal}
+              onCancel={() => {
+                closeRenameModal();
+                onClose();
+              }}
               filepath={data.filepath}
               filename={data.filename}
             />
             <DeleteModal
               open={deleteOpen}
-              onCancel={closeDeleteModal}
+              onCancel={() => {
+                closeDeleteModal();
+                onClose();
+              }}
               filepath={data.filepath}
             />
           </div>

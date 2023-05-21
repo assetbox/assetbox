@@ -1,6 +1,7 @@
 import type { AssetBoxData } from "@assetbox/tools";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import DupeAssetsMenuIcon from "./assets/dupe-assets-menu.svg";
 import { Layout, SideBar } from "./components";
@@ -40,6 +41,7 @@ export const App = ({ data }: AppProps) => {
           <Route path="/dupe" element={<DupePage />} />
         </Routes>
       </Main>
+      <ToastContainer />
     </Layout>
   );
 };

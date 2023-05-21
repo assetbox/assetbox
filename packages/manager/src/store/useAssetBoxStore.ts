@@ -1,8 +1,11 @@
 import type { AssetBoxData, AssetStat } from "@assetbox/tools";
 import { create } from "zustand";
 
+import { client } from "../api";
+
 interface AssetBoxStore extends AssetBoxData {
   isLoaded: boolean;
+  appendCategories: (categoryName: string, category: AssetStat) => void;
 }
 
 export const useAssetBoxStore = create<AssetBoxStore>((set, get) => ({
@@ -29,3 +32,9 @@ export const useAssetBoxStore = create<AssetBoxStore>((set, get) => ({
     });
   },
 }));
+
+export const syncAssetBox = async () => {
+  const assetBoxData = await client.getAssetBoxData.query();
+
+  useAssetBoxStore.setState(assetBoxData);
+};

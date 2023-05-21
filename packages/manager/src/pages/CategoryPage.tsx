@@ -29,6 +29,7 @@ export const CategoryPage = () => {
   const { category } = useParams();
 
   const { categories, usedFiles } = useAssetBoxStore();
+
   const [filterOption, setFilterOption] = useState<FilterOption>(
     filterOptions[0]
   );

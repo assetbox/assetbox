@@ -1,4 +1,4 @@
-import { getAssetBoxData, mergeDupeFileSet } from "@assetbox/tools";
+import { getAssetBoxData } from "@assetbox/tools";
 import { initTRPC } from "@trpc/server";
 import { rename, unlink } from "fs/promises";
 import { z } from "zod";
@@ -27,22 +27,6 @@ export const appRouter = t.router({
         await rename(req.input.oldPath, req.input.newPath);
       } catch (e) {
         throw new Error("File rename error");
-      }
-      return true;
-    }),
-
-  mergeAsset: t.procedure
-    .input(
-      z.object({
-        fileSet: z.array(z.string()),
-        newPathAndName: z.string(),
-      })
-    )
-    .mutation(async (req) => {
-      try {
-        mergeDupeFileSet(req.input.fileSet, req.input.newPathAndName);
-      } catch (e) {
-        throw new Error("File merge error");
       }
       return true;
     }),

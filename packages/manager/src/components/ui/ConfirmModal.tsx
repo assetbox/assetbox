@@ -1,8 +1,8 @@
-import { ModalProps } from "../../hooks";
 import { Button, ButtonVariantProps } from "./Button";
 import { Modal } from "./Modal";
 
-export type ConfirmModalProps<T = unknown> = Pick<ModalProps<T>, "open"> & {
+export type ConfirmModalProps<T = unknown> = {
+  open: boolean;
   confirmText?: string;
   data?: T | undefined;
   confirmVariant?: ButtonVariantProps["variant"];

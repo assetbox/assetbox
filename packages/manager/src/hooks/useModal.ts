@@ -27,5 +27,3 @@ export const useModal = <T = unknown>() => {
   );
   return { openModal, closeModal, open: modalData.open, data: modalData.data };
 };
-
-export type ModalProps<T = unknown> = ReturnType<typeof useModal<T>>;

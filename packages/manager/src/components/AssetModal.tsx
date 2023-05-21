@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import { client } from "../api";
 import CodeIcon from "../assets/code.svg";
 import InformationIcon from "../assets/information.svg";
-import { ModalProps, useModal } from "../hooks";
+import { useModal } from "../hooks";
 import { syncAssetBox, useAssetBoxStore } from "../store";
-import { Button, InlineSVG, Modal } from "./ui";
+import { Button, InlineSVG, Modal, ModalProps } from "./ui";
 import { ConfirmModal, ConfirmModalProps } from "./ui/ConfirmModal";
 import { Input } from "./ui/Input";
 import { PathCard } from "./ui/PathCard";
@@ -114,8 +114,8 @@ export const AssetModal = ({
   open,
   data,
   onClose,
-}: Omit<ModalProps<AssetStat>, "openModal" | "closeModal"> & {
-  onClose: () => void;
+}: ModalProps & {
+  data?: AssetStat;
 }) => {
   const { usedFiles } = useAssetBoxStore();
 

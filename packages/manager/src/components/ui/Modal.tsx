@@ -7,6 +7,11 @@ import {
 
 import { cn } from "../../utils";
 
+export type ModalProps = {
+  open: boolean;
+  onClose: () => void;
+};
+
 export const Modal = ({ open, children, ...props }: DialogProps<"div">) => {
   return (
     <Transition

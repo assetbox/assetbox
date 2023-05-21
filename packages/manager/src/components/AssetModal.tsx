@@ -1,11 +1,17 @@
 import { AssetStat } from "@assetbox/tools";
 import dayjs from "dayjs";
+import { sep } from "path";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
+import { client } from "../api";
 import CodeIcon from "../assets/code.svg";
 import InformationIcon from "../assets/information.svg";
-import { ModalProps } from "../hooks";
+import { ModalProps, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
 import { Button, InlineSVG, Modal } from "./ui";
+import { ConfirmModal, ConfirmModalProps } from "./ui/ConfirmModal";
+import { Input } from "./ui/Input";
 import { PathCard } from "./ui/PathCard";
 
 const InfoItem = ({
@@ -18,15 +24,110 @@ const InfoItem = ({
   </div>
 );
 
-export const AssetModal = ({
+const RenameModal = ({
+  onCancel,
   open,
-  closeModal,
-  data,
-}: Omit<ModalProps<AssetStat>, "openModal">) => {
-  const { usedFiles } = useAssetBoxStore();
+  filename,
+  filepath,
+}: ConfirmModalProps & Record<"filename" | "filepath", string>) => {
+  const [newFilename, setNewFilename] = useState(filename);
 
   return (
-    <Modal open={open} onClose={closeModal}>
+    <ConfirmModal
+      onCancel={onCancel}
+      onConfirm={() => {
+        toast
+          .promise(
+            client.renameAsset.mutate({
+              oldPath: filepath,
+              newPath: [...filepath.split("/").slice(0, -1), newFilename].join(
+                "/"
+              ),
+            }),
+            {
+              pending: "Deleting...",
+              success: "Deleted!",
+              error: "Failed to delete",
+            }
+          )
+          .then(onCancel);
+      }}
+      cancelVariant="gray"
+      open={open}
+    >
+      <p className="mb-2 text-sm">Please enter a file name to replace</p>
+      <Input
+        value={newFilename}
+        onChange={(e) => setNewFilename(e.target.value)}
+        className="w-full mb-4"
+      />
+
+      <div className="p-2 rounded bg-gray-light h-28">
+        <div className="mb-2">
+          <p className="mb-1 text-sm text-gray">Current File Name</p>
+          <p className="text-sm">{filename}</p>
+        </div>
+        <div>
+          <p className="mb-1 text-sm text-gray">New File Name</p>
+          <p className="text-sm">{newFilename}</p>
+        </div>
+      </div>
+    </ConfirmModal>
+  );
+};
+
+const DeleteModal = ({
+  onCancel,
+  open,
+  filepath,
+}: ConfirmModalProps & Record<"filepath", string>) => {
+  return (
+    <ConfirmModal
+      onCancel={onCancel}
+      confirmText="Delete"
+      confirmVariant="danger"
+      cancelText="Cancel"
+      cancelVariant="gray"
+      onConfirm={() => {
+        toast
+          .promise(client.deleteAsset.mutate(filepath), {
+            pending: "Deleting...",
+            success: "Deleted!",
+            error: "Failed to delete",
+          })
+          .then(onCancel);
+      }}
+      open={open}
+    >
+      <p className="mb-2 text-sm">Are you sure you want to delete it?</p>
+      <p className="p-2 text-sm rounded bg-gray-light">{filepath}</p>
+    </ConfirmModal>
+  );
+};
+
+export const AssetModal = ({
+  open,
+  data,
+  onClose,
+}: Omit<ModalProps<AssetStat>, "openModal" | "closeModal"> & {
+  onClose: () => void;
+}) => {
+  const { usedFiles } = useAssetBoxStore();
+
+  const {
+    open: renameOpen,
+    openModal: openRenameModal,
+    closeModal: closeRenameModal,
+  } = useModal();
+
+  const {
+    open: deleteOpen,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal();
+
+  return (
+    <Modal open={open} onClose={onClose}>
       <Modal.Panel className={"max-w-6xl p-7"}>
         {data ? (
           <div>
@@ -78,9 +179,25 @@ export const AssetModal = ({
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant={"primary"}>Rename</Button>
-              <Button variant={"danger"}>Delete</Button>
+              <Button variant="primary" onClick={openRenameModal}>
+                Rename
+              </Button>
+              <Button variant="danger" onClick={openDeleteModal}>
+                Delete
+              </Button>
             </div>
+
+            <RenameModal
+              open={renameOpen}
+              onCancel={closeRenameModal}
+              filepath={data.filepath}
+              filename={data.filename}
+            />
+            <DeleteModal
+              open={deleteOpen}
+              onCancel={closeDeleteModal}
+              filepath={data.filepath}
+            />
           </div>
         ) : null}
       </Modal.Panel>

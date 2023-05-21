@@ -1,6 +1,6 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import EmptyIcon from "../assets/empty-icon.svg";
@@ -141,7 +141,7 @@ export const CategoryPage = () => {
         </AssetView>
       )}
 
-      <AssetModal data={modalAsset} closeModal={closeModal} open={open} />
+      <AssetModal data={modalAsset} onClose={closeModal} open={open} />
     </div>
   );
 };

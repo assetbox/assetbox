@@ -1,5 +1,6 @@
 import { AssetStat } from "@assetbox/tools";
 import dayjs from "dayjs";
+import { sep } from "path";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -23,29 +24,63 @@ const InfoItem = ({
   </div>
 );
 
-const RenameModal = ({ onCancel, open, data }: ConfirmModalProps<string>) => {
-  const [filename, setFilename] = useState("");
+const RenameModal = ({
+  onCancel,
+  open,
+  filename,
+  filepath,
+}: ConfirmModalProps & Record<"filename" | "filepath", string>) => {
+  const [newFilename, setNewFilename] = useState(filename);
 
   return (
     <ConfirmModal
       onCancel={onCancel}
       onConfirm={() => {
-        alert(data);
+        toast
+          .promise(
+            client.renameAsset.mutate({
+              oldPath: filepath,
+              newPath: [...filepath.split("/").slice(0, -1), newFilename].join(
+                "/"
+              ),
+            }),
+            {
+              pending: "Deleting...",
+              success: "Deleted!",
+              error: "Failed to delete",
+            }
+          )
+          .then(onCancel);
       }}
       cancelVariant="gray"
       open={open}
     >
       <p className="mb-2 text-sm">Please enter a file name to replace</p>
       <Input
-        value={filename}
-        onChange={(e) => setFilename(e.target.value)}
-        className="w-full"
+        value={newFilename}
+        onChange={(e) => setNewFilename(e.target.value)}
+        className="w-full mb-4"
       />
+
+      <div className="p-2 rounded bg-gray-light h-28">
+        <div className="mb-2">
+          <p className="mb-1 text-sm text-gray">Current File Name</p>
+          <p className="text-sm">{filename}</p>
+        </div>
+        <div>
+          <p className="mb-1 text-sm text-gray">New File Name</p>
+          <p className="text-sm">{newFilename}</p>
+        </div>
+      </div>
     </ConfirmModal>
   );
 };
 
-const DeleteModal = ({ onCancel, open, data }: ConfirmModalProps<string>) => {
+const DeleteModal = ({
+  onCancel,
+  open,
+  filepath,
+}: ConfirmModalProps & Record<"filepath", string>) => {
   return (
     <ConfirmModal
       onCancel={onCancel}
@@ -54,11 +89,8 @@ const DeleteModal = ({ onCancel, open, data }: ConfirmModalProps<string>) => {
       cancelText="Cancel"
       cancelVariant="gray"
       onConfirm={() => {
-        if (!data) {
-          return;
-        }
         toast
-          .promise(client.deleteAsset.mutate(data), {
+          .promise(client.deleteAsset.mutate(filepath), {
             pending: "Deleting...",
             success: "Deleted!",
             error: "Failed to delete",
@@ -68,7 +100,7 @@ const DeleteModal = ({ onCancel, open, data }: ConfirmModalProps<string>) => {
       open={open}
     >
       <p className="mb-2 text-sm">Are you sure you want to delete it?</p>
-      <p className="p-2 text-sm rounded bg-gray-light">{data}</p>
+      <p className="p-2 text-sm rounded bg-gray-light">{filepath}</p>
     </ConfirmModal>
   );
 };
@@ -158,12 +190,13 @@ export const AssetModal = ({
             <RenameModal
               open={renameOpen}
               onCancel={closeRenameModal}
-              data={data.filepath}
+              filepath={data.filepath}
+              filename={data.filename}
             />
             <DeleteModal
               open={deleteOpen}
               onCancel={closeDeleteModal}
-              data={data.filepath}
+              filepath={data.filepath}
             />
           </div>
         ) : null}

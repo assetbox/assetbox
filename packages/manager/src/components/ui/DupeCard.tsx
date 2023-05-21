@@ -77,7 +77,8 @@ const MultipleDeleteModal = ({
         </div>
         <div className="flex justify-end">
           <Button
-            variant="primary"
+            variant="danger"
+            className="w-40"
             onClick={() => {
               toast
                 .promise(
@@ -96,7 +97,7 @@ const MultipleDeleteModal = ({
                 });
             }}
           >
-            Delete
+            {selectedPaths.length} Files Delete
           </Button>
         </div>
       </Modal.Panel>

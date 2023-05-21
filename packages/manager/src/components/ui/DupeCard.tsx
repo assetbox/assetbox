@@ -109,20 +109,24 @@ export const DupeCard = ({ asset, paths }: DupeCardProps) => {
   const { closeModal, open, openModal } = useModal();
 
   return (
-    <div className="flex max-w-[728px] min-h-[198px] bg-gray rounded-xl bg-opacity-10 py-8 px-10 gap-6">
-      <div
-        className={cn("flex flex-col gap-3", asset.type !== "icon" && "flex-1")}
-      >
-        <Asset asset={asset} />
-        <Button onClick={openModal} className="w-full">
-          Manage
-        </Button>
+    <div>
+      <div className="flex max-w-[728px] min-h-[198px] bg-gray rounded-xl bg-opacity-10 py-8 px-10 gap-6">
+        <div
+          className={cn(
+            "flex flex-col gap-3",
+            asset.type !== "icon" && "flex-1"
+          )}
+        >
+          <Asset asset={asset} />
+          <Button onClick={openModal} className="w-full">
+            Manage
+          </Button>
+        </div>
+        <PathCard
+          paths={paths}
+          className={cn(asset.type === "image" && "flex-1")}
+        />
       </div>
-      <PathCard
-        paths={paths}
-        className={cn(asset.type === "image" && "flex-1")}
-      />
-
       <MultipleDeleteModal
         onClose={closeModal}
         open={open}

@@ -1,10 +1,8 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
-import { useMemo, useState } from "react";
-import type { DropTargetMonitor } from "react-dnd";
-import { useDrop } from "react-dnd";
-import { NativeTypes } from "react-dnd-html5-backend";
+import { ReactNode, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { match } from "ts-pattern";
 
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
@@ -34,7 +32,7 @@ const useFilterAsset = ({
   assetType,
   search,
 }: {
-  currentCategory: string;
+  currentCategory?: string;
   filterOption: FilterOption;
   assetType: AssetViewType;
   search: string;
@@ -82,7 +80,7 @@ export const CategoryPage = () => {
   const { usedFiles } = useAssetBoxStore();
 
   const assets = useFilterAsset({
-    currentCategory: category!,
+    currentCategory: category,
     filterOption,
     assetType,
     search,
@@ -157,7 +155,6 @@ export const CategoryPage = () => {
           </ListBox>
         </div>
       </div>
-
       {assets?.length === 0 ? (
         <div className="h-3/4">
           <div className="flex flex-col items-center justify-center h-full gap-y-5">
@@ -177,7 +174,6 @@ export const CategoryPage = () => {
           ))}
         </AssetView>
       )}
-
       <AssetModal data={modalAsset} onClose={closeModal} open={open} />
     </div>
   );

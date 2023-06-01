@@ -4,7 +4,7 @@ import { expect, jest, test } from "@jest/globals";
 import { vol } from "memfs";
 import process from "process";
 
-import { findDupeFileSet } from "./findDupeFileSet";
+import { findDupeFileSet, isDupeFiles } from "./findDupeFileSet";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 import { createMockRepository } from "./test/utils/mockRepository";
 
@@ -54,6 +54,43 @@ describe("findDupeFileFromGlob Test", () => {
       const result = await findDupeFileSet(assetFiles);
 
       expect(result).toStrictEqual([]);
+    });
+
+    afterAll(() => {
+      spy.mockClear();
+      vol.rmdirSync("/test/basic", { recursive: true });
+    });
+  });
+
+  describe("isDupeFiles Test", () => {
+    beforeAll(() => {
+      spy.mockReturnValue("/test/basic");
+      createMockRepository("/test/basic", {
+        assetBoxConfig: true,
+        isDupe: false,
+      });
+    });
+
+    test("isDupeFiles Test", async () => {
+      const files = [
+        {
+          path: "/test/basic/src/assets/icons/d.svg",
+          hash: "a87ff679a2f3e71d9181a67b7542122c",
+        },
+        {
+          path: "/test/basic/src/assets/icons/qwe.svg",
+          hash: "eccbc87e4b5ce2fe28308fd9f2a7baf5",
+        },
+      ];
+
+      const { categories } = await readAssetBoxConfig();
+      const assetFiles = Object.values(categories).flat();
+      const result = await isDupeFiles(assetFiles, files);
+
+      expect(result).toStrictEqual({
+        "src/assets/icons/d.svg": true,
+        "src/assets/icons/qwe.svg": false,
+      });
     });
 
     afterAll(() => {

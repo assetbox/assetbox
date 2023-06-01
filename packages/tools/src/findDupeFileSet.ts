@@ -37,6 +37,7 @@ export const findDupeFileSet = async (assetFiles: string[]) => {
       [file]: await createFileHash(file),
     }))
   );
+
   const fileHashMap = fileHashes.reduce(
     (result, fileHash) => ({
       ...result,
@@ -46,4 +47,40 @@ export const findDupeFileSet = async (assetFiles: string[]) => {
   );
 
   return compareHash(fileHashMap);
+};
+
+export const isDupeFiles = async (
+  assetFiles: string[],
+  files: {
+    path: string;
+    hash: string;
+  }[]
+) => {
+  // props로 받아야 할 것
+  // const { categories } = await readAssetBoxConfig();
+  // const assetFiles = Object.values(categories).flat();
+
+  const fileHashes = await Promise.all(
+    assetFiles.map(async (file) => await createFileHash(file))
+  );
+  const results: { [key: string]: boolean } = {};
+
+  // const results:{} = files.reduce((acc, file) => {
+  //   const filePath = relative(cwd(), file.path);
+  //   const hashIncluded = fileHashes.includes(file.hash);
+
+  //   acc[filePath] = hashIncluded;
+
+  //   return acc;
+  // }, {});
+  files.forEach((file) => {
+    const filePath = relative(cwd(), file.path);
+    const hashIncluded = fileHashes.includes(file.hash);
+    if (filePath in results) {
+      console.log("드래그 앤 드롭으로 추가한 파일에 중복된 파일이 존재함.");
+    }
+    results[filePath] = hashIncluded;
+  });
+
+  return results;
 };

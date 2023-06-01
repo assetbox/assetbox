@@ -9,7 +9,7 @@ import { AssetItem, AssetView, ListBox } from "../components";
 import { AssetModal } from "../components/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
-import { useModal } from "../hooks";
+import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
 import { cn } from "../utils";
 import { compareByName } from "../utils/sort";
@@ -25,21 +25,23 @@ const mapAssetType: Record<AssetViewType, AssetStat["type"]> = {
   Animations: "animation",
 };
 
-export const CategoryPage = () => {
-  const { category } = useParams();
-
+const useFilterAsset = ({
+  currentCategory,
+  filterOption,
+  assetType,
+  search,
+}: {
+  currentCategory?: string;
+  filterOption: FilterOption;
+  assetType: AssetViewType;
+  search: string;
+}) => {
   const { categories, usedFiles } = useAssetBoxStore();
 
-  const [filterOption, setFilterOption] = useState<FilterOption>(
-    filterOptions[0]
-  );
-  const [assetType, setAssetType] = useState<AssetViewType>("Icons");
-  const [search, setSearch] = useState("");
+  return useMemo(() => {
+    if (!currentCategory || !categories[currentCategory]) return [];
 
-  const assets = useMemo(() => {
-    if (!category || !categories[category]) return [];
-
-    const sortedAssets = categories[category]
+    const sortedAssets = categories[currentCategory]
       .sort(compareByName("ASC"))
       .filter((asset) => asset.type === mapAssetType[assetType])
       .filter((asset) =>
@@ -62,7 +64,26 @@ export const CategoryPage = () => {
         return sortedAssets;
       }
     }
-  }, [categories, filterOption, assetType, category, search]);
+  }, [categories, filterOption, assetType, currentCategory, search]);
+};
+
+export const CategoryPage = () => {
+  const { category } = useParams();
+
+  const [filterOption, setFilterOption] = useState<FilterOption>(
+    filterOptions[0]
+  );
+  const [assetType, setAssetType] = useState<AssetViewType>("Icons");
+  const [search, setSearch] = useState("");
+
+  const { usedFiles } = useAssetBoxStore();
+
+  const assets = useFilterAsset({
+    currentCategory: category,
+    filterOption,
+    assetType,
+    search,
+  });
 
   const {
     data: modalAsset,
@@ -71,8 +92,20 @@ export const CategoryPage = () => {
     closeModal,
   } = useModal<AssetStat>();
 
+  const { isDrag, dragRef } = useFileUpload({
+    onDrop: (files) => {
+      console.log(files);
+    },
+  });
+
   return (
-    <div className="h-full p-14">
+    <div
+      className={cn(
+        "h-full p-14 transition-opacity duration-300",
+        isDrag && "opacity-30"
+      )}
+      ref={dragRef}
+    >
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div className="w-full lg:w-[550px]">
           <Input
@@ -121,7 +154,6 @@ export const CategoryPage = () => {
           </ListBox>
         </div>
       </div>
-
       {assets?.length === 0 ? (
         <div className="h-3/4">
           <div className="flex flex-col items-center justify-center h-full gap-y-5">
@@ -141,7 +173,6 @@ export const CategoryPage = () => {
           ))}
         </AssetView>
       )}
-
       <AssetModal data={modalAsset} onClose={closeModal} open={open} />
     </div>
   );

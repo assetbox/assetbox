@@ -3,15 +3,15 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { client } from "../api";
-import CodeIcon from "../assets/code.svg";
-import InformationIcon from "../assets/information.svg";
-import { useModal } from "../hooks";
-import { syncAssetBox, useAssetBoxStore } from "../store";
-import { Button, InlineSVG, Modal, ModalProps } from "./ui";
-import { ConfirmModal, ConfirmModalProps } from "./ui/ConfirmModal";
-import { Input } from "./ui/Input";
-import { PathCard } from "./ui/PathCard";
+import { client } from "../../api";
+import CodeIcon from "../../assets/code.svg";
+import InformationIcon from "../../assets/information.svg";
+import { useModal } from "../../hooks";
+import { syncAssetBox, useAssetBoxStore } from "../../store";
+import { Button, InlineSVG, Modal, ModalProps } from "../ui";
+import { ConfirmModal, ConfirmModalProps } from "../ui/ConfirmModal";
+import { Input } from "../ui/Input";
+import { PathCard } from "../ui/PathCard";
 
 const InfoItem = ({
   label,

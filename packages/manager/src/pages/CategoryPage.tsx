@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
 import { AssetItem, AssetView, ListBox } from "../components";
-import { AssetModal } from "../components/AssetModal";
+import { AssetModal } from "../components/modal/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
 import { useFileUpload, useModal } from "../hooks";

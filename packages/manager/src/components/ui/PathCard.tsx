@@ -8,7 +8,7 @@ export const PathCard = ({ paths, className, ...props }: PathCardProps) => {
   return (
     <div
       className={cn(
-        "grow bg-[#F7F9Fb] rounded-lg p-6 overflow-auto",
+        "grow bg-gray-light rounded-lg p-6 overflow-auto",
         className
       )}
       {...props}

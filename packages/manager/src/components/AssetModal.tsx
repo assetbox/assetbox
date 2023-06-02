@@ -169,7 +169,7 @@ export const AssetModal = ({
                     <p className="text-sm font-bold">Information</p>
                   </div>
 
-                  <div className="bg-[#F7F9FB] rounded px-5 py-6">
+                  <div className="px-5 py-6 rounded bg-gray-light">
                     <InfoItem label="File Name">{data.filename}</InfoItem>
                     <InfoItem label="Used Count">
                       {usedFiles[data.filepath]?.length}

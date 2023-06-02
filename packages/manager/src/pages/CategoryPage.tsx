@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
-import { AssetItem, AssetView, ListBox } from "../components";
+import { AssetItem, AssetView, FolderSelector, ListBox } from "../components";
 import { AssetModal } from "../components/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
@@ -106,6 +106,7 @@ export const CategoryPage = () => {
       )}
       ref={dragRef}
     >
+      <FolderSelector open={true} onClose={() => false} />
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div className="w-full lg:w-[550px]">
           <Input

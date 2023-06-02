@@ -1,4 +1,4 @@
-import { DropTargetMonitor, useDrop } from "react-dnd";
+import { type DropTargetMonitor, useDrop } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 
 interface FileUploadOptions {

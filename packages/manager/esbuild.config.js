@@ -13,7 +13,7 @@ Promise.all([
     external: Object.keys({
       ...packagesJson.dependencies,
       ...packagesJson.devDependencies,
-    }),
+    }).filter((key) => !["react-dnd", "react-dnd-html5-backend"].includes(key)),
     platform: "node",
     outfile: "./dist/entry.cjs",
   }),

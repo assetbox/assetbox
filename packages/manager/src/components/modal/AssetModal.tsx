@@ -10,18 +10,9 @@ import { useModal } from "../../hooks";
 import { syncAssetBox, useAssetBoxStore } from "../../store";
 import { Button, InlineSVG, Modal, ModalProps } from "../ui";
 import { ConfirmModal, ConfirmModalProps } from "../ui/ConfirmModal";
+import { InfoItem } from "../ui/InfoItem";
 import { Input } from "../ui/Input";
 import { PathCard } from "../ui/PathCard";
-
-const InfoItem = ({
-  label,
-  children,
-}: React.PropsWithChildren<Record<"label", string>>) => (
-  <div className="flex mb-2">
-    <p className="text-sm font-bold text-gray w-28">{label}</p>
-    <p className="text-sm font-bold">{children}</p>
-  </div>
-);
 
 const RenameModal = ({
   onCancel,

@@ -7,6 +7,7 @@ import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
 import { AssetItem, AssetView, ListBox } from "../components";
 import { AssetModal } from "../components/modal/AssetModal";
+import { DupeModal } from "../components/modal/DupeModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
 import { useFileUpload, useModal } from "../hooks";
@@ -173,7 +174,8 @@ export const CategoryPage = () => {
           ))}
         </AssetView>
       )}
-      <AssetModal data={modalAsset} onClose={closeModal} open={open} />
+      {/* <AssetModal data={modalAsset} onClose={closeModal} open={open} /> */}
+      <DupeModal data={modalAsset} onClose={closeModal} open={open} />
     </div>
   );
 };

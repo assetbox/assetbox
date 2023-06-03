@@ -1,6 +1,6 @@
 import { type RequestHandler, Router } from "express";
 import multer from "multer";
-export const uploadFileRouter = Router();
+const uploadFileRouter = Router();
 const upload = multer({ dest: __dirname + "/public/uploads/" });
 
 const uploadFile: RequestHandler = async (req, res) => {
@@ -18,6 +18,6 @@ const test: RequestHandler = async (req, res) => {
     throw new Error("Asset upload Test Error" + e);
   }
 };
-uploadFileRouter.post("/", uploadFile);
+uploadFileRouter.post("/", upload.array("assets"), uploadFile);
 uploadFileRouter.get("/", test);
 module.exports = uploadFileRouter;

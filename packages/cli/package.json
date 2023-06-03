@@ -26,6 +26,7 @@
     "@types/prompts": "^2.4.3",
     "@types/react": "^18.0.28",
     "esbuild-plugin-copy": "^2.1.1",
+    "md5-file": "^5.0.0",
     "multer": "1.4.5-lts.1",
     "rollup-plugin-copy": "^3.4.0",
     "source-map-support": "^0.5.21"

@@ -1,3 +1,4 @@
+import { type FolderTree } from "@assetbox/tools";
 import { Transition } from "@headlessui/react";
 import { createContext, useContext, useState } from "react";
 
@@ -5,10 +6,6 @@ import DownVector from "../assets/down-vector.svg";
 import FolderIcon from "../assets/folder.svg";
 import { cn, noop } from "../utils";
 import { Button, Modal } from "./ui";
-
-type FolderTree = {
-  [path: string]: FolderTree;
-};
 
 type FolderProps = {
   label: string;

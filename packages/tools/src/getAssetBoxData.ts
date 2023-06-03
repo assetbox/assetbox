@@ -1,5 +1,6 @@
 import { findDupeFileSet } from "./findDupeFileSet";
 import { getCategoryStats } from "./getCategoryStats";
+import { getFolderTree } from "./getFolderTree";
 import { findImportFileSet } from "./importExtract";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 import { AssetBoxData } from "./types";
@@ -18,6 +19,8 @@ export const getAssetBoxData = async () => {
     0
   );
 
+  const folderTree = await getFolderTree();
+
   return {
     categories: categoryStats,
     usedFiles,
@@ -30,5 +33,6 @@ export const getAssetBoxData = async () => {
       count: assetFiles.length - dupeFiles.flat().length,
       totalCount: assetFiles.length,
     },
+    folderTree,
   } satisfies AssetBoxData;
 };

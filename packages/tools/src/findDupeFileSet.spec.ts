@@ -88,8 +88,8 @@ describe("findDupeFileFromGlob Test", () => {
       const result = await isDupeFiles(assetFiles, files);
 
       expect(result).toStrictEqual({
-        "src/assets/icons/d.svg": true,
-        "src/assets/icons/qwe.svg": false,
+        "src/assets/icons/d.svg": ["src/assets/icons/d.svg"],
+        "src/assets/icons/qwe.svg": [],
       });
     });
 

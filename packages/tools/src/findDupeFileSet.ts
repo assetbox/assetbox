@@ -51,7 +51,7 @@ export const findDupeFileSet = async (assetFiles: string[]) => {
 
 export const isDupeFiles = async (
   assetFiles: string[],
-  files: {
+  addedFiles: {
     path: string;
     hash: string;
   }[]
@@ -61,25 +61,27 @@ export const isDupeFiles = async (
   // const assetFiles = Object.values(categories).flat();
 
   const fileHashes = await Promise.all(
-    assetFiles.map(async (file) => await createFileHash(file))
+    assetFiles.map(async (file) => ({
+      [file]: await createFileHash(file),
+    }))
   );
-  const results: { [key: string]: boolean } = {};
 
-  // const results:{} = files.reduce((acc, file) => {
-  //   const filePath = relative(cwd(), file.path);
-  //   const hashIncluded = fileHashes.includes(file.hash);
+  const results: { [key: string]: string[] } = {};
 
-  //   acc[filePath] = hashIncluded;
-
-  //   return acc;
-  // }, {});
-  files.forEach((file) => {
+  addedFiles.forEach((file) => {
     const filePath = relative(cwd(), file.path);
-    const hashIncluded = fileHashes.includes(file.hash);
+    const dupHashList = fileHashes
+      .filter((hash) => Object.values(hash)[0] === file.hash)
+      .map((hash) => relative(cwd(), Object.keys(hash)[0]));
+
     if (filePath in results) {
       console.log("드래그 앤 드롭으로 추가한 파일에 중복된 파일이 존재함.");
     }
-    results[filePath] = hashIncluded;
+
+    results[filePath] = results[filePath] || [];
+    if (dupHashList.length !== 0) {
+      results[filePath] = dupHashList;
+    }
   });
 
   return results;

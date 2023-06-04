@@ -7,9 +7,7 @@ import { Alert, Button, InlineSVG, Modal } from "../ui";
 import { InfoItem } from "../ui/InfoItem";
 import { PathCard } from "../ui/PathCard";
 export const DupeModal = ({ open, data, onClose }: any) => {
-  //temp
-
-  console.log("data", data);
+  console.log("modal_data", data);
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Panel className={"max-w-6xl p-7"}>

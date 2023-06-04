@@ -133,7 +133,7 @@ export const CategoryPage = () => {
   } = useModal<File[]>();
 
   const {
-    data: temp,
+    data: validatedFiles,
     open: isDupeFileSelector,
     openModal: openDupeFileSelector,
     closeModal: closeDupeFileSelector,
@@ -142,35 +142,39 @@ export const CategoryPage = () => {
   const { isDrag, dragRef } = useFileUpload({
     onDrop: (files) => {
       openFolderSelector(files);
-
-      // const notDupePaths: string[] = Object.entries(temp)
-      //   .filter(([key, item]) => item.path.length === 0)
-      //   .map(([key]) => key);
-
-      // if (notDupePaths.length > 0) {
-      //   toast.promise(
-      //     async () => {
-      //       notDupePaths.forEach(async (path) => {
-      //         const saveResponse = await axios.post(
-      //           "/api/assetbox/files",
-      //           path
-      //         );
-      //         return saveResponse?.status === 201;
-      //       });
-      //     },
-      //     {
-      //       pending: "파일 저장 중...",
-      //       success: "파일 저장 완료",
-      //       error: "파일 저장 실패",
-      //     }
-      //   );
-      // }
     },
   });
-  const test = async (data: AddedFiles[]) => {
+
+  const saveNotDupeFiles = async (data: AddedFiles[]) => {
+    const notDupePaths: string[] = Object.entries(data)
+      .filter(([key, item]) => item.path.length === 0)
+      .map(([key]) => key);
+
+    if (notDupePaths.length > 0) {
+      toast.promise(
+        async () => {
+          notDupePaths.forEach(async (path) => {
+            const saveResponse = await axios.post("", path);
+            return saveResponse?.status === 201;
+          });
+        },
+        {
+          pending: "파일 저장 중...",
+          success: "파일 저장 완료",
+          error: "파일 저장 실패",
+        }
+      );
+    }
+  };
+  const openDupeModal = async (data: AddedFiles[]) => {
+    closeFolderSelector();
+
     const dupeFiles = Object.values(data).filter(
       (item) => item.path.length > 0
     );
+
+    // saveNotDupeFiles(data);
+
     if (dupeFiles.length > 0) {
       openDupeFileSelector(dupeFiles);
     }
@@ -208,12 +212,11 @@ export const CategoryPage = () => {
               },
             }
           );
-          test(response.data);
-          // setAddedFiles(response.data);
+          openDupeModal(response.data);
         }}
       />
       <DupeModal
-        data={modalAsset}
+        data={validatedFiles}
         onClose={closeModal}
         open={isDupeFileSelector}
       />

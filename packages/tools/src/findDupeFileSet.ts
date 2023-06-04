@@ -49,17 +49,13 @@ export const findDupeFileSet = async (assetFiles: string[]) => {
   return compareHash(fileHashMap);
 };
 
-export const isDupeFiles = async (
+export const getDupeFiles = async (
   assetFiles: string[],
   addedFiles: {
     path: string;
     hash: string;
   }[]
 ) => {
-  // props로 받아야 할 것
-  // const { categories } = await readAssetBoxConfig();
-  // const assetFiles = Object.values(categories).flat();
-
   const fileHashes = await Promise.all(
     assetFiles.map(async (file) => ({
       [file]: await createFileHash(file),

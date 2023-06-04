@@ -4,7 +4,7 @@ import { expect, jest, test } from "@jest/globals";
 import { vol } from "memfs";
 import process from "process";
 
-import { findDupeFileSet, isDupeFiles } from "./findDupeFileSet";
+import { findDupeFileSet, getDupeFiles } from "./findDupeFileSet";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 import { createMockRepository } from "./test/utils/mockRepository";
 
@@ -85,7 +85,7 @@ describe("findDupeFileFromGlob Test", () => {
 
       const { categories } = await readAssetBoxConfig();
       const assetFiles = Object.values(categories).flat();
-      const result = await isDupeFiles(assetFiles, files);
+      const result = await getDupeFiles(assetFiles, files);
 
       expect(result).toStrictEqual({
         "src/assets/icons/d.svg": ["src/assets/icons/d.svg"],

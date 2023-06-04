@@ -65,14 +65,11 @@ function transformObject(
 }
 
 const getValidationInfo: RequestHandler = async (req, res) => {
-  console.log("====getValidationInfo====");
-  console.log(req.body.savePath);
   const { categories } = await readAssetBoxConfig();
   const assetFiles = Object.values(categories).flat(); // 모든파일
-  console.log(assetFiles);
-  console.log("====getAddedFiles====");
+
   const getAddedFiles = fs.readdirSync(cwd() + "/.assetbox/"); // 추가된 파일 watingValidation 폴더에서 가져오기
-  console.log(getAddedFiles);
+
   const fileList: { path: string; hash: string }[] = [];
 
   getAddedFiles.map(async (file) => {
@@ -82,13 +79,8 @@ const getValidationInfo: RequestHandler = async (req, res) => {
     fileList.push(json);
   });
 
-  console.log("====fileList====");
-  console.log(fileList);
   const result = await getDupeFiles(assetFiles, fileList);
-  console.log("===result");
-  console.log(result);
   const transformedObj: Record<string, ResultItem> = transformObject(result);
-  console.log(transformedObj);
   fs.rmdirSync(cwd() + "/.assetbox", { recursive: true });
   res.status(201).json({ ...transformedObj });
 };

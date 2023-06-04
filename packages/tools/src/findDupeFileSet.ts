@@ -4,7 +4,7 @@ import { relative } from "path";
 
 import { cwd } from "./cwd";
 
-const createFileHash = async (file: string) => {
+export const createFileHash = async (file: string) => {
   const data = await readFile(file);
   const hash = crypto
     .createHash("md5")

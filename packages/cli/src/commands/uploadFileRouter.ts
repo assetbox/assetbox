@@ -1,3 +1,4 @@
+import { createFileHash, cwd } from "@assetbox/tools";
 import { type RequestHandler, Router } from "express";
 import md5File from "md5-file";
 import multer from "multer";
@@ -20,6 +21,7 @@ const uploadFile: RequestHandler = async (req, res) => {
     /* 
     md5 기반 해쉬 구하는 로직
     */
+
     md5File(files[0].path).then((hash) => {
       console.log(`The hash of files[0].path is: ${hash}`);
     });

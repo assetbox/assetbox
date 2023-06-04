@@ -6,6 +6,7 @@ import { createServer as createViteServer } from "vite";
 
 import { renderStaticHtml } from "../context/renderStaticHtml";
 import { resolveCliRoot } from "../utils/path";
+import { uploadFileRouter } from "./uploadFileRouter";
 
 // Create Asset Manager Server
 export const manage = async () => {
@@ -26,6 +27,7 @@ export const manage = async () => {
     })
   );
 
+  app.use("/upload", uploadFileRouter);
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     try {

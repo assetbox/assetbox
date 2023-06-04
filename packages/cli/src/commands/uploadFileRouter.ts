@@ -41,6 +41,28 @@ const uploadFile: RequestHandler = async (req, res) => {
     throw new Error("Asset upload Error" + e);
   }
 };
+interface ResultItem {
+  path: string[];
+  base64Image: string;
+}
+
+function transformObject(
+  obj: Record<string, string[]>
+): Record<string, ResultItem> {
+  const transformedObj: Record<string, ResultItem> = {};
+
+  for (const key in obj) {
+    const fileName = key.substring(key.lastIndexOf("/") + 1);
+    transformedObj[key] = {
+      path: obj[key],
+      base64Image: fs.readFileSync(cwd() + "/.assetbox/" + fileName, {
+        encoding: "base64",
+      }),
+    };
+  }
+
+  return transformedObj;
+}
 
 const getValidationInfo: RequestHandler = async (req, res) => {
   console.log("====getValidationInfo====");
@@ -59,14 +81,16 @@ const getValidationInfo: RequestHandler = async (req, res) => {
     json.hash = await createFileHash(cwd() + "/.assetbox/" + file);
     fileList.push(json);
   });
-  fs.rmdirSync(cwd() + "/.assetbox", { recursive: true });
+
   console.log("====fileList====");
   console.log(fileList);
   const result = await getDupeFiles(assetFiles, fileList);
   console.log("===result");
   console.log(result);
-
-  res.status(406).json({ message: "Asset validation successfully" });
+  const transformedObj: Record<string, ResultItem> = transformObject(result);
+  console.log(transformedObj);
+  fs.rmdirSync(cwd() + "/.assetbox", { recursive: true });
+  res.status(201).json({ ...transformedObj });
 };
 const test: RequestHandler = async (req, res) => {
   try {

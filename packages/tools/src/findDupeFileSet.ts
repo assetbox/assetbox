@@ -63,7 +63,6 @@ export const getDupeFiles = async (
   );
 
   const results: { [key: string]: string[] } = {};
-
   addedFiles.forEach((file) => {
     const filePath = relative(cwd(), file.path);
     const dupHashList = fileHashes

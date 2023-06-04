@@ -2,6 +2,7 @@ import { appRouter } from "@assetbox/trpc";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import express from "express";
 import fs from "fs";
+import multer from "multer";
 import { createServer as createViteServer } from "vite";
 
 import { renderStaticHtml } from "../context/renderStaticHtml";
@@ -19,6 +20,7 @@ export const manage = async () => {
   app.use(vite.middlewares);
 
   app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
   app.use(
     "/trpc",
     createExpressMiddleware({

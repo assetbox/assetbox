@@ -9,15 +9,22 @@ import fs from "fs";
 import multer from "multer";
 
 export const uploadFileRouter = Router();
-const uploadAsset = (savePath: string) =>
+
+const uploadAsset = (savePath?: string) =>
   multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
-        if (savePath == "") savePath = req.body.savePath;
-        if (!fs.existsSync(cwd() + savePath)) {
-          fs.mkdirSync(cwd() + savePath);
+        console.log("===");
+        console.log(savePath);
+        if (typeof savePath == "undefined") {
+          savePath = req.body.savePath;
         }
-        cb(null, cwd() + savePath);
+
+        if (!fs.existsSync(cwd() + "/" + savePath)) {
+          console.log("create dir");
+          fs.mkdirSync(cwd() + "/" + savePath);
+        }
+        cb(null, cwd() + "/" + savePath);
       },
       filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -27,9 +34,19 @@ const uploadAsset = (savePath: string) =>
 
 const uploadFile: RequestHandler = async (req, res) => {
   try {
-    const file: any = req.files;
-    console.log(file);
-    res.status(406).json({ message: "Asset uploaded successfully" });
+    console.log(
+      fs.existsSync(
+        cwd() + "/" + req.body.savePath + "/" + req.file?.originalname
+      )
+    );
+    if (
+      !fs.existsSync(
+        cwd() + "/" + req.body.savePath + "/" + req.file?.originalname
+      )
+    ) {
+      res.status(400).json({ message: "Asset upload Failed" });
+    }
+    res.status(201).json({ message: "Asset uploaded successfully" });
   } catch (e) {
     throw new Error("Asset upload Error" + e);
   }
@@ -85,14 +102,10 @@ const test: RequestHandler = async (req, res) => {
   }
 };
 
-uploadFileRouter.post(
-  "/",
-  uploadAsset("/.assetbox").array("assets"),
-  uploadFile
-);
+uploadFileRouter.post("/", uploadAsset().single("assets"), uploadFile);
 uploadFileRouter.post(
   "/validation",
-  uploadAsset("").array("assets"),
+  uploadAsset("/.assetbox").array("assets"),
   getValidationInfo
 );
 uploadFileRouter.get("/", test);

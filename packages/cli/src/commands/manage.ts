@@ -27,7 +27,7 @@ export const manage = async () => {
     })
   );
 
-  app.use("/validation", uploadFileRouter);
+  app.use("/upload", uploadFileRouter);
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     try {

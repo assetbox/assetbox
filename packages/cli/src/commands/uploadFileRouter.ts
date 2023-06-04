@@ -41,27 +41,35 @@ const uploadFile: RequestHandler = async (req, res) => {
     throw new Error("Asset upload Error" + e);
   }
 };
-interface ResultItem {
-  path: string[];
-  base64Image: string;
+
+interface ImageObject {
+  [key: string]: string[];
 }
 
-function transformObject(
-  obj: Record<string, string[]>
-): Record<string, ResultItem> {
-  const transformedObj: Record<string, ResultItem> = {};
+interface ConvertedResult {
+  savePath: string;
+  base64Image: string;
+  path: string[];
+}
+function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
+  const result: ConvertedResult[] = [];
 
-  for (const key in obj) {
-    const fileName = key.substring(key.lastIndexOf("/") + 1);
-    transformedObj[key] = {
-      path: obj[key],
-      base64Image: fs.readFileSync(cwd() + "/.assetbox/" + fileName, {
-        encoding: "base64",
-      }),
-    };
+  for (const key in imageObject) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (imageObject.hasOwnProperty(key)) {
+      const savePath = key;
+      const base64Image = "";
+      const path = imageObject[key];
+
+      result.push({
+        savePath,
+        base64Image,
+        path,
+      });
+    }
   }
 
-  return transformedObj;
+  return result;
 }
 
 const getValidationInfo: RequestHandler = async (req, res) => {
@@ -80,9 +88,9 @@ const getValidationInfo: RequestHandler = async (req, res) => {
   });
 
   const result = await getDupeFiles(assetFiles, fileList);
-  const transformedObj: Record<string, ResultItem> = transformObject(result);
+  const convertedResult: ConvertedResult[] = convertImageObject(result);
   fs.rmdirSync(cwd() + "/.assetbox", { recursive: true });
-  res.status(201).json({ ...transformedObj });
+  res.status(201).json([...convertedResult]);
 };
 const test: RequestHandler = async (req, res) => {
   try {

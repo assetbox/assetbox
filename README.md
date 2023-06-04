@@ -135,3 +135,9 @@ import Example from "../../example.svg";
 ```
 
 Finds `"../../example.svg"`, converts it to a relative path, and matches it with the paths of the assets in the assetbox. 
+
+
+## Contributor Guide
+
+If you want a pull request for bugs or performance improvement, please check the following guide.  
+[CONTRIBUTING.md](https://github.com/assetbox/assetbox/blob/main/CONTRIBUTING.md)

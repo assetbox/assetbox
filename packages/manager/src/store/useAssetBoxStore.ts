@@ -20,6 +20,7 @@ export const useAssetBoxStore = create<AssetBoxStore>((set, get) => ({
     count: 0,
     totalCount: 0,
   },
+  folderTree: {},
   isLoaded: false,
   appendCategories: (categoryName: string, category: AssetStat) => {
     const { categories } = get();

@@ -38,4 +38,9 @@ export interface AssetBoxData {
     count: number;
     totalCount: number;
   };
+  folderTree: FolderTree;
 }
+
+export type FolderTree = {
+  [path: string]: FolderTree;
+};

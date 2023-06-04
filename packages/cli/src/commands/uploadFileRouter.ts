@@ -7,6 +7,7 @@ import {
 import { type RequestHandler, Router } from "express";
 import fs from "fs";
 import multer from "multer";
+import { sep } from "path";
 
 export const uploadFileRouter = Router();
 
@@ -14,17 +15,16 @@ const uploadAsset = (savePath?: string) =>
   multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
-        console.log("===");
-        console.log(savePath);
+        const checkPath = [cwd(), savePath].join(sep);
         if (typeof savePath == "undefined") {
           savePath = req.body.savePath;
         }
 
-        if (!fs.existsSync(cwd() + "/" + savePath)) {
+        if (!fs.existsSync(checkPath)) {
           console.log("create dir");
-          fs.mkdirSync(cwd() + "/" + savePath);
+          fs.mkdirSync(checkPath);
         }
-        cb(null, cwd() + "/" + savePath);
+        cb(null, checkPath);
       },
       filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -34,11 +34,10 @@ const uploadAsset = (savePath?: string) =>
 
 const uploadFile: RequestHandler = async (req, res) => {
   try {
-    if (
-      !fs.existsSync(
-        cwd() + "/" + req.body.savePath + "/" + req.file?.originalname
-      )
-    ) {
+    const checkingPath = [cwd(), req.body.savePath, req.file?.originalname]
+      .filter(Boolean)
+      .join(sep);
+    if (!fs.existsSync(checkingPath)) {
       res.status(400).json({ message: "Asset upload Failed" });
     }
 

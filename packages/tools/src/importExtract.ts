@@ -3,13 +3,18 @@ import { relative, resolve, sep } from "path";
 
 import { cwd } from "./cwd";
 
+export type ExtractImportData = {
+  path: string;
+  lineCode: string;
+  lineNumber: number;
+};
+
 const extractImportedFiles = async (
   assetFiles: string[],
   assetFileNames: string[],
   file: string
 ) => {
   const fileContent = await readFile(file, "utf-8");
-
   const regex = new RegExp(
     assetFileNames
       .map(
@@ -20,8 +25,12 @@ const extractImportedFiles = async (
     "g"
   );
 
+  const lineRegex = fileContent.split("\n");
+
   const matches = (fileContent.match(regex) ?? [])
     .map((match) => {
+      const number = lineRegex.findIndex((v) => v.includes(match));
+      const code = lineRegex[number];
       const normalizeMatch = match.replace(/['"]/g, "");
       switch (normalizeMatch[0]) {
         case ".": {
@@ -30,7 +39,11 @@ const extractImportedFiles = async (
             normalizeMatch
           );
 
-          return relative(cwd(), originPath);
+          return {
+            path: relative(cwd(), originPath),
+            lineCode: code,
+            lineNumber: number + 1,
+          };
         }
         default:
         case "/": {
@@ -40,20 +53,24 @@ const extractImportedFiles = async (
           if (!originPath) {
             return null;
           }
-          return relative(cwd(), originPath);
+          return {
+            path: relative(cwd(), originPath),
+            lineCode: code,
+            lineNumber: number + 1,
+          };
         }
       }
     })
-    .filter(Boolean) as string[];
+    .filter(Boolean);
 
   return matches;
 };
 
 const mapFileReferences = (
   assetFiles: string[],
-  importFileMap: Record<string, string[]>
+  importFileMap: Record<string, ExtractImportData[]>
 ) => {
-  const fileReferences: Record<string, string[]> = {};
+  const fileReferences: Record<string, ExtractImportData[]> = {};
 
   assetFiles.forEach((fileName) => {
     fileReferences[fileName] = [];
@@ -63,12 +80,11 @@ const mapFileReferences = (
     const importedFiles = importFileMap[importName];
 
     importedFiles.forEach((fileName) => {
-      if (fileReferences[fileName]) {
-        fileReferences[fileName].push(importName);
+      if (fileReferences[fileName.path]) {
+        fileReferences[fileName.path].push({ ...fileName, path: importName });
       }
     });
   });
-
   return fileReferences;
 };
 
@@ -97,7 +113,7 @@ export const findImportFileSet = async (
       ...acc,
       ...curr,
     };
-  }, {} as Record<string, string[]>);
+  }, {});
 
   return mapFileReferences(normalizeAssetFiles, importFileMap);
 };

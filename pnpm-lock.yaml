@@ -291,6 +291,9 @@ importers:
       '@jest/globals':
         specifier: ^29.5.0
         version: 29.5.0
+      '@total-typescript/ts-reset':
+        specifier: ^0.4.2
+        version: 0.4.2
       '@types/jest':
         specifier: ^29.5.1
         version: 29.5.1
@@ -2765,6 +2768,10 @@ packages:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
     dev: false
+
+  /@total-typescript/ts-reset@0.4.2:
+    resolution: {integrity: sha512-vqd7ZUDSrXFVT1n8b2kc3LnklncDQFPvR58yUS1kEP23/nHPAO9l1lMjUfnPrXYYk4Hj54rrLKMW5ipwk7k09A==}
+    dev: true
 
   /@trpc/client@10.23.0(@trpc/server@10.23.0):
     resolution: {integrity: sha512-7hTh9OjVIx4Co3kUyIu94SjbUIuS2WKl3E5BMseYbNOHfeY5rqwkCsw0N5EHWszhIVttUMDE0oCf10tNhYEq1A==}

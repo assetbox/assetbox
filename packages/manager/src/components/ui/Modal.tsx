@@ -2,6 +2,7 @@ import {
   Dialog,
   type DialogPanelProps,
   type DialogProps,
+  DialogTitleProps,
   Transition,
 } from "@headlessui/react";
 
@@ -50,3 +51,22 @@ Modal.Panel = ({ className, ...props }: DialogPanelProps<"div">) => {
     </div>
   );
 };
+
+Modal.Title = ({
+  children,
+  className,
+  ...props
+}: React.PropsWithChildren<DialogTitleProps<"div">>) => (
+  <Dialog.Title
+    as="div"
+    className={(bag) =>
+      cn(
+        "text-base font-bold",
+        typeof className === "function" ? className(bag) : className
+      )
+    }
+    {...props}
+  >
+    {children}
+  </Dialog.Title>
+);

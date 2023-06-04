@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
-import { AssetItem, AssetView, ListBox } from "../components";
+import { AssetItem, AssetView, FolderSelector, ListBox } from "../components";
 import { AssetModal } from "../components/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
@@ -76,7 +76,7 @@ export const CategoryPage = () => {
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
   const [search, setSearch] = useState("");
 
-  const { usedFiles } = useAssetBoxStore();
+  const { usedFiles, folderTree } = useAssetBoxStore();
 
   const assets = useFilterAsset({
     currentCategory: category,
@@ -92,9 +92,16 @@ export const CategoryPage = () => {
     closeModal,
   } = useModal<AssetStat>();
 
+  const {
+    data: uploadFiles,
+    open: isOpenFolderSelector,
+    openModal: openFolderSelector,
+    closeModal: closeFolderSelector,
+  } = useModal<File[]>();
+
   const { isDrag, dragRef } = useFileUpload({
     onDrop: (files) => {
-      console.log(files);
+      openFolderSelector(files);
     },
   });
 
@@ -106,6 +113,12 @@ export const CategoryPage = () => {
       )}
       ref={dragRef}
     >
+      <FolderSelector
+        open={isOpenFolderSelector}
+        onClose={closeFolderSelector}
+        folderTree={folderTree}
+        onSave={(path) => console.log(path)}
+      />
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div className="w-full lg:w-[550px]">
           <Input

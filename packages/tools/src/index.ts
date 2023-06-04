@@ -5,6 +5,7 @@ export * from "./findDupeFileSet";
 export * from "./findFilePathsFromGlob";
 export * from "./getAssetBoxData";
 export * from "./getCategoryStats";
+export * from "./getFolderTree";
 export * from "./importExtract";
 export * from "./readAssetBoxConfig";
 export * from "./types";

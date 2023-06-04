@@ -1,7 +1,9 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
+import axios from "axios";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
@@ -24,6 +26,11 @@ const mapAssetType: Record<AssetViewType, AssetStat["type"]> = {
   Icons: "icon",
   Images: "image",
   Animations: "animation",
+};
+
+type AddedFiles = {
+  path: string[];
+  data: string;
 };
 
 const useFilterAsset = ({
@@ -100,9 +107,69 @@ export const CategoryPage = () => {
     closeModal: closeFolderSelector,
   } = useModal<File[]>();
 
+  const {
+    data: temp,
+    open: isDupeFileSelector,
+    openModal: openDupeFileSelector,
+    closeModal: closeDupeFileSelector,
+  } = useModal<{ path: string[]; data: string }[]>();
+
   const { isDrag, dragRef } = useFileUpload({
     onDrop: (files) => {
+      // 파일 추가되면 바로 openFolderSelector 모달 실행
       openFolderSelector(files);
+      const temp: Record<string, AddedFiles> = {
+        add1: {
+          path: ["dup1", "dup2"],
+          data: "base1",
+        },
+        add2: {
+          path: ["dup3", "dup4"],
+          data: "base2",
+        },
+        add3: {
+          path: [],
+          data: "base3",
+        },
+      };
+      // let isDupe = false;
+
+      // for (const key in temp) {
+      //   const item = temp[key];
+      //   isDupe = item.path.length > 0;
+      // }
+
+      const notDupePaths: string[] = Object.entries(temp)
+        .filter(([key, item]) => item.path.length === 0)
+        .map(([key]) => key);
+
+      // @@ 파일저장
+      if (notDupePaths.length > 0) {
+        toast.promise(
+          async () => {
+            notDupePaths.forEach(async (path) => {
+              const saveResponse = await axios.post(
+                "/api/assetbox/files",
+                path
+              );
+              return saveResponse?.status === 201;
+            });
+          },
+          {
+            pending: "파일 저장 중...",
+            success: "파일 저장 완료",
+            error: "파일 저장 실패",
+          }
+        );
+      }
+
+      const dupeFiles: Array<{ path: string[]; data: string }> = Object.values(
+        temp
+      ).filter((item) => item.path.length > 0);
+
+      if (dupeFiles.length > 0) {
+        openDupeFileSelector(dupeFiles);
+      }
     },
   });
 
@@ -120,6 +187,12 @@ export const CategoryPage = () => {
         folderTree={folderTree}
         onSave={(path) => console.log(path)}
       />
+      <DupeModal
+        data={modalAsset}
+        onClose={closeModal}
+        open={isDupeFileSelector}
+      />
+
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div className="w-full lg:w-[550px]">
           <Input
@@ -187,8 +260,7 @@ export const CategoryPage = () => {
           ))}
         </AssetView>
       )}
-      {/* <AssetModal data={modalAsset} onClose={closeModal} open={open} /> */}
-      <DupeModal data={modalAsset} onClose={closeModal} open={open} />
+      <AssetModal data={modalAsset} onClose={closeModal} open={open} />
     </div>
   );
 };

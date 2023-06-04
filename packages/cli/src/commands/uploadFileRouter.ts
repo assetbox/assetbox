@@ -34,11 +34,6 @@ const uploadAsset = (savePath?: string) =>
 
 const uploadFile: RequestHandler = async (req, res) => {
   try {
-    console.log(
-      fs.existsSync(
-        cwd() + "/" + req.body.savePath + "/" + req.file?.originalname
-      )
-    );
     if (
       !fs.existsSync(
         cwd() + "/" + req.body.savePath + "/" + req.file?.originalname
@@ -46,6 +41,7 @@ const uploadFile: RequestHandler = async (req, res) => {
     ) {
       res.status(400).json({ message: "Asset upload Failed" });
     }
+
     res.status(201).json({ message: "Asset uploaded successfully" });
   } catch (e) {
     throw new Error("Asset upload Error" + e);

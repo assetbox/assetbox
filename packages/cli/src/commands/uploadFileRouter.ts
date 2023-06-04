@@ -13,6 +13,7 @@ const uploadAsset = (savePath: string) =>
   multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
+        if (savePath == "") savePath = req.body.savePath;
         if (!fs.existsSync(cwd() + savePath)) {
           fs.mkdirSync(cwd() + savePath);
         }
@@ -28,14 +29,6 @@ const uploadFile: RequestHandler = async (req, res) => {
   try {
     const file: any = req.files;
     console.log(file);
-    /* 
-    md5 기반 해쉬 구하는 로직
-    */
-
-    /*
-    중복 validation check 로직 구현
-    */
-
     res.status(406).json({ message: "Asset uploaded successfully" });
   } catch (e) {
     throw new Error("Asset upload Error" + e);
@@ -99,7 +92,7 @@ uploadFileRouter.post(
 );
 uploadFileRouter.post(
   "/validation",
-  uploadAsset("/.assetbox").array("assets"),
+  uploadAsset("").array("assets"),
   getValidationInfo
 );
 uploadFileRouter.get("/", test);

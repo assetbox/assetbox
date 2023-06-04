@@ -62,7 +62,7 @@ describe("findDupeFileFromGlob Test", () => {
     });
   });
 
-  describe("isDupeFiles Test", () => {
+  describe("getDupeFiles Test", () => {
     beforeAll(() => {
       spy.mockReturnValue("/test/basic");
       createMockRepository("/test/basic", {
@@ -71,7 +71,7 @@ describe("findDupeFileFromGlob Test", () => {
       });
     });
 
-    test("isDupeFiles Test", async () => {
+    test("getDupeFiles Test", async () => {
       const files = [
         {
           path: "/test/basic/src/assets/icons/d.svg",

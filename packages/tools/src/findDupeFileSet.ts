@@ -4,7 +4,7 @@ import { relative } from "path";
 
 import { cwd } from "./cwd";
 
-const createFileHash = async (file: string) => {
+export const createFileHash = async (file: string) => {
   const data = await readFile(file);
   const hash = crypto
     .createHash("md5")
@@ -63,7 +63,6 @@ export const getDupeFiles = async (
   );
 
   const results: { [key: string]: string[] } = {};
-
   addedFiles.forEach((file) => {
     const filePath = relative(cwd(), file.path);
     const dupHashList = fileHashes

@@ -19,16 +19,12 @@ const alertVariants = cva("flex py-4 gap-3 items-center", {
 });
 
 export const Alert = ({ variant, children, ...props }: AlertProps) => {
-  const icon = ({ variant }: AlertVariantProps) => {
-    return match(variant)
-      .with("danger", () => <DangerInformationIcon className="ml-3" />)
-      .with("info", () => <AlertInformationIcon className="ml-3" />)
-      .otherwise(() => <AlertInformationIcon className="ml-3" />);
-  };
-
   return (
     <div {...props} className={cn(alertVariants({ variant }))}>
-      {icon({ variant })}
+      {match(variant)
+        .with("danger", () => <DangerInformationIcon className="ml-3" />)
+        .with("info", () => <AlertInformationIcon className="ml-3" />)
+        .otherwise(() => null)}
       <p className="text-xs">{children}</p>
     </div>
   );

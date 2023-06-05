@@ -51,7 +51,7 @@ export const staticBuild = async () => {
     resolveProjectRoot("assetbox-dist", "index.html"),
     "utf-8"
   );
-  const html = await renderStaticHtml(template, "/", true);
+  const html = await renderStaticHtml(template, "/", { onlyCategories: true });
   const staticHtml = normalizeFilePaths.reduce((originHtml, filePath) => {
     const filename = filePath.split(sep).pop();
     if (!filename) {

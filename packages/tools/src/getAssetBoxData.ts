@@ -5,7 +5,7 @@ import { findImportFileSet } from "./importExtract";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 import { AssetBoxData } from "./types";
 
-type GetAssetBoxOptions = {
+export type GetAssetBoxOptions = {
   onlyCategories: boolean;
 };
 

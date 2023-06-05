@@ -1,3 +1,4 @@
+import type { GetAssetBoxOptions } from "@assetbox/tools";
 import { getAssetBoxData } from "@assetbox/tools";
 
 import { resolveCliRoot } from "../utils/path";
@@ -5,11 +6,11 @@ import { resolveCliRoot } from "../utils/path";
 export const renderStaticHtml = async (
   template: string,
   url: string,
-  onlyCategories: boolean
+  options?: GetAssetBoxOptions
 ) => {
   const entryServerModulePath = resolveCliRoot("ssr", "entryServer.cjs");
 
-  const ssrData = await getAssetBoxData({ onlyCategories });
+  const ssrData = await getAssetBoxData(options);
 
   const { render } = await import(entryServerModulePath);
   const appHtml = await render(url, ssrData);

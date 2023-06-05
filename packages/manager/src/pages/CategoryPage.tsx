@@ -9,6 +9,7 @@ import { AssetItem, AssetView, FolderSelector, ListBox } from "../components";
 import { AssetModal } from "../components/AssetModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
+import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
 import { cn } from "../utils";
@@ -121,9 +122,7 @@ export const CategoryPage = () => {
       />
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div
-          className={`w-full ${
-            !process.env.BUILD ? "lg:w-[550px]" : "lg:w-[650px]"
-          }`}
+          className={cn("w-full", !isBuild ? "lg:w-[550px]" : "lg:w-[650px]")}
         >
           <Input
             noOutline
@@ -153,7 +152,7 @@ export const CategoryPage = () => {
               Animations
             </ButtonGroup.Button>
           </ButtonGroup>
-          {!process.env.BUILD ? (
+          {!isBuild ? (
             <>
               <ListBox value={filterOption} onChange={setFilterOption}>
                 <ListBox.Button
@@ -189,7 +188,7 @@ export const CategoryPage = () => {
             <AssetItem
               disabled={usedFiles[asset.filepath]?.length === 0}
               onClick={() => {
-                !process.env.BUILD ? openModal(asset) : null;
+                !isBuild ? openModal(asset) : null;
               }}
               key={`asset-${asset.filename}`}
               asset={asset}

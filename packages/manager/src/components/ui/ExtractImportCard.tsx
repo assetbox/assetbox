@@ -28,16 +28,17 @@ const ExtractImportItem = ({
       </p>
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger
+          className="outline-none"
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
-          <p className="text-sm underline outline-none">{data.path}</p>
+          <p className="text-sm underline">{data.path}</p>
         </Popover.Trigger>
         <Popover.Content
           side="right"
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
-          className="z-10 ml-4 rounded-lg shadow-lg"
+          className="z-10 mx-4 rounded-lg shadow-lg"
         >
           <SyntaxHighlighter
             showLineNumbers
@@ -55,7 +56,7 @@ const ExtractImportItem = ({
                 ? { style }
                 : {};
             }}
-            customStyle={{ borderRadius: "8px", fontSize: "11px" }}
+            customStyle={{ borderRadius: "8px", fontSize: "12px" }}
             language="typescript"
           >
             {code}

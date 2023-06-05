@@ -39,7 +39,7 @@ export const manage = async () => {
         );
       template = await vite.transformIndexHtml(url, template);
 
-      const html = await renderStaticHtml(template, url);
+      const html = await renderStaticHtml(template, url, false);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       vite.ssrFixStacktrace(e as any);

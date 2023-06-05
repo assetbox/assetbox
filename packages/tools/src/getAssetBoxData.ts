@@ -5,7 +5,11 @@ import { findImportFileSet } from "./importExtract";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 import { AssetBoxData } from "./types";
 
-export const getAssetBoxData = async () => {
+type GetAssetBoxOptions = {
+  onlyCategories: boolean;
+};
+
+export const getAssetBoxData = async (options?: GetAssetBoxOptions) => {
   const { categories, trackingPaths } = await readAssetBoxConfig();
 
   const categoryStats = await getCategoryStats(categories);
@@ -20,6 +24,23 @@ export const getAssetBoxData = async () => {
   );
 
   const folderTree = await getFolderTree();
+
+  if (options?.onlyCategories) {
+    return {
+      categories: categoryStats,
+      usedFiles: {},
+      usedCoverage: {
+        count: 0,
+        totalCount: 0,
+      },
+      dupeFiles: [],
+      uniqueCoverage: {
+        count: 0,
+        totalCount: 0,
+      },
+      folderTree: {},
+    } satisfies AssetBoxData;
+  }
 
   return {
     categories: categoryStats,

@@ -120,7 +120,11 @@ export const CategoryPage = () => {
         onSave={(path) => console.log(path)}
       />
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
-        <div className="w-full lg:w-[550px]">
+        <div
+          className={`w-full ${
+            !process.env.BUILD ? "lg:w-[550px]" : "lg:w-[650px]"
+          }`}
+        >
           <Input
             noOutline
             className="w-full h-12 group"
@@ -149,22 +153,27 @@ export const CategoryPage = () => {
               Animations
             </ButtonGroup.Button>
           </ButtonGroup>
-
-          <ListBox value={filterOption} onChange={setFilterOption}>
-            <ListBox.Button className={({ open }) => cn(open && "bg-black")}>
-              {filterOption}
-            </ListBox.Button>
-            <ListBox.Options>
-              {filterOptions.map((filterOption) => (
-                <ListBox.Option
-                  key={`option-${filterOption}`}
-                  value={filterOption}
+          {!process.env.BUILD ? (
+            <>
+              <ListBox value={filterOption} onChange={setFilterOption}>
+                <ListBox.Button
+                  className={({ open }) => cn(open && "bg-black")}
                 >
                   {filterOption}
-                </ListBox.Option>
-              ))}
-            </ListBox.Options>
-          </ListBox>
+                </ListBox.Button>
+                <ListBox.Options>
+                  {filterOptions.map((filterOption) => (
+                    <ListBox.Option
+                      key={`option-${filterOption}`}
+                      value={filterOption}
+                    >
+                      {filterOption}
+                    </ListBox.Option>
+                  ))}
+                </ListBox.Options>
+              </ListBox>
+            </>
+          ) : null}
         </div>
       </div>
       {assets?.length === 0 ? (
@@ -179,7 +188,9 @@ export const CategoryPage = () => {
           {assets?.map((asset: AssetStat) => (
             <AssetItem
               disabled={usedFiles[asset.filepath]?.length === 0}
-              onClick={() => openModal(asset)}
+              onClick={() => {
+                !process.env.BUILD ? openModal(asset) : null;
+              }}
               key={`asset-${asset.filename}`}
               asset={asset}
             />

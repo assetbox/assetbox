@@ -90,21 +90,22 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
   return (
     <div className="h-full px-8 pt-12 bg-white select-none w-80">
       <Logo className="ml-[10px] mb-8" />
-
-      <CoverageBar
-        className="mb-2"
-        name="Used Coverage"
-        count={usedCoverage.count}
-        totalCount={usedCoverage.totalCount}
-      />
-
-      <CoverageBar
-        className="mb-10"
-        name="Unique Coverage"
-        count={uniqueCoverage.count}
-        totalCount={uniqueCoverage.totalCount}
-      />
-
+      {!process.env.BUILD ? (
+        <>
+          <CoverageBar
+            className="mb-2"
+            name="Used Coverage"
+            count={usedCoverage.count}
+            totalCount={usedCoverage.totalCount}
+          />
+          <CoverageBar
+            className="mb-10"
+            name="Unique Coverage"
+            count={uniqueCoverage.count}
+            totalCount={uniqueCoverage.totalCount}
+          />
+        </>
+      ) : null}
       <div className="flex items-center gap-2 mb-4">
         <HamburgerIcon className="ml-[10px]" />
         <p className="text-base font-bold text-gray-dark">Category</p>
@@ -120,19 +121,21 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
         </Fragment>
       ))}
 
-      {menus.map(({ icon, label, path }) => (
-        <Fragment key={`menu-${label}`}>
-          <MenuItem
-            to={path}
-            active={pathname === path}
-            className="px-[10px]"
-            icon={icon}
-          >
-            {label}
-          </MenuItem>
-          <SectorLine />
-        </Fragment>
-      ))}
+      {!process.env.BUILD
+        ? menus.map(({ icon, label, path }) => (
+            <Fragment key={`menu-${label}`}>
+              <MenuItem
+                to={path}
+                active={pathname === path}
+                className="px-[10px]"
+                icon={icon}
+              >
+                {label}
+              </MenuItem>
+              <SectorLine />
+            </Fragment>
+          ))
+        : null}
     </div>
   );
 };

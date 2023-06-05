@@ -1,35 +1,30 @@
 import { build } from "esbuild";
-import svgr from "esbuild-plugin-svgr";
 
 import packageJson from "./package.json" assert { type: "json" };
 
 Promise.all([
   build({
-    entryPoints: ["./src/entry.ts"],
+    entryPoints: ["./src/index.ts"],
     bundle: true,
     minify: true,
-    sourcemap: true,
-    format: "cjs",
-    plugins: [svgr()],
     external: Object.keys({
       ...packageJson.dependencies,
       ...packageJson.devDependencies,
-    }).filter((key) => !["react-dnd", "react-dnd-html5-backend"].includes(key)),
+    }).filter((key) => !["@assetbox/tools"].includes(key)),
+    format: "cjs",
     platform: "node",
-    outfile: "./dist/entry.cjs",
+    outfile: "./dist/index.cjs",
   }),
   build({
-    entryPoints: ["./src/entry.ts"],
+    entryPoints: ["./src/index.ts"],
     bundle: true,
     minify: true,
-    sourcemap: true,
-    format: "esm",
-    plugins: [svgr()],
     external: Object.keys({
       ...packageJson.dependencies,
       ...packageJson.devDependencies,
-    }),
-    platform: "browser",
-    outfile: "./dist/entry.mjs",
+    }).filter((key) => !["@assetbox/tools"].includes(key)),
+    format: "esm",
+    platform: "node",
+    outfile: "./dist/index.mjs",
   }),
 ]);

@@ -1,7 +1,7 @@
 import { build as esbuild } from "esbuild";
 import { copy } from "esbuild-plugin-copy";
 
-import packagesJson from "./package.json" assert { type: "json" };
+import packageJson from "./package.json" assert { type: "json" };
 
 const ENTRY_COMMON_OPTIONS = {
   bundle: true,
@@ -27,8 +27,8 @@ const build = async () => {
       format: "cjs",
       platform: "node",
       external: Object.keys({
-        ...packagesJson.dependencies,
-        ...packagesJson.devDependencies,
+        ...packageJson.dependencies,
+        ...packageJson.devDependencies,
       }),
       outfile: "./bin/main.cjs",
       define: {

@@ -1,5 +1,25 @@
 {
   "name": "@assetbox/react",
   "version": "0.1.0",
-  "main": "index.js"
+  "exports": {
+    "require": "./dist/index.cjs"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.21.5",
+    "@babel/plugin-transform-react-jsx": "^7.22.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.21.5",
+    "@svgr/core": "^8.0.0",
+    "@svgr/plugin-jsx": "^8.0.1",
+    "camelcase": "^7.0.1"
+  },
+  "devDependencies": {
+    "@assetbox/tools": "workspace:^",
+    "@types/babel__core": "^7.20.1",
+    "@types/node": "^18.15.3",
+    "esbuild": "^0.17.11"
+  }
 }

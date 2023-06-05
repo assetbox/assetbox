@@ -7,8 +7,6 @@
   
   <img width="1419" alt="image" src="https://github.com/assetbox/assetbox/assets/41789633/b6458ff1-f5a5-4f74-984d-f80b9dac83c2">
 
-
-  
   <p>
     Visualizes and manages icon and image files within your frontend project.
     <br />
@@ -50,16 +48,6 @@ $ npm assetbox -v
 
 ## Getting Started for manage
 
-Open the package.json and change the script field.
-```json
-{
-  "scripts": {
-    "asset:manage": "assetbox manage",
-    "asset:static-build": "assetbox static-build",
-  }
-}
-```
-
 Create config file
 ```sh
 $ pnpm assetbox init # (or yarn or npm)
@@ -83,26 +71,22 @@ $ pnpm assetbox init # (or yarn or npm)
 
 * **assetbox.config.cjs**
 ```js
-module.exports = {
-  /**
-    The key for `categories` will be the menu in the sidebar.
-    Enter the folder locations for each category.
-  **/
+/**
+ * @type {import('@assetbox/cli').AssetBoxScheme}
+ */
+const config = {
   categories: {
-    Icon: ["./src/assets/icons/**/*"],
-    Images: ["./src/assets/images/**/*"],
-    Animations: ["./src/assets/animations/**/*"]
+    Icons: ["./src/assets/icons/**/*"],
+    Images: ["./public/images/**/*"],
   },
-  /**
-    Enter the folder where the assets declared in `categories` are used.
-    This is utilized for static analysis.
-  **/
   trackingPaths: ["./src/**/*"],
-}
+};
+
+module.exports = config;
 ```
 
 ```sh
-$ pnpm asset:manage
+$ pnpm assetbox manage
 ```
 
 ## Static Build
@@ -113,7 +97,7 @@ In this case, the administrative portion is lost and replaced with read-only.
 Can be used as an icon viewer
 
 ```sh
-$ pnpm asset:static-build 
+$ pnpm assetbox static-build 
 ```
 
 ## Coverage

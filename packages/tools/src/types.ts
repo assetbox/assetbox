@@ -1,11 +1,20 @@
-import { readAssetBoxConfig } from "./readAssetBoxConfig";
+export type IconBuildPlugin = {
+  name: string;
+  build: (context: AssetBoxConfig) => void | Promise<void>;
+};
 
 export type AssetBoxScheme = {
   categories: Record<string, string[]>;
   trackingPaths: string[];
+  iconBuild?: {
+    outdir?: string;
+    plugins?: IconBuildPlugin[];
+  };
 };
 
-export type AssetBoxConfig = Awaited<ReturnType<typeof readAssetBoxConfig>>;
+export type AssetBoxConfig = {
+  configFilePath: string;
+} & AssetBoxScheme;
 
 export type AssetBaseStat = {
   filepath: string;

@@ -10,7 +10,7 @@ Promise.all([
     external: Object.keys({
       ...packageJson.dependencies,
       ...packageJson.devDependencies,
-    }).filter((key) => !["@assetbox/tools"].includes(key)),
+    }).filter((key) => !["@assetbox/tools", "camelcase"].includes(key)),
     format: "cjs",
     platform: "node",
     outfile: "./dist/index.cjs",
@@ -22,7 +22,7 @@ Promise.all([
     external: Object.keys({
       ...packageJson.dependencies,
       ...packageJson.devDependencies,
-    }).filter((key) => !["@assetbox/tools"].includes(key)),
+    }).filter((key) => !["@assetbox/tools", "camelcase"].includes(key)),
     format: "esm",
     platform: "node",
     outfile: "./dist/index.mjs",

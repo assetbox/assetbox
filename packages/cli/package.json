@@ -5,6 +5,7 @@
     "bin",
     "package.json"
   ],
+  "types": "./src/export.ts",
   "bin": {
     "assetbox": "./bin/main.cjs"
   },

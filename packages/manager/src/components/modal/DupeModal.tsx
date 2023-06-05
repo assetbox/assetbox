@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ImgHTMLAttributes } from "react";
 
 import Close from "../../assets/close.svg";
 import CodeIcon from "../../assets/code.svg";
 import InformationIcon from "../../assets/information.svg";
-import LeftArrow from "../../assets/left-pointing-arrow.svg";
-import RightArrow from "../../assets/right-pointing-arrow.svg";
 import { Alert, Button, InlineSVG, Modal } from "../ui";
 import { InfoItem } from "../ui/InfoItem";
 import { PathCard } from "../ui/PathCard";
 
 export type AddedFiles = {
-  filepath: string;
+  savePath: string;
   dupePaths: string[];
   base64Image: string;
 };
@@ -19,13 +18,29 @@ type DupeModalProps = {
   data: AddedFiles[];
   open: boolean;
   onClose: () => void;
+  handleSaveFile: (files: AddedFiles[]) => Promise<boolean> | boolean;
 };
 
-export const DupeModal = ({ data, open, onClose }: DupeModalProps) => {
-  const [current, setCurrent] = useState<AddedFiles>(data[0]);
+const ImageComponent = ({
+  savePath,
+  base64Image,
+  ...props
+}: {
+  savePath: string;
+  base64Image: string;
+} & React.ImgHTMLAttributes<HTMLImageElement>) => (
+  <img src={base64Image} alt={savePath} {...props} />
+);
+
+export const DupeModal = ({
+  data,
+  open,
+  onClose,
+  handleSaveFile,
+}: DupeModalProps) => {
   const [idx, setIdx] = useState(0);
 
-  const [isAdded, setIsAdded] = useState(() =>
+  const [isAdded, setIsAdded] = useState<boolean[]>(() =>
     Array(data.length)
       .fill(0)
       .map(() => false)
@@ -33,23 +48,35 @@ export const DupeModal = ({ data, open, onClose }: DupeModalProps) => {
   const handleNext = () => {
     if (idx < data.length - 1) {
       setIdx(idx + 1);
-      setCurrent(data[idx + 1]);
+    } else if (idx === data.length - 1) {
+      onClose();
     }
   };
   const handlePrev = () => {
     if (idx > 0) {
       setIdx(idx - 1);
-      setCurrent(data[idx - 1]);
     }
   };
-  console.log("modal_data", data);
+
+  const handleAdd = (files: AddedFiles[]) => {
+    console.log(files);
+    if (handleSaveFile(files) === true) {
+      setIsAdded((prev) => {
+        const updated = [...prev];
+        updated[idx] = true;
+        return updated;
+      });
+    }
+  };
+
   return (
-    <Modal open={open} onClose={onClose}>
-      <Modal.Panel className={"max-w-6xl p-7"}>
-        <span className="float-right cursor-pointer" onClick={onClose}>
-          <Close />
-        </span>
-        {data ? (
+    data[idx] && (
+      <Modal open={open} onClose={onClose}>
+        <Modal.Panel className={"max-w-6xl p-7"}>
+          <span className="float-right cursor-pointer" onClick={onClose}>
+            <Close />
+          </span>
+
           <div>
             <div className="flex gap-6 mb-9">
               <div className="flex flex-col justify-between">
@@ -63,7 +90,12 @@ export const DupeModal = ({ data, open, onClose }: DupeModalProps) => {
                       className="object-cover w-full h-full rounded"
                     />
                   ) : null} */}
-                  {/* <img src={current.base64Image} /> */}
+                  <ImageComponent
+                    className="object-cover w-full h-full rounded"
+                    key={idx}
+                    savePath={data[idx].savePath}
+                    base64Image={data[idx].base64Image}
+                  />
                 </div>
                 <Alert variant="danger">This file is a duplicate file.</Alert>
               </div>
@@ -74,7 +106,7 @@ export const DupeModal = ({ data, open, onClose }: DupeModalProps) => {
                     <p className="text-sm font-bold">Information</p>
                   </div>
                   <div className="bg-[#F7F9FB] rounded px-5 py-2">
-                    {/* <InfoItem label="File Path">{current.}</InfoItem> */}
+                    <InfoItem label="File Path">{data[idx].savePath}</InfoItem>
                   </div>
                 </div>
                 <div>
@@ -82,21 +114,48 @@ export const DupeModal = ({ data, open, onClose }: DupeModalProps) => {
                     <CodeIcon />
                     <p className="text-sm font-bold">Dupe File Paths</p>
                   </div>
-                  <PathCard paths={["test"]} className="h-48" />
+                  <PathCard paths={data[idx].dupePaths} className="h-48" />
                 </div>
               </div>
             </div>
           </div>
-        ) : null}
-        <div className="relative flex items-center justify-center w-full gap-x-5">
-          <LeftArrow className="cursor-pointer" onClick={handlePrev} />
-          <p>2 / 4</p>
-          <RightArrow className="cursor-pointer" onClick={handleNext} />
-          <div className="absolute right-0">
-            <Button variant="danger">Add</Button>
+          <div className="relative flex items-center justify-center w-full gap-x-5">
+            {idx > 0 && (
+              <Button
+                variant="primary"
+                className="absolute left-0 cursor-pointer"
+                onClick={handlePrev}
+              >
+                Prev
+              </Button>
+            )}
+
+            <p>{`${idx + 1} / ${data.length}`}</p>
+
+            <div className="absolute right-0 flex gap-2">
+              {isAdded[idx] ? (
+                <Button variant="gray" className="cursor-not-allowed">
+                  Added
+                </Button>
+              ) : (
+                <Button
+                  variant="danger"
+                  onClick={() => handleAdd(Array(data[idx]))}
+                >
+                  Add
+                </Button>
+              )}
+              <Button
+                variant="primary"
+                className="cursor-pointer"
+                onClick={handleNext}
+              >
+                Skip
+              </Button>
+            </div>
           </div>
-        </div>
-      </Modal.Panel>
-    </Modal>
+        </Modal.Panel>
+      </Modal>
+    )
   );
 };

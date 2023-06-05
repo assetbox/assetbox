@@ -140,33 +140,33 @@ export const CategoryPage = () => {
   });
 
   const saveFiles = async (files: AddedFiles[]) => {
-    if (files.length > 0) {
-      toast.promise(
-        async () => {
-          files.forEach(async (path) => {
-            const blob = getBlobFromResponse(path.filepath);
-            const saveResponse = await axios.post("addFile", { path, blob });
-            return saveResponse?.status === 201;
-          });
-        },
-        {
-          pending: "파일 저장 중...",
-          success: "파일 저장 완료",
-          error: "파일 저장 실패",
-        }
-      );
+    try {
+      if (files.length > 0) {
+        await toast.promise(
+          async () => {
+            files.forEach(async (path) => {
+              const blob = getBlobFromResponse(path.savePath);
+              const saveResponse = await axios.post("addFile", { path, blob });
+              return saveResponse?.status === 201;
+            });
+          },
+          {
+            pending: "파일 저장 중...",
+            success: "파일 저장 완료",
+            error: "파일 저장 실패",
+          }
+        );
+      }
+      return true;
+    } catch (e) {
+      return false;
     }
   };
-  const openDupeModal = async (
-    projectRoot: string,
-    assets: BlobData[],
-    data: AddedFiles[]
-  ) => {
+  const openDupeModal = async (files: AddedFiles[]) => {
     closeFolderSelector();
-    const dupeFiles = data.filter((item) => item.dupePaths.length > 0);
 
-    if (dupeFiles.length > 0) {
-      openDupeFileSelector(dupeFiles);
+    if (files.length > 0) {
+      openDupeFileSelector(files);
     }
   };
 
@@ -227,18 +227,24 @@ export const CategoryPage = () => {
               },
             }
           );
+          console.log(response.data);
           const notDupeFiles: AddedFiles[] = response.data.filter(
             (item: AddedFiles) => item.dupePaths.length === 0
           );
-
           // saveFiles(notDupeFiles);
-          openDupeModal(path, blobRef.current, response.data);
+
+          const dupeFiles = response.data.filter(
+            (item: AddedFiles) => item.dupePaths.length > 0
+          );
+
+          openDupeModal(dupeFiles);
         }}
       />
       <DupeModal
         data={validatedFiles ?? []}
         onClose={closeDupeFileSelector}
         open={isDupeFileSelector}
+        handleSaveFile={saveFiles}
       />
 
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">

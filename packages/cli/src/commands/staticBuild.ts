@@ -45,6 +45,8 @@ export const staticBuild = async () => {
     },
   });
 
+  global.process.env.BUILD = "true";
+
   template = await readFile(
     resolveProjectRoot("assetbox-dist", "index.html"),
     "utf-8"

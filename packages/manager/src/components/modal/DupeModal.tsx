@@ -60,6 +60,7 @@ export const DupeModal = ({
 
   const handleAdd = (files: AddedFiles[]) => {
     console.log(files);
+
     if (handleSaveFile(files) === true) {
       setIsAdded((prev) => {
         const updated = [...prev];

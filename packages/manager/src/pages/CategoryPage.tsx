@@ -142,20 +142,27 @@ export const CategoryPage = () => {
   const saveFiles = async (files: AddedFiles[]) => {
     try {
       if (files.length > 0) {
-        await toast.promise(
-          async () => {
-            files.forEach(async (path) => {
+        files.forEach(async (path) => {
+          await toast.promise(
+            async () => {
               const blob = getBlobFromResponse(path.savePath);
-              const saveResponse = await axios.post("addFile", { path, blob });
-              return saveResponse?.status === 201;
-            });
-          },
-          {
-            pending: "파일 저장 중...",
-            success: "파일 저장 완료",
-            error: "파일 저장 실패",
-          }
-        );
+              const saveResponse = await axios.post("addFile", {
+                path,
+                blob,
+              });
+              console.log("saveResponse", saveResponse);
+              if (saveResponse?.status !== 201) {
+                throw new Error("파일 저장 실패");
+              }
+              return saveResponse;
+            },
+            {
+              pending: `Saving ${path.savePath} in progress`,
+              success: `${path.savePath} saved successfully`,
+              error: `Failed to save ${path.savePath}`,
+            }
+          );
+        });
       }
       return true;
     } catch (e) {

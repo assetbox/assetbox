@@ -2,4 +2,3 @@ packages:
   - 'packages/*'
   - 'frameworks/*'
   - 'example/*'
-  - 'docs'

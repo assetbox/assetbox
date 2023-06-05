@@ -7,7 +7,7 @@ interface PathCardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const PathCardItem = ({ index, path }: { index: number; path: string }) => {
   return (
-    <div className="flex flex-nowrap" key={`path-${path}`}>
+    <div className="flex flex-nowrap">
       <p className="text-sm w-6 min-w-[24px] text-gray-dark text-opacity-20">
         {index}
       </p>
@@ -36,7 +36,7 @@ export const PathCard = ({
         </div>
       ) : (
         paths.map((path, index) => (
-          <PathCardItem index={index + 1} path={path} />
+          <PathCardItem index={index + 1} path={path} key={`path-${path}`} />
         ))
       )}
     </div>

@@ -39,7 +39,7 @@ export const DupePage = () => {
         {dupeFiles.map((paths) => (
           <DupeCard
             paths={paths}
-            key={`card-${paths[0]}`}
+            key={`card-${paths}`}
             asset={mapAsset[paths[0]]}
           />
         ))}

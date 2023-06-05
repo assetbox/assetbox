@@ -1,7 +1,7 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -9,7 +9,7 @@ import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
 import { AssetItem, AssetView, FolderSelector, ListBox } from "../components";
 import { AssetModal } from "../components/modal/AssetModal";
-import { DupeModal } from "../components/modal/DupeModal";
+import { AddedFiles, DupeModal } from "../components/modal/DupeModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
 import { useFileUpload, useModal } from "../hooks";
@@ -28,17 +28,12 @@ const mapAssetType: Record<AssetViewType, AssetStat["type"]> = {
   Animations: "animation",
 };
 
-type AddedFiles = {
-  path: string[];
-  base64Image: string;
-};
-
-const fileToBlob = (
-  file: File
-): Promise<{
+type BlobData = {
   blob: Blob;
   filename: string;
-}> => {
+};
+
+const fileToBlob = (file: File): Promise<BlobData> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -108,7 +103,6 @@ export const CategoryPage = () => {
   );
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
   const [search, setSearch] = useState("");
-
   const { usedFiles, folderTree } = useAssetBoxStore();
   // const [addedFiles, setAddedFiles] = useState<Record<string, AddedFiles>>({});
   const assets = useFilterAsset({
@@ -145,16 +139,13 @@ export const CategoryPage = () => {
     },
   });
 
-  const saveNotDupeFiles = async (data: AddedFiles[]) => {
-    const notDupePaths: string[] = Object.entries(data)
-      .filter(([key, item]) => item.path.length === 0)
-      .map(([key]) => key);
-
-    if (notDupePaths.length > 0) {
+  const saveFiles = async (files: AddedFiles[]) => {
+    if (files.length > 0) {
       toast.promise(
         async () => {
-          notDupePaths.forEach(async (path) => {
-            const saveResponse = await axios.post("", path);
+          files.forEach(async (path) => {
+            const blob = getBlobFromResponse(path.filepath);
+            const saveResponse = await axios.post("addFile", { path, blob });
             return saveResponse?.status === 201;
           });
         },
@@ -166,19 +157,40 @@ export const CategoryPage = () => {
       );
     }
   };
-  const openDupeModal = async (data: AddedFiles[]) => {
+  const openDupeModal = async (
+    projectRoot: string,
+    assets: BlobData[],
+    data: AddedFiles[]
+  ) => {
     closeFolderSelector();
-
-    const dupeFiles = Object.values(data).filter(
-      (item) => item.path.length > 0
-    );
-
-    // saveNotDupeFiles(data);
+    const dupeFiles = data.filter((item) => item.dupePaths.length > 0);
 
     if (dupeFiles.length > 0) {
       openDupeFileSelector(dupeFiles);
     }
   };
+
+  const blobRef = useRef<BlobData[]>([]);
+  const savePathRef = useRef<string>("");
+
+  //업로드 파일을 blob으로 변환
+  useEffect(() => {
+    const getBlobRef = async () => {
+      const blobs = await Promise.all(
+        uploadFiles?.map((file) => fileToBlob(file)) ?? []
+      );
+      blobRef.current = blobs;
+    };
+
+    getBlobRef();
+  }, [uploadFiles]);
+
+  //response된 이미지를 업로드 된 원본 파일로 바꿔줌
+  const getBlobFromResponse = useCallback((filepath: string) => {
+    return blobRef.current.find(
+      (f) => filepath === [savePathRef.current, f.filename].join("/")
+    );
+  }, []);
 
   return (
     <div
@@ -193,13 +205,16 @@ export const CategoryPage = () => {
         onClose={closeFolderSelector}
         folderTree={folderTree}
         onSave={async (path) => {
+          savePathRef.current = path;
+
           const formData = new FormData();
           formData.append("savePath", path);
 
-          const assets = await Promise.all(
-            uploadFiles?.map((file) => fileToBlob(file)) ?? []
-          );
-          assets.forEach((asset) => {
+          // const assets = await Promise.all(
+          //   uploadFiles?.map((file) => fileToBlob(file)) ?? []
+          // );
+
+          blobRef.current.forEach((asset) => {
             formData.append("assets", asset.blob, asset.filename);
           });
 
@@ -212,12 +227,17 @@ export const CategoryPage = () => {
               },
             }
           );
-          openDupeModal(response.data);
+          const notDupeFiles: AddedFiles[] = response.data.filter(
+            (item: AddedFiles) => item.dupePaths.length === 0
+          );
+
+          // saveFiles(notDupeFiles);
+          openDupeModal(path, blobRef.current, response.data);
         }}
       />
       <DupeModal
-        data={validatedFiles}
-        onClose={closeModal}
+        data={validatedFiles ?? []}
+        onClose={closeDupeFileSelector}
         open={isDupeFileSelector}
       />
 

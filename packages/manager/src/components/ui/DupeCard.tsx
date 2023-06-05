@@ -34,6 +34,18 @@ const MultipleDeleteModal = ({
   const concernsPaths = [
     ...new Set(selectedPaths.map((path) => usedFiles[path]).flat()),
   ];
+
+  const alertProps = {
+    info: {
+      variant: "info",
+      children: "These file are not in use.",
+    },
+    danger: {
+      variant: "danger",
+      children: "These file are in use. Would you still like to change it?",
+    },
+  } as const;
+
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Panel className="p-7 min-w-[410px]">
@@ -68,18 +80,17 @@ const MultipleDeleteModal = ({
             fallback="There are no codes of concern."
             className="h-40 mb-4"
           />
-          <Alert variant={`${concernsPaths.length === 0 ? "info" : "danger"}`}>
-            {concernsPaths.length === 0
-              ? "These file are not in use."
-              : "These file are in use. Would you still like to change it?"}
-          </Alert>
+          <Alert
+            {...alertProps[concernsPaths.length === 0 ? "info" : "danger"]}
+          />
         </div>
         <div className="flex justify-end">
           <Button
             variant="danger"
-            className={`w-40 ${
+            className={cn(
+              "w-40",
               selectedPaths.length === 0 && "opacity-50 pointer-events-none"
-            }`}
+            )}
             onClick={() => {
               toast
                 .promise(

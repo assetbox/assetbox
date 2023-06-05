@@ -30,7 +30,7 @@ export const App = ({ data }: AppProps) => {
 
   const initRoute = useMemo(() => {
     const [category] = Object.keys(categories);
-    return `/${category}`;
+    return ["/", category].join("");
   }, [isLoaded, categories]);
 
   return (
@@ -47,7 +47,7 @@ export const App = ({ data }: AppProps) => {
           <Route path="/:category" element={<CategoryPage />} />
           <Route path="/dupe" element={<DupePage />} />
           {isLoaded ? (
-            <Route path="*" element={<Navigate to={initRoute} replace />} />
+            <Route index element={<Navigate to={initRoute} replace />} />
           ) : null}
         </Routes>
       </Main>

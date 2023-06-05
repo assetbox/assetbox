@@ -1,4 +1,4 @@
-import type { ExtractImportData } from "./importExtract";
+import type { ExtractImport } from "./importExtract";
 import { readAssetBoxConfig } from "./readAssetBoxConfig";
 
 export type AssetBoxScheme = {
@@ -29,7 +29,7 @@ export type AssetStat = AssetImageStat | AssetIconStat;
 
 export interface AssetBoxData {
   categories: Record<string, AssetStat[]>;
-  usedFiles: Record<string, ExtractImportData[]>;
+  usedFiles: Record<string, ExtractImport[]>;
   dupeFiles: string[][];
   uniqueCoverage: {
     count: number;

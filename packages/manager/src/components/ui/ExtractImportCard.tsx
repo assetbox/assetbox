@@ -31,7 +31,7 @@ const ExtractImportItem = ({
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
-          <p className="text-sm underline">{data.path}</p>
+          <p className="text-sm underline outline-none">{data.path}</p>
         </Popover.Trigger>
         <Popover.Content
           side="right"

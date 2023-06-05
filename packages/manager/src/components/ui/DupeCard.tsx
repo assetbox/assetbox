@@ -10,6 +10,7 @@ import { Asset } from "../asset";
 import { Alert } from "./Alert";
 import { Button } from "./Button";
 import { CheckBox } from "./CheckBox";
+import { ExtractImportCard } from "./ExtractImportCard";
 import { Modal, type ModalProps } from "./Modal";
 import { PathCard } from "./PathCard";
 
@@ -62,23 +63,23 @@ const MultipleDeleteModal = ({
 
         <div className="mb-5">
           <p className="mb-3 text-base font-bold">Concerns Paths</p>
-          <PathCard
-            paths={
-              concernsPaths.length > 0
-                ? concernsPaths
-                : ["There are no codes of concern."]
-            }
+          <ExtractImportCard
+            data={concernsPaths}
+            fallback="There are no codes of concern."
             className="h-40 mb-4"
           />
-
-          <Alert variant="danger">
-            These codes are in use. Would you still like to change it?
+          <Alert variant={`${concernsPaths.length === 0 ? "safe" : "danger"}`}>
+            {concernsPaths.length === 0
+              ? "These file are not in use."
+              : "These file are in use. Would you still like to change it?"}
           </Alert>
         </div>
         <div className="flex justify-end">
           <Button
             variant="danger"
-            className="w-40"
+            className={`w-40 ${
+              selectedPaths.length === 0 && "opacity-50 pointer-events-none"
+            }`}
             onClick={() => {
               toast
                 .promise(

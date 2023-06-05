@@ -3,10 +3,13 @@ import { relative, resolve, sep } from "path";
 
 import { cwd } from "./cwd";
 
-export type ExtractImportData = {
+export type ExtractImport = {
   path: string;
-  lineCode: string;
-  lineNumber: number;
+  codeDatas: {
+    code: string;
+    line: number;
+    isReal: boolean;
+  }[];
 };
 
 const extractImportedFiles = async (
@@ -24,13 +27,21 @@ const extractImportedFiles = async (
       .join("|"),
     "g"
   );
-
   const lineRegex = fileContent.split("\n");
 
   const matches = (fileContent.match(regex) ?? [])
     .map((match) => {
-      const number = lineRegex.findIndex((v) => v.includes(match));
-      const code = lineRegex[number];
+      const lineNumber = lineRegex.findIndex((codeLine) =>
+        codeLine.includes(match)
+      );
+      const codeDatas = [lineNumber - 1, lineNumber, lineNumber + 1]
+        .filter((lineNumber) => lineRegex[lineNumber])
+        .map((line) => ({
+          code: lineRegex[line],
+          line,
+          isReal: lineNumber === line,
+        }));
+
       const normalizeMatch = match.replace(/['"]/g, "");
       switch (normalizeMatch[0]) {
         case ".": {
@@ -41,8 +52,7 @@ const extractImportedFiles = async (
 
           return {
             path: relative(cwd(), originPath),
-            lineCode: code,
-            lineNumber: number + 1,
+            codeDatas,
           };
         }
         default:
@@ -55,8 +65,7 @@ const extractImportedFiles = async (
           }
           return {
             path: relative(cwd(), originPath),
-            lineCode: code,
-            lineNumber: number + 1,
+            codeDatas,
           };
         }
       }
@@ -68,9 +77,9 @@ const extractImportedFiles = async (
 
 const mapFileReferences = (
   assetFiles: string[],
-  importFileMap: Record<string, ExtractImportData[]>
+  importFileMap: Record<string, ExtractImport[]>
 ) => {
-  const fileReferences: Record<string, ExtractImportData[]> = {};
+  const fileReferences: Record<string, ExtractImport[]> = {};
 
   assetFiles.forEach((fileName) => {
     fileReferences[fileName] = [];

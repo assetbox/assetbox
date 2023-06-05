@@ -187,11 +187,9 @@ export const CategoryPage = () => {
           {assets?.map((asset: AssetStat) => (
             <AssetItem
               disabled={usedFiles[asset.filepath]?.length === 0}
-              onClick={() => {
-                !isBuild ? openModal(asset) : null;
-              }}
               key={`asset-${asset.filename}`}
               asset={asset}
+              {...(!isBuild && { onClick: () => openModal(asset) })}
             />
           ))}
         </AssetView>

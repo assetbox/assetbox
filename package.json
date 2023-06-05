@@ -8,7 +8,7 @@
     "prepare": "husky install || true",
     "preinstall": "npx only-allow pnpm",
     "test:type": "turbo test:type",
-    "build": "turbo build --filter='./packages/*'",
+    "build": "turbo build --filter='./packages/*' --filter='./frameworks/*'",
     "lint": "eslint . --ext .ts,.tsx,.js,.json --fix",
     "test": "turbo test --filter='./packages/*'"
   },

@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-undef
 module.exports = {
   env: {
+    node: true,
     browser: true,
     es2021: true,
   },
@@ -22,5 +23,6 @@ module.exports = {
     "simple-import-sort/exports": "error",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-var-requires": "off",
   },
 };

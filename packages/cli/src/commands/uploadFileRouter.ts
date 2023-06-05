@@ -27,7 +27,7 @@ const uploadAsset = (savePath: string) =>
 const uploadFile: RequestHandler = async (req, res) => {
   try {
     const file: any = req.files;
-    console.log(file);
+    // console.log(file);
     /* 
     md5 기반 해쉬 구하는 로직
     */
@@ -49,7 +49,7 @@ interface ImageObject {
 interface ConvertedResult {
   savePath: string;
   base64Image: string;
-  path: string[];
+  dupePaths: string[];
 }
 function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
   const result: ConvertedResult[] = [];
@@ -59,12 +59,12 @@ function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
     if (imageObject.hasOwnProperty(key)) {
       const savePath = key;
       const base64Image = "";
-      const path = imageObject[key];
+      const dupePaths = imageObject[key];
 
       result.push({
         savePath,
         base64Image,
-        path,
+        dupePaths,
       });
     }
   }

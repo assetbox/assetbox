@@ -1,9 +1,13 @@
-import { cwd, type IconBuildPlugin } from "@assetbox/tools";
+import {
+  cwd,
+  getAllDirectoriesRecursive,
+  type IconBuildPlugin,
+} from "@assetbox/tools";
 import { transformAsync } from "@babel/core";
 import { transform } from "@svgr/core";
 import camelCase from "camelcase";
 import { existsSync } from "fs";
-import { mkdir, readFile, writeFile } from "fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "fs/promises";
 import { join, relative, resolve, sep } from "path";
 import pc from "picocolors";
 
@@ -16,11 +20,11 @@ const buildSvg = async ({
   categoryName: string;
   filePaths: string[];
 }) => {
-  return Promise.all(
+  const generatedPaths = await Promise.all(
     filePaths.map(async (filePath) => {
       const extension = filePath.split(".").pop();
       if (extension && !["svg"].includes(extension)) {
-        return;
+        return [];
       }
 
       const filename = filePath.split(sep).pop()?.split(".").shift();
@@ -89,6 +93,9 @@ const buildSvg = async ({
         });
       }
 
+      const esmCodePath = join(esmPath, `${componentName}.mjs`);
+      const cjsCodePath = join(cjsPath, `${componentName}.cjs`);
+
       await Promise.all([
         writeFile(
           join(esmPath, `${componentName}.mjs`),
@@ -113,21 +120,72 @@ const buildSvg = async ({
           )
         ),
       ]);
+
+      return [esmCodePath, cjsCodePath];
     })
   );
+
+  return generatedPaths.flat();
 };
 
 export const react = (): IconBuildPlugin => ({
   name: "react-icon",
   build: async ({ categories, iconBuild }) => {
-    await Promise.all(
-      Object.entries(categories).map(async ([categoryName, filePaths]) => {
-        return buildSvg({
-          outdir: iconBuild!.outdir!,
-          categoryName,
-          filePaths,
-        });
-      })
+    const outdir = iconBuild!.outdir!;
+
+    const generatedPaths = (
+      await Promise.all(
+        Object.entries(categories).map(async ([categoryName, filePaths]) => {
+          return buildSvg({
+            outdir,
+            categoryName,
+            filePaths,
+          });
+        })
+      )
+    ).flat();
+
+    const directories = await getAllDirectoriesRecursive(
+      resolve(cwd(), outdir)
     );
+    const indexFilePaths = directories.map((directory) => {
+      if (directory.includes("cjs")) {
+        return resolve(cwd(), outdir, directory, "index.cjs");
+      }
+      return resolve(cwd(), outdir, directory, "index.mjs");
+    });
+
+    for (const indexFilePath of indexFilePaths) {
+      const root = indexFilePath.split(sep).slice(0, -1).join(sep);
+      const iconPaths = await readdir(root);
+
+      const indexContent = iconPaths
+        .map((iconPath) => {
+          const [filename] = iconPath.split(".");
+          if (filename === "index") {
+            return null;
+          }
+
+          return `export * from "./${filename}"`;
+        })
+        .filter(Boolean)
+        .join("\n");
+
+      if (indexFilePath.includes("cjs")) {
+        const indexContextCJS = await transformAsync(indexContent, {
+          plugins: [[require("@babel/plugin-transform-modules-commonjs")]],
+        });
+
+        if (!indexContextCJS?.code) {
+          throw new Error(
+            `'${indexFilePath}' @babel/plugin-transform-modules-commonjs failed`
+          );
+        }
+
+        writeFile(indexFilePath, indexContextCJS.code);
+      } else {
+        writeFile(indexFilePath, indexContent);
+      }
+    }
   },
 });

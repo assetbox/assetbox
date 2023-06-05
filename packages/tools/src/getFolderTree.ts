@@ -4,7 +4,7 @@ import { join, sep } from "path";
 import { cwd } from "./cwd";
 import { FolderTree } from "./types";
 
-const getAllDirectoriesRecursive = async (directoryPath: string) => {
+export const getAllDirectoriesRecursive = async (directoryPath: string) => {
   const files = await readdir(directoryPath, { withFileTypes: true });
 
   const directories: string[] = [];

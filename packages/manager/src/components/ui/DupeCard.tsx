@@ -68,7 +68,7 @@ const MultipleDeleteModal = ({
             fallback="There are no codes of concern."
             className="h-40 mb-4"
           />
-          <Alert variant={`${concernsPaths.length === 0 ? "safe" : "danger"}`}>
+          <Alert variant={`${concernsPaths.length === 0 ? "info" : "danger"}`}>
             {concernsPaths.length === 0
               ? "These file are not in use."
               : "These file are in use. Would you still like to change it?"}

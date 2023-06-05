@@ -1,1 +1,1 @@
-export type * from "@assetbox/tools";
+export * from "@assetbox/tools/dist/types";

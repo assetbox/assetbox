@@ -1,3 +1,5 @@
+import type { ExtractImport } from "./importExtract";
+
 export type IconBuildPlugin = {
   name: string;
   build: (context: AssetBoxConfig) => void | Promise<void>;
@@ -37,7 +39,7 @@ export type AssetStat = AssetImageStat | AssetIconStat;
 
 export interface AssetBoxData {
   categories: Record<string, AssetStat[]>;
-  usedFiles: Record<string, string[]>;
+  usedFiles: Record<string, ExtractImport[]>;
   dupeFiles: string[][];
   uniqueCoverage: {
     count: number;

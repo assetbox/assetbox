@@ -1,6 +1,6 @@
 import type { AssetBoxData } from "@assetbox/tools";
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import DupeAssetsMenuIcon from "./assets/dupe-assets-menu.svg";
@@ -22,9 +22,16 @@ const menus = [
 ];
 
 export const App = ({ data }: AppProps) => {
+  const { isLoaded, categories } = useAssetBoxStore();
+
   useEffect(() => {
     useAssetBoxStore.setState({ ...data, isLoaded: true });
   }, [data]);
+
+  const initRoute = useMemo(() => {
+    const [category] = Object.keys(categories);
+    return ["/", category].join("");
+  }, [isLoaded, categories]);
 
   return (
     <Layout>
@@ -39,6 +46,9 @@ export const App = ({ data }: AppProps) => {
         <Routes>
           <Route path="/:category" element={<CategoryPage />} />
           <Route path="/dupe" element={<DupePage />} />
+          {isLoaded ? (
+            <Route index element={<Navigate to={initRoute} replace />} />
+          ) : null}
         </Routes>
       </Main>
       <ToastContainer />

@@ -3,13 +3,21 @@ import { relative, resolve, sep } from "path";
 
 import { cwd } from "./cwd";
 
+export type ExtractImport = {
+  path: string;
+  codeDatas: {
+    code: string;
+    line: number;
+    isReal: boolean;
+  }[];
+};
+
 const extractImportedFiles = async (
   assetFiles: string[],
   assetFileNames: string[],
   file: string
 ) => {
   const fileContent = await readFile(file, "utf-8");
-
   const regex = new RegExp(
     assetFileNames
       .map(
@@ -19,9 +27,21 @@ const extractImportedFiles = async (
       .join("|"),
     "g"
   );
+  const lineRegex = fileContent.split("\n");
 
   const matches = (fileContent.match(regex) ?? [])
     .map((match) => {
+      const lineNumber = lineRegex.findIndex((codeLine) =>
+        codeLine.includes(match)
+      );
+      const codeDatas = [lineNumber - 1, lineNumber, lineNumber + 1]
+        .filter((lineNumber) => lineRegex[lineNumber])
+        .map((line) => ({
+          code: lineRegex[line],
+          line,
+          isReal: lineNumber === line,
+        }));
+
       const normalizeMatch = match.replace(/['"]/g, "");
       switch (normalizeMatch[0]) {
         case ".": {
@@ -30,7 +50,10 @@ const extractImportedFiles = async (
             normalizeMatch
           );
 
-          return relative(cwd(), originPath);
+          return {
+            path: relative(cwd(), originPath),
+            codeDatas,
+          };
         }
         default:
         case "/": {
@@ -40,20 +63,23 @@ const extractImportedFiles = async (
           if (!originPath) {
             return null;
           }
-          return relative(cwd(), originPath);
+          return {
+            path: relative(cwd(), originPath),
+            codeDatas,
+          };
         }
       }
     })
-    .filter(Boolean) as string[];
+    .filter(Boolean);
 
   return matches;
 };
 
 const mapFileReferences = (
   assetFiles: string[],
-  importFileMap: Record<string, string[]>
+  importFileMap: Record<string, ExtractImport[]>
 ) => {
-  const fileReferences: Record<string, string[]> = {};
+  const fileReferences: Record<string, ExtractImport[]> = {};
 
   assetFiles.forEach((fileName) => {
     fileReferences[fileName] = [];
@@ -63,12 +89,11 @@ const mapFileReferences = (
     const importedFiles = importFileMap[importName];
 
     importedFiles.forEach((fileName) => {
-      if (fileReferences[fileName]) {
-        fileReferences[fileName].push(importName);
+      if (fileReferences[fileName.path]) {
+        fileReferences[fileName.path].push({ ...fileName, path: importName });
       }
     });
   });
-
   return fileReferences;
 };
 
@@ -97,7 +122,7 @@ export const findImportFileSet = async (
       ...acc,
       ...curr,
     };
-  }, {} as Record<string, string[]>);
+  }, {});
 
   return mapFileReferences(normalizeAssetFiles, importFileMap);
 };

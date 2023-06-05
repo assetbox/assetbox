@@ -1,6 +1,6 @@
 import { build } from "esbuild";
 
-import packagesJson from "./package.json" assert { type: "json" };
+import packageJson from "./package.json" assert { type: "json" };
 build({
   entryPoints: ["./src/index.ts"],
   bundle: true,
@@ -8,8 +8,8 @@ build({
   sourcemap: true,
   format: "cjs",
   external: Object.keys({
-    ...packagesJson.devDependencies,
-    ...packagesJson.peerDependencies,
+    ...packageJson.devDependencies,
+    ...packageJson.peerDependencies,
   }),
   platform: "node",
   outfile: "./dist/index.cjs",

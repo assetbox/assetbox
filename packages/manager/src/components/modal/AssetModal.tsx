@@ -3,16 +3,25 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { client } from "../../api";
-import CodeIcon from "../../assets/code.svg";
-import InformationIcon from "../../assets/information.svg";
-import { useModal } from "../../hooks";
-import { syncAssetBox, useAssetBoxStore } from "../../store";
-import { Button, InlineSVG, Modal, ModalProps } from "../ui";
-import { ConfirmModal, ConfirmModalProps } from "../ui/ConfirmModal";
-import { InfoItem } from "../ui/InfoItem";
-import { Input } from "../ui/Input";
-import { PathCard } from "../ui/PathCard";
+import { client } from "../api";
+import CodeIcon from "../assets/code.svg";
+import InformationIcon from "../assets/information.svg";
+import { useModal } from "../hooks";
+import { syncAssetBox, useAssetBoxStore } from "../store";
+import { Button, InlineSVG, Modal, ModalProps } from "./ui";
+import { ConfirmModal, ConfirmModalProps } from "./ui/ConfirmModal";
+import { ExtractImportCard } from "./ui/ExtractImportCard";
+import { Input } from "./ui/Input";
+
+const InfoItem = ({
+  label,
+  children,
+}: React.PropsWithChildren<Record<"label", string>>) => (
+  <div className="flex mb-2">
+    <p className="text-sm font-bold text-gray w-28">{label}</p>
+    <p className="text-sm font-bold">{children}</p>
+  </div>
+);
 
 const RenameModal = ({
   onCancel,
@@ -40,10 +49,8 @@ const RenameModal = ({
               error: "Failed to rename",
             }
           )
-          .then(() => {
-            onCancel();
-            syncAssetBox();
-          });
+          .then(syncAssetBox)
+          .then(onCancel);
       }}
       cancelVariant="gray"
       open={open}
@@ -88,10 +95,8 @@ const DeleteModal = ({
             success: "Deleted!",
             error: "Failed to delete",
           })
-          .then(() => {
-            onCancel();
-            syncAssetBox();
-          });
+          .then(syncAssetBox)
+          .then(onCancel);
       }}
       open={open}
     >
@@ -145,12 +150,9 @@ export const AssetModal = ({
                     <CodeIcon />
                     <p className="text-sm font-bold">Used Code Path</p>
                   </div>
-                  <PathCard
-                    paths={
-                      usedFiles[data.filepath]?.length > 0
-                        ? usedFiles[data.filepath]
-                        : ["No files found in use."]
-                    }
+                  <ExtractImportCard
+                    data={usedFiles[data.filepath] ?? []}
+                    fallback="There are no codes of concern."
                     className="h-48"
                   />
                 </div>
@@ -185,13 +187,19 @@ export const AssetModal = ({
 
             <RenameModal
               open={renameOpen}
-              onCancel={closeRenameModal}
+              onCancel={() => {
+                closeRenameModal();
+                onClose();
+              }}
               filepath={data.filepath}
               filename={data.filename}
             />
             <DeleteModal
               open={deleteOpen}
-              onCancel={closeDeleteModal}
+              onCancel={() => {
+                closeDeleteModal();
+                onClose();
+              }}
               filepath={data.filepath}
             />
           </div>

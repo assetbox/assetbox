@@ -22,6 +22,7 @@ export const manage = async () => {
   app.use(vite.middlewares);
 
   app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
   app.use(
     "/trpc",
     createExpressMiddleware({

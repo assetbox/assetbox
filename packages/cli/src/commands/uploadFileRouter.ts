@@ -24,7 +24,6 @@ const uploadAsset = (savePath?: string) =>
         }
 
         if (!fs.existsSync(resolvePath)) {
-          console.log("create dir");
           fs.mkdirSync(resolvePath);
         }
         cb(null, resolvePath);
@@ -39,7 +38,7 @@ const uploadFile: RequestHandler = async (req, res) => {
   try {
     const checkingPath = [cwd(), req.body.savePath, req.file?.originalname]
       .filter(Boolean)
-      .join(sep);
+      .join(path.sep);
     if (!fs.existsSync(checkingPath)) {
       res.status(400).json({ message: "Asset upload Failed" });
     }

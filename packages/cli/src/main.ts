@@ -30,11 +30,12 @@ program
   });
 
 program
+  .option("-p, --port <number>")
   .command("manage")
   .description("Open the development server of the assetbox.")
   .action(async () => {
     try {
-      await manage();
+      await manage(program.opts().port);
     } catch (e) {
       if (e instanceof Error) {
         console.error(e.message);

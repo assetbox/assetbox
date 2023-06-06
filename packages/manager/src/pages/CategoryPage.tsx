@@ -204,10 +204,6 @@ export const CategoryPage = () => {
           const formData = new FormData();
           formData.append("savePath", path);
 
-          // const assets = await Promise.all(
-          //   uploadFiles?.map((file) => fileToBlob(file)) ?? []
-          // );
-
           blobRef.current.forEach((asset) => {
             formData.append("assets", asset.blob, asset.filename);
           });

@@ -50,6 +50,8 @@ export const DupeModal = ({
       setIdx(idx + 1);
     } else if (idx === data.length - 1) {
       onClose();
+      setIsAdded((prev) => prev.map(() => false));
+      setIdx(0);
     }
   };
   const handlePrev = () => {
@@ -72,27 +74,14 @@ export const DupeModal = ({
 
   return (
     data[idx] && (
-      <Modal open={open} onClose={onClose}>
-        <Modal.Panel className={"max-w-6xl p-7"}>
-          <span className="float-right cursor-pointer" onClick={onClose}>
-            <Close />
-          </span>
-
+      <Modal open={open} onClose={() => null}>
+        <Modal.Panel className={"max-w-6xl p-8"}>
           <div>
             <div className="flex gap-6 mb-9">
               <div className="flex flex-col justify-between">
-                <div className="flex items-center justify-center flex-1 mb-2 max-h-[250px]">
-                  {/* {data.type === "icon" ? (
-                    <InlineSVG svgHtml={data.data} className="w-2/3 h-2/3" />
-                  ) : null}
-                  {data.type === "image" ? (
-                    <img
-                      src={data.filepath}
-                      className="object-cover w-full h-full rounded"
-                    />
-                  ) : null} */}
+                <div className="flex items-center justify-center flex-1 mb-2 h-[300px] w-[300px]">
                   <ImageComponent
-                    className="object-cover w-full h-full rounded"
+                    className="object-fill w-full h-full rounded"
                     key={idx}
                     savePath={data[idx].savePath}
                     base64Image={data[idx].base64Image}

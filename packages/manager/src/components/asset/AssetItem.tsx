@@ -11,7 +11,7 @@ export const AssetItem = ({ asset, disabled, ...props }: AssetItemProps) => {
   const [filename] = asset.filename.split(".");
 
   return (
-    <div className="group " {...props}>
+    <div className="pb-2 group" {...props}>
       <Asset
         asset={asset}
         disabled={disabled}

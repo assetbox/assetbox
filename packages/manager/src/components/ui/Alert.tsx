@@ -9,7 +9,7 @@ import { cn } from "../../utils";
 export type AlertVariantProps = VariantProps<typeof alertVariants>;
 type AlertProps = React.HTMLAttributes<HTMLDivElement> & AlertVariantProps;
 
-const alertVariants = cva("flex py-4 gap-3 items-center", {
+const alertVariants = cva("flex px-3 py-4 gap-3 items-center rounded", {
   variants: {
     variant: {
       danger: ["bg-[rgba(255,54,122,0.1)]"],

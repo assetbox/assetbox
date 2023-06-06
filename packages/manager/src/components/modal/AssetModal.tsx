@@ -3,15 +3,15 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { client } from "../api";
-import CodeIcon from "../assets/code.svg";
-import InformationIcon from "../assets/information.svg";
-import { useModal } from "../hooks";
-import { syncAssetBox, useAssetBoxStore } from "../store";
-import { Button, InlineSVG, Modal, ModalProps } from "./ui";
-import { ConfirmModal, ConfirmModalProps } from "./ui/ConfirmModal";
-import { ExtractImportCard } from "./ui/ExtractImportCard";
-import { Input } from "./ui/Input";
+import { client } from "../../api";
+import CodeIcon from "../../assets/code.svg";
+import InformationIcon from "../../assets/information.svg";
+import { useModal } from "../../hooks";
+import { syncAssetBox, useAssetBoxStore } from "../../store";
+import { Button, InlineSVG, Modal, type ModalProps } from ".././ui";
+import { ConfirmModal, type ConfirmModalProps } from ".././ui/ConfirmModal";
+import { ExtractImportCard } from ".././ui/ExtractImportCard";
+import { Input } from ".././ui/Input";
 
 const InfoItem = ({
   label,
@@ -133,18 +133,21 @@ export const AssetModal = ({
         {data ? (
           <div>
             <div className="flex gap-6 mb-9">
-              <div className="flex items-center justify-center flex-1">
+              <div className="flex items-center justify-center flex-1 w-96">
                 {data.type === "icon" ? (
-                  <InlineSVG svgHtml={data.data} className="w-2/3 h-2/3" />
+                  <InlineSVG
+                    svgHtml={data.data}
+                    className="max-h-[250px] h-full"
+                  />
                 ) : null}
                 {data.type === "image" ? (
                   <img
                     src={data.filepath}
-                    className="object-cover w-full h-full rounded"
+                    className="object-contain w-full h-full rounded"
                   />
                 ) : null}
               </div>
-              <div className="w-96">
+              <div className="flex-1 w-96">
                 <div className="mb-7">
                   <div className="flex items-center gap-2 mb-2">
                     <CodeIcon />
@@ -189,7 +192,7 @@ export const AssetModal = ({
               open={renameOpen}
               onCancel={() => {
                 closeRenameModal();
-                onClose();
+                onClose(false);
               }}
               filepath={data.filepath}
               filename={data.filename}
@@ -198,7 +201,7 @@ export const AssetModal = ({
               open={deleteOpen}
               onCancel={() => {
                 closeDeleteModal();
-                onClose();
+                onClose(false);
               }}
               filepath={data.filepath}
             />

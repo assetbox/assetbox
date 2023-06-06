@@ -78,7 +78,7 @@ export const DupeModal = ({
           <div>
             <div className="flex gap-6 mb-9">
               <div className="flex flex-col justify-between">
-                <div className="flex items-center justify-center flex-1 mb-2 h-[300px] w-[300px]">
+                <div className="flex items-center justify-center flex-1 mb-2 h-[250px] w-[250px]">
                   <ImageComponent
                     className="object-fill w-full h-full rounded"
                     key={idx}

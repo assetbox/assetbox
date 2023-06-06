@@ -8,8 +8,8 @@ import CodeIcon from "../../assets/code.svg";
 import InformationIcon from "../../assets/information.svg";
 import { useModal } from "../../hooks";
 import { syncAssetBox, useAssetBoxStore } from "../../store";
-import { Button, InlineSVG, Modal, ModalProps } from ".././ui";
-import { ConfirmModal, ConfirmModalProps } from ".././ui/ConfirmModal";
+import { Button, InlineSVG, Modal, type ModalProps } from ".././ui";
+import { ConfirmModal, type ConfirmModalProps } from ".././ui/ConfirmModal";
 import { ExtractImportCard } from ".././ui/ExtractImportCard";
 import { Input } from ".././ui/Input";
 
@@ -192,7 +192,7 @@ export const AssetModal = ({
               open={renameOpen}
               onCancel={() => {
                 closeRenameModal();
-                onClose();
+                onClose(false);
               }}
               filepath={data.filepath}
               filename={data.filename}
@@ -201,7 +201,7 @@ export const AssetModal = ({
               open={deleteOpen}
               onCancel={() => {
                 closeDeleteModal();
-                onClose();
+                onClose(false);
               }}
               filepath={data.filepath}
             />

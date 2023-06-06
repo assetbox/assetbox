@@ -12,7 +12,10 @@ export const fileToBlob = (file: File): Promise<BlobData> => {
         reject(new Error("Unable to convert file to blob"));
         return;
       }
-      const blob = new Blob([reader.result], { type: file.type });
+      const blob = new Blob([reader.result], {
+        type: file.type,
+      });
+
       resolve({
         blob,
         filename: file.name,

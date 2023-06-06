@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import { express } from "../api";
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
 import { AssetItem, AssetView, FolderSelector, ListBox } from "../components";
@@ -14,7 +15,7 @@ import { Input } from "../components/ui/Input";
 import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
-import { BlobData, client, cn, fileToBlob } from "../utils";
+import { BlobData, cn, fileToBlob, makeFormData } from "../utils";
 import { compareByName } from "../utils/sort";
 
 type AssetViewType = "Icons" | "Images" | "Animations";
@@ -72,11 +73,13 @@ const useFilterAsset = ({
 
 export const CategoryPage = () => {
   const { category } = useParams();
+
   const [filterOption, setFilterOption] = useState<FilterOption>(
     filterOptions[0]
   );
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
   const [search, setSearch] = useState("");
+
   const { usedFiles, folderTree } = useAssetBoxStore();
 
   const blobRef = useRef<BlobData[]>([]);
@@ -122,21 +125,20 @@ export const CategoryPage = () => {
         files.forEach(async (path) => {
           await toast.promise(
             async () => {
-              const blob = getBlobFromResponse(path.savePath);
-              const formData = new FormData();
-              formData.append("savePath", savePathRef.current);
+              const blobData = getBlobFromResponse(path.savePath);
+              const formData = makeFormData({
+                savePath: savePathRef.current,
+                assets: blobData,
+              });
 
-              if (blob) {
-                formData.append("assets", blob.blob, blob.filename);
-              }
-              const saveResponse = await client.post("/upload", formData, {
+              const saveResponse = await express.post("/upload", formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
               });
 
               if (saveResponse?.status !== 201) {
-                throw new Error("파일 저장 실패");
+                throw new Error("Failed to save");
               }
               return saveResponse;
             },
@@ -184,16 +186,14 @@ export const CategoryPage = () => {
         onClose={closeFolderSelector}
         folderTree={folderTree}
         onSave={async (path) => {
-          const formData = new FormData();
-
-          formData.append("savePath", path);
-          savePathRef.current = path;
-
-          blobRef.current.forEach((asset) => {
-            formData.append("assets", asset.blob, asset.filename);
+          const formData = makeFormData({
+            savePath: path,
+            assets: blobRef.current,
           });
 
-          const response = await client.post("/upload/validation", formData, {
+          savePathRef.current = path;
+
+          const response = await express.post("/upload/validation", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

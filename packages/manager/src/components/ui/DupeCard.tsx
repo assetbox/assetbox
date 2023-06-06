@@ -102,7 +102,7 @@ const MultipleDeleteModal = ({
                   }
                 )
                 .then(() => {
-                  onClose();
+                  onClose(false);
                   syncAssetBox();
                 });
             }}

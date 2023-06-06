@@ -3,6 +3,7 @@ import { useState } from "react";
 import CodeIcon from "../../assets/code.svg";
 import InformationIcon from "../../assets/information.svg";
 import { Alert, Button, Modal } from "../ui";
+import { ImgBase64 } from "../ui/ImgBase64";
 import { InfoItem } from "../ui/InfoItem";
 import { PathCard } from "../ui/PathCard";
 
@@ -18,17 +19,6 @@ type DupeModalProps = {
   onClose: () => void;
   handleSaveFile: (files: AddedFiles[]) => Promise<boolean> | boolean;
 };
-
-const ImageComponent = ({
-  savePath,
-  base64Image,
-  ...props
-}: {
-  savePath: string;
-  base64Image: string;
-} & React.ImgHTMLAttributes<HTMLImageElement>) => (
-  <img src={base64Image} alt={savePath} {...props} />
-);
 
 export const DupeModal = ({
   data,
@@ -71,80 +61,77 @@ export const DupeModal = ({
     }
   };
 
-  return (
-    data[idx] && (
-      <Modal open={open} onClose={() => null}>
-        <Modal.Panel className={"max-w-6xl p-8"}>
-          <div>
-            <div className="flex gap-6 mb-9">
-              <div className="flex flex-col flex-1 w-96">
-                <div className="flex items-center justify-center flex-1 w-full h-full mb-2 ">
-                  <ImageComponent
-                    className="object-fill max-h-[250px] h-full"
-                    key={idx}
-                    savePath={data[idx].savePath}
-                    base64Image={data[idx].base64Image}
-                  />
-                </div>
-                <Alert variant="danger">This file is a duplicate file.</Alert>
+  return data[idx] ? (
+    <Modal open={open} onClose={() => null}>
+      <Modal.Panel className={"max-w-6xl p-8"}>
+        <div>
+          <div className="flex gap-6 mb-9">
+            <div className="flex flex-col flex-1 w-96">
+              <div className="flex items-center justify-center flex-1 w-full h-full mb-2 ">
+                <ImgBase64
+                  className="object-fill max-h-[250px] h-full"
+                  key={idx}
+                  base64Image={data[idx].base64Image}
+                />
               </div>
-              <div className="flex-1 w-96">
-                <div className="mb-7">
-                  <div className="flex items-center gap-2 mb-2">
-                    <InformationIcon />
-                    <p className="text-sm font-bold">Information</p>
-                  </div>
-                  <div className="bg-[#F7F9FB] rounded px-5 py-2">
-                    <InfoItem label="File Path">{data[idx].savePath}</InfoItem>
-                  </div>
+              <Alert variant="danger">This file is a duplicate file.</Alert>
+            </div>
+            <div className="flex-1 w-96">
+              <div className="mb-7">
+                <div className="flex items-center gap-2 mb-2">
+                  <InformationIcon />
+                  <p className="text-sm font-bold">Information</p>
                 </div>
-                <div>
-                  <div className="flex items-center gap-1 mb-2">
-                    <CodeIcon />
-                    <p className="text-sm font-bold">Dupe File Paths</p>
-                  </div>
-                  <PathCard paths={data[idx].dupePaths} className="h-48" />
+                <div className="bg-[#F7F9FB] rounded px-5 py-2">
+                  <InfoItem label="File Path">{data[idx].savePath}</InfoItem>
                 </div>
+              </div>
+              <div>
+                <div className="flex items-center gap-1 mb-2">
+                  <CodeIcon />
+                  <p className="text-sm font-bold">Dupe File Paths</p>
+                </div>
+                <PathCard paths={data[idx].dupePaths} className="h-48" />
               </div>
             </div>
           </div>
-          <div className="relative flex items-center justify-center w-full gap-x-5">
-            {idx > 0 && (
+        </div>
+        <div className="relative flex items-center justify-center w-full gap-x-5">
+          {idx > 0 ? (
+            <Button
+              variant="primary"
+              className="absolute left-0 cursor-pointer"
+              onClick={handlePrev}
+            >
+              Prev
+            </Button>
+          ) : null}
+
+          <p>{`${idx + 1} / ${data.length}`}</p>
+
+          <div className="absolute right-0 flex gap-2">
+            {isAdded[idx] ? (
+              <Button variant="gray" className="cursor-not-allowed">
+                Added
+              </Button>
+            ) : (
               <Button
-                variant="primary"
-                className="absolute left-0 cursor-pointer"
-                onClick={handlePrev}
+                variant="danger"
+                onClick={() => handleAdd(Array(data[idx]))}
               >
-                Prev
+                Add
               </Button>
             )}
-
-            <p>{`${idx + 1} / ${data.length}`}</p>
-
-            <div className="absolute right-0 flex gap-2">
-              {isAdded[idx] ? (
-                <Button variant="gray" className="cursor-not-allowed">
-                  Added
-                </Button>
-              ) : (
-                <Button
-                  variant="danger"
-                  onClick={() => handleAdd(Array(data[idx]))}
-                >
-                  Add
-                </Button>
-              )}
-              <Button
-                variant="primary"
-                className="cursor-pointer"
-                onClick={handleNext}
-              >
-                Skip
-              </Button>
-            </div>
+            <Button
+              variant="primary"
+              className="cursor-pointer"
+              onClick={handleNext}
+            >
+              Skip
+            </Button>
           </div>
-        </Modal.Panel>
-      </Modal>
-    )
-  );
+        </div>
+      </Modal.Panel>
+    </Modal>
+  ) : null;
 };

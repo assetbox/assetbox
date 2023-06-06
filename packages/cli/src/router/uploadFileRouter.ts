@@ -6,8 +6,19 @@ import {
 } from "@assetbox/tools";
 import { type RequestHandler, Router } from "express";
 import fs from "fs";
+import { mkdir, readdir, readFile, rmdir } from "fs/promises";
 import multer from "multer";
 import path, { join, sep } from "path";
+
+interface ImageObject {
+  [key: string]: string[];
+}
+
+interface ConvertedResult {
+  savePath: string;
+  base64Image: string;
+  dupePaths: string[];
+}
 
 export const uploadFileRouter = Router();
 
@@ -19,8 +30,8 @@ const uploadAsset = (savePath?: string) =>
           ? join(cwd(), sep, savePath)
           : join(cwd(), sep, req.body.savePath);
 
-        if (!fs.existsSync(`${resolvePath}`)) {
-          fs.mkdirSync(`${resolvePath}`);
+        if (!fs.existsSync(resolvePath)) {
+          mkdir(resolvePath);
         }
         cb(null, resolvePath);
       },
@@ -46,79 +57,69 @@ const uploadFile: RequestHandler = async (req, res) => {
   }
 };
 
-interface ImageObject {
-  [key: string]: string[];
-}
-
-interface ConvertedResult {
-  savePath: string;
-  base64Image: string;
-  dupePaths: string[];
-}
-function getExtension(name: string) {
+const getExtension = (name: string) => {
   const extension = name.split(".").pop()!;
 
   if (["svg"].includes(extension)) {
     return "svg+xml";
   }
   return extension;
-}
-function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
+};
+
+const convertImageObject = async (
+  imageObject: ImageObject
+): Promise<ConvertedResult[]> => {
   const result: ConvertedResult[] = [];
 
   for (const key in imageObject) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (imageObject.hasOwnProperty(key)) {
-      const fileNameWithExtension = key.substring(key.lastIndexOf(sep) + 1);
+    const fileName = key.split(sep).pop()!;
 
-      const extension = getExtension(
-        path.join(cwd(), sep, ".assetbox", sep, fileNameWithExtension)
-      );
+    const extension = getExtension(
+      path.join(cwd(), sep, ".assetbox", sep, fileName)
+    );
 
-      const savePath = key;
-      const prefix = ["data:image", `${extension};base64`].join(sep);
+    const savePath = key;
+    const prefix = ["data:image", `${extension};base64`].join(sep);
 
-      const base64Image = `${prefix},${fs.readFileSync(
-        path.join(cwd(), sep, ".assetbox", sep, fileNameWithExtension),
-        {
-          encoding: "base64",
-        }
-      )}`;
-      const dupePaths = imageObject[key];
+    const base64Image = [
+      prefix,
+      await readFile(path.join(cwd(), sep, ".assetbox", sep, fileName), {
+        encoding: "base64",
+      }),
+    ].join("");
 
-      result.push({
-        savePath,
-        base64Image,
-        dupePaths,
-      });
-    }
+    const dupePaths = imageObject[key];
+
+    result.push({
+      savePath,
+      base64Image,
+      dupePaths,
+    });
   }
-
   return result;
-}
+};
 
 const getValidationInfo: RequestHandler = async (req, res) => {
   const { categories } = await readAssetBoxConfig();
   const assetFiles = Object.values(categories).flat();
 
-  const getAddedFiles = fs.readdirSync(path.join(cwd(), sep, ".assetbox", sep));
-  const fileList: { path: string; hash: string }[] = [];
+  const getAddedFiles = await readdir(path.join(cwd(), sep, ".assetbox", sep));
 
-  getAddedFiles.map(async (file) => {
-    const json = { path: "", hash: "" };
-    json.path = path.join(req.body.savePath, sep, file);
-    json.hash = await createFileHash(
-      path.join(cwd(), sep, ".assetbox", sep, file)
-    );
-    fileList.push(json);
+  const fileList = getAddedFiles.map(async (file: string) => {
+    const json = {
+      path: join(req.body.savePath, file),
+      hash: await createFileHash(path.join(cwd(), sep, ".assetbox", sep, file)),
+    };
+    return json;
   });
-  console;
 
-  const result = await getDupeFiles(assetFiles, fileList);
-  const convertedResult: ConvertedResult[] = convertImageObject(result);
-  fs.rmdirSync(path.join(cwd(), sep, ".assetbox"), { recursive: true });
-  res.status(201).json([...convertedResult]);
+  const result = await getDupeFiles(assetFiles, await Promise.all(fileList));
+  const convertedResult: ConvertedResult[] = await convertImageObject(result);
+
+  rmdir(path.join(cwd(), sep, ".assetbox"), { recursive: true });
+  res.status(201).json(convertedResult);
 };
+
 const test: RequestHandler = async (req, res) => {
   try {
     res.status(200).send("Asset upload Test");

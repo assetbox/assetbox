@@ -5,8 +5,8 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 
 import { renderStaticHtml } from "../context/renderStaticHtml";
+import { uploadFileRouter } from "../router/uploadFileRouter";
 import { resolveCliRoot } from "../utils/path";
-import { uploadFileRouter } from "./uploadFileRouter";
 
 // Create Asset Manager Server
 export const manage = async () => {

@@ -7,6 +7,7 @@ const config = {
     Images: ["./public/images/**/*"],
   },
   trackingPaths: ["./src/**/*"],
+  port: 6006,
 };
 
 module.exports = config;

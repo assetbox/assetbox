@@ -10,7 +10,14 @@ import { renderStaticHtml } from "../context/renderStaticHtml";
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
 
 export const staticBuild = async () => {
-  const { categories } = await readAssetBoxConfig();
+  const {
+    categories,
+    staticBuild = {
+      outDir: "assetbox-dist",
+    },
+  } = await readAssetBoxConfig();
+  const outDir = staticBuild.outDir!;
+
   const assetFiles = Object.values(categories).flat();
 
   const normalizeFilePaths = assetFiles.map((filePath) =>
@@ -32,13 +39,13 @@ export const staticBuild = async () => {
     plugins: [
       react(),
       copy({
-        targets: [{ src: assetFiles, dest: join("assetbox-dist", "assets") }],
+        targets: [{ src: assetFiles, dest: join(outDir, "assets") }],
         onlyFiles: true,
       }),
     ],
     publicDir: false,
     build: {
-      outDir: resolveProjectRoot("assetbox-dist"),
+      outDir: resolveProjectRoot(outDir),
     },
     define: {
       "process.env.BUILD": "true",
@@ -47,10 +54,7 @@ export const staticBuild = async () => {
 
   global.process.env.BUILD = "true";
 
-  template = await readFile(
-    resolveProjectRoot("assetbox-dist", "index.html"),
-    "utf-8"
-  );
+  template = await readFile(resolveProjectRoot(outDir, "index.html"), "utf-8");
   const html = await renderStaticHtml(template, "/", { onlyCategories: true });
   const staticHtml = normalizeFilePaths.reduce((originHtml, filePath) => {
     const filename = filePath.split(sep).pop();
@@ -62,8 +66,5 @@ export const staticBuild = async () => {
     return originHtml.replace(filePathReg, join("assets", filename));
   }, html);
 
-  await writeFile(
-    resolveProjectRoot("assetbox-dist", "index.html"),
-    staticHtml
-  );
+  await writeFile(resolveProjectRoot(outDir, "index.html"), staticHtml);
 };

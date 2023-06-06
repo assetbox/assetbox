@@ -135,7 +135,10 @@ export const AssetModal = ({
             <div className="flex gap-6 mb-9">
               <div className="flex items-center justify-center flex-1">
                 {data.type === "icon" ? (
-                  <InlineSVG svgHtml={data.data} className="w-2/3 h-2/3" />
+                  <InlineSVG
+                    svgHtml={data.data}
+                    className="object-fill w-[300px] h-[300px]"
+                  />
                 ) : null}
                 {data.type === "image" ? (
                   <img

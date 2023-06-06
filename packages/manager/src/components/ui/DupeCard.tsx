@@ -31,7 +31,7 @@ const MultipleDeleteModal = ({
 
   const [selectedPaths, setSelectedPaths] = useState<string[]>([]);
 
-  const concernsPaths = [
+  const pathsInUse = [
     ...new Set(selectedPaths.map((path) => usedFiles[path]).flat()),
   ];
 
@@ -48,7 +48,7 @@ const MultipleDeleteModal = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Modal.Panel className="p-7 min-w-[410px]">
+      <Modal.Panel className="p-7 min-w-[440px]">
         <div className="mb-5">
           <p className="mb-3 text-base font-bold">Select Paths</p>
           <div className="flex flex-col gap-2">
@@ -74,15 +74,13 @@ const MultipleDeleteModal = ({
         </div>
 
         <div className="mb-5">
-          <p className="mb-3 text-base font-bold">Concerns Paths</p>
+          <p className="mb-3 text-base font-bold">Paths In Use</p>
           <ExtractImportCard
-            data={concernsPaths}
+            data={pathsInUse}
             fallback="There are no codes of concern."
             className="h-40 mb-4"
           />
-          <Alert
-            {...alertProps[concernsPaths.length === 0 ? "info" : "danger"]}
-          />
+          <Alert {...alertProps[pathsInUse.length === 0 ? "info" : "danger"]} />
         </div>
         <div className="flex justify-end">
           <Button

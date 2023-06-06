@@ -1,18 +1,21 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
-import { useMemo, useState } from "react";
+import axios from "axios";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import EmptyIcon from "../assets/empty-icon.svg";
 import SearchIcon from "../assets/search-icon.svg";
 import { AssetItem, AssetView, FolderSelector, ListBox } from "../components";
-import { AssetModal } from "../components/AssetModal";
+import { AssetModal } from "../components/modal/AssetModal";
+import { AddedFiles, DupeModal } from "../components/modal/DupeModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
 import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
-import { cn } from "../utils";
+import { BlobData, cn, fileToBlob } from "../utils";
 import { compareByName } from "../utils/sort";
 
 type AssetViewType = "Icons" | "Images" | "Animations";
@@ -76,9 +79,8 @@ export const CategoryPage = () => {
   );
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
   const [search, setSearch] = useState("");
-
   const { usedFiles, folderTree } = useAssetBoxStore();
-
+  // const [addedFiles, setAddedFiles] = useState<Record<string, AddedFiles>>({});
   const assets = useFilterAsset({
     currentCategory: category,
     filterOption,
@@ -100,11 +102,78 @@ export const CategoryPage = () => {
     closeModal: closeFolderSelector,
   } = useModal<File[]>();
 
+  const {
+    data: validatedFiles,
+    open: isDupeFileSelector,
+    openModal: openDupeFileSelector,
+    closeModal: closeDupeFileSelector,
+  } = useModal<AddedFiles[]>();
+
   const { isDrag, dragRef } = useFileUpload({
     onDrop: (files) => {
       openFolderSelector(files);
     },
   });
+
+  const saveFiles = async (files: AddedFiles[]) => {
+    try {
+      if (files.length > 0) {
+        files.forEach(async (path) => {
+          await toast.promise(
+            async () => {
+              const blob = getBlobFromResponse(path.savePath);
+              const saveResponse = await axios.post("upload", {
+                path,
+                blob,
+              });
+              console.log("saveResponse", saveResponse);
+              if (saveResponse?.status !== 201) {
+                throw new Error("파일 저장 실패");
+              }
+              return saveResponse;
+            },
+            {
+              pending: `Saving ${path.savePath} in progress`,
+              success: `${path.savePath} saved successfully`,
+              error: `Failed to save ${path.savePath}`,
+            }
+          );
+        });
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+  const openDupeModal = async (files: AddedFiles[]) => {
+    closeFolderSelector();
+
+    if (files.length > 0) {
+      openDupeFileSelector(files);
+    }
+  };
+
+  const blobRef = useRef<BlobData[]>([]);
+  const savePathRef = useRef<string>("");
+
+  //업로드 파일을 blob으로 변환
+  useEffect(() => {
+    const getBlobRef = async () => {
+      const blobs = await Promise.all(
+        uploadFiles?.map((file) => fileToBlob(file)) ?? []
+      );
+      blobRef.current = blobs;
+    };
+
+    getBlobRef();
+  }, [uploadFiles]);
+
+  //response된 이미지를 업로드 된 원본 파일로 바꿔줌
+  const getBlobFromResponse = useCallback((filepath: string) => {
+    return blobRef.current.find(
+      (f) => filepath === [savePathRef.current, f.filename].join("/")
+    );
+  }, []);
 
   return (
     <div
@@ -118,8 +187,49 @@ export const CategoryPage = () => {
         open={isOpenFolderSelector}
         onClose={closeFolderSelector}
         folderTree={folderTree}
-        onSave={(path) => console.log(path)}
+        onSave={async (path) => {
+          savePathRef.current = path;
+
+          const formData = new FormData();
+          formData.append("savePath", path);
+
+          // const assets = await Promise.all(
+          //   uploadFiles?.map((file) => fileToBlob(file)) ?? []
+          // );
+
+          blobRef.current.forEach((asset) => {
+            formData.append("assets", asset.blob, asset.filename);
+          });
+
+          const response = await axios.post(
+            "http://localhost:6001/upload/validation",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          console.log(response.data);
+          const notDupeFiles: AddedFiles[] = response.data.filter(
+            (item: AddedFiles) => item.dupePaths.length === 0
+          );
+          saveFiles(notDupeFiles);
+
+          const dupeFiles = response.data.filter(
+            (item: AddedFiles) => item.dupePaths.length > 0
+          );
+
+          openDupeModal(dupeFiles);
+        }}
       />
+      <DupeModal
+        data={validatedFiles ?? []}
+        onClose={closeDupeFileSelector}
+        open={isDupeFileSelector}
+        handleSaveFile={saveFiles}
+      />
+
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
         <div
           className={cn("w-full", !isBuild ? "lg:w-[550px]" : "lg:w-[650px]")}

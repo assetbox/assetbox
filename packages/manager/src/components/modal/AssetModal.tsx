@@ -133,21 +133,21 @@ export const AssetModal = ({
         {data ? (
           <div>
             <div className="flex gap-6 mb-9">
-              <div className="flex items-center justify-center flex-1">
+              <div className="flex items-center justify-center flex-1 w-96">
                 {data.type === "icon" ? (
                   <InlineSVG
                     svgHtml={data.data}
-                    className="object-fill w-[300px] h-[300px]"
+                    className="max-h-[250px] h-full"
                   />
                 ) : null}
                 {data.type === "image" ? (
                   <img
                     src={data.filepath}
-                    className="object-cover w-full h-full rounded"
+                    className="object-contain w-full h-full rounded"
                   />
                 ) : null}
               </div>
-              <div className="w-96">
+              <div className="flex-1 w-96">
                 <div className="mb-7">
                   <div className="flex items-center gap-2 mb-2">
                     <CodeIcon />

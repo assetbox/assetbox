@@ -18,12 +18,7 @@ const alertVariants = cva("flex px-3 py-4 gap-3 items-center rounded", {
   },
 });
 
-export const Alert = ({
-  variant,
-  children,
-  className,
-  ...props
-}: AlertProps) => {
+export const Alert = ({ variant, children, ...props }: AlertProps) => {
   return (
     <div {...props} className={cn(alertVariants({ variant }))}>
       {match(variant)

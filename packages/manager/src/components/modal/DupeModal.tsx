@@ -77,10 +77,10 @@ export const DupeModal = ({
         <Modal.Panel className={"max-w-6xl p-8"}>
           <div>
             <div className="flex gap-6 mb-9">
-              <div className="flex flex-col justify-between">
-                <div className="flex items-center justify-center flex-1 mb-2 h-[250px] w-[250px]">
+              <div className="flex flex-col flex-1 w-96">
+                <div className="flex items-center justify-center flex-1 w-full h-full mb-2 ">
                   <ImageComponent
-                    className="object-fill w-full h-full rounded"
+                    className="object-fill max-h-[250px] h-full"
                     key={idx}
                     savePath={data[idx].savePath}
                     base64Image={data[idx].base64Image}
@@ -88,7 +88,7 @@ export const DupeModal = ({
                 </div>
                 <Alert variant="danger">This file is a duplicate file.</Alert>
               </div>
-              <div className="w-96">
+              <div className="flex-1 w-96">
                 <div className="mb-7">
                   <div className="flex items-center gap-2 mb-2">
                     <InformationIcon />

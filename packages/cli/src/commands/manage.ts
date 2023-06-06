@@ -15,6 +15,9 @@ export const manage = async () => {
     server: { middlewareMode: true },
     appType: "custom",
     publicDir: false,
+    define: {
+      "process.env.BUILD": "false",
+    },
   });
   app.use(vite.middlewares);
 

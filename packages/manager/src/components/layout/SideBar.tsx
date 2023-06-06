@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import FolderIcon from "../../assets/folder.svg";
 import HamburgerIcon from "../../assets/hamburger.svg";
 import Logo from "../../assets/logo.svg";
+import { isBuild } from "../../env";
 import { useAssetBoxStore } from "../../store";
 import { cn } from "../../utils";
 import { ProgressBar } from "../ui";
@@ -90,21 +91,22 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
   return (
     <div className="h-full px-8 pt-12 bg-white select-none w-80">
       <Logo className="ml-[10px] mb-8" />
-
-      <CoverageBar
-        className="mb-2"
-        name="Used Coverage"
-        count={usedCoverage.count}
-        totalCount={usedCoverage.totalCount}
-      />
-
-      <CoverageBar
-        className="mb-10"
-        name="Unique Coverage"
-        count={uniqueCoverage.count}
-        totalCount={uniqueCoverage.totalCount}
-      />
-
+      {!isBuild ? (
+        <>
+          <CoverageBar
+            className="mb-2"
+            name="Used Coverage"
+            count={usedCoverage.count}
+            totalCount={usedCoverage.totalCount}
+          />
+          <CoverageBar
+            className="mb-10"
+            name="Unique Coverage"
+            count={uniqueCoverage.count}
+            totalCount={uniqueCoverage.totalCount}
+          />
+        </>
+      ) : null}
       <div className="flex items-center gap-2 mb-4">
         <HamburgerIcon className="ml-[10px]" />
         <p className="text-base font-bold text-gray-dark">Category</p>
@@ -120,19 +122,21 @@ export const SideBar = ({ categories, menus }: SideBarProps) => {
         </Fragment>
       ))}
 
-      {menus.map(({ icon, label, path }) => (
-        <Fragment key={`menu-${label}`}>
-          <MenuItem
-            to={path}
-            active={pathname === path}
-            className="px-[10px]"
-            icon={icon}
-          >
-            {label}
-          </MenuItem>
-          <SectorLine />
-        </Fragment>
-      ))}
+      {!isBuild
+        ? menus.map(({ icon, label, path }) => (
+            <Fragment key={`menu-${label}`}>
+              <MenuItem
+                to={path}
+                active={pathname === path}
+                className="px-[10px]"
+                icon={icon}
+              >
+                {label}
+              </MenuItem>
+              <SectorLine />
+            </Fragment>
+          ))
+        : null}
     </div>
   );
 };

@@ -1,11 +1,22 @@
-import { readAssetBoxConfig } from "./readAssetBoxConfig";
+import type { ExtractImport } from "./importExtract";
+
+export type IconBuildPlugin = {
+  name: string;
+  build: (context: AssetBoxConfig) => void | Promise<void>;
+};
 
 export type AssetBoxScheme = {
   categories: Record<string, string[]>;
   trackingPaths: string[];
+  iconBuild?: {
+    outdir?: string;
+    plugins?: IconBuildPlugin[];
+  };
 };
 
-export type AssetBoxConfig = Awaited<ReturnType<typeof readAssetBoxConfig>>;
+export type AssetBoxConfig = {
+  configFilePath: string;
+} & AssetBoxScheme;
 
 export type AssetBaseStat = {
   filepath: string;
@@ -28,7 +39,7 @@ export type AssetStat = AssetImageStat | AssetIconStat;
 
 export interface AssetBoxData {
   categories: Record<string, AssetStat[]>;
-  usedFiles: Record<string, string[]>;
+  usedFiles: Record<string, ExtractImport[]>;
   dupeFiles: string[][];
   uniqueCoverage: {
     count: number;

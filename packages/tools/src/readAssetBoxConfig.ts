@@ -2,7 +2,7 @@ import { lilconfig } from "lilconfig";
 import { findPackageRoot } from "workspace-tools";
 
 import { findFilePathsFromGlob } from "./findFilePathsFromGlob";
-import type { AssetBoxScheme } from "./types";
+import type { AssetBoxConfig, AssetBoxScheme } from "./types";
 
 export const getCategoryFileList = async (
   category: AssetBoxScheme["categories"]
@@ -24,7 +24,7 @@ export const getCategoryFileList = async (
   );
 };
 
-export const readAssetBoxConfig = async () => {
+export const readAssetBoxConfig: () => Promise<AssetBoxConfig> = async () => {
   const options = {
     stopDir: findPackageRoot(process.cwd()),
     searchPlaces: [
@@ -40,11 +40,21 @@ export const readAssetBoxConfig = async () => {
     throw new Error("Couldn't find assetbox.config.js.");
   }
 
-  const { categories, trackingPaths }: AssetBoxScheme = value.config;
+  const {
+    categories,
+    trackingPaths,
+    iconBuild = {
+      outdir: "dist",
+      plugins: [],
+    },
+    ...configs
+  }: AssetBoxScheme = value.config;
 
   return {
     configFilePath: value.filepath,
     trackingPaths: await findFilePathsFromGlob(trackingPaths),
     categories: await getCategoryFileList(categories),
+    iconBuild,
+    ...configs,
   };
 };

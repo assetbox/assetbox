@@ -4,6 +4,7 @@ import { Command } from "commander";
 
 import { version as packageVersion } from "../package.json";
 import { manage, staticBuild } from "./commands";
+import { iconBuild } from "./commands/iconBuild";
 import { initialize } from "./initialize";
 
 const program = new Command();
@@ -49,6 +50,19 @@ program
   .action(async () => {
     try {
       await staticBuild();
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
+    }
+  });
+
+program
+  .command("icon-build")
+  .description("Build the svg file as a front-end framework component.")
+  .action(async () => {
+    try {
+      await iconBuild();
     } catch (e) {
       if (e instanceof Error) {
         console.error(e.message);

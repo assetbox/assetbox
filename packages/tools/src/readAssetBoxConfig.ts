@@ -44,7 +44,7 @@ export const readAssetBoxConfig: () => Promise<AssetBoxConfig> = async () => {
     categories,
     trackingPaths,
     iconBuild = {
-      outdir: "dist",
+      outDir: "dist",
       plugins: [],
     },
     ...configs

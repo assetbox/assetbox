@@ -8,8 +8,11 @@ export type IconBuildPlugin = {
 export type AssetBoxScheme = {
   categories: Record<string, string[]>;
   trackingPaths: string[];
+  staticBuild?: {
+    outDir?: string;
+  };
   iconBuild?: {
-    outdir?: string;
+    outDir?: string;
     plugins?: IconBuildPlugin[];
   };
   port?: number;

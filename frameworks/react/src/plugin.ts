@@ -12,11 +12,11 @@ import { join, relative, resolve, sep } from "path";
 import pc from "picocolors";
 
 const buildSvg = async ({
-  outdir,
+  outDir,
   categoryName,
   filePaths,
 }: {
-  outdir: string;
+  outDir: string;
   categoryName: string;
   filePaths: string[];
 }) => {
@@ -71,13 +71,13 @@ const buildSvg = async ({
 
       const esmPath = resolve(
         cwd(),
-        outdir,
+        outDir,
         "esm",
         categoryName.toLocaleLowerCase()
       );
       const cjsPath = resolve(
         cwd(),
-        outdir,
+        outDir,
         "cjs",
         categoryName.toLocaleLowerCase()
       );
@@ -105,7 +105,7 @@ const buildSvg = async ({
             "Processing (ESM)",
             pc.yellow(`${relative(cwd(), filePath)}`),
             " => ",
-            pc.green(join(outdir, "esm", `${componentName}.mjs`))
+            pc.green(join(outDir, "esm", `${componentName}.mjs`))
           )
         ),
         writeFile(
@@ -116,7 +116,7 @@ const buildSvg = async ({
             "Processing (CJS)",
             pc.yellow(`${relative(cwd(), filePath)}`),
             " => ",
-            pc.green(join(outdir, "cjs", `${componentName}.cjs`))
+            pc.green(join(outDir, "cjs", `${componentName}.cjs`))
           )
         ),
       ]);
@@ -131,28 +131,26 @@ const buildSvg = async ({
 export const react = (): IconBuildPlugin => ({
   name: "react-icon",
   build: async ({ categories, iconBuild }) => {
-    const outdir = iconBuild!.outdir!;
+    const outDir = iconBuild!.outDir!;
 
-    const generatedPaths = (
-      await Promise.all(
-        Object.entries(categories).map(async ([categoryName, filePaths]) => {
-          return buildSvg({
-            outdir,
-            categoryName,
-            filePaths,
-          });
-        })
-      )
-    ).flat();
+    await Promise.all(
+      Object.entries(categories).map(async ([categoryName, filePaths]) => {
+        return buildSvg({
+          outDir,
+          categoryName,
+          filePaths,
+        });
+      })
+    );
 
     const directories = await getAllDirectoriesRecursive(
-      resolve(cwd(), outdir)
+      resolve(cwd(), outDir)
     );
     const indexFilePaths = directories.map((directory) => {
       if (directory.includes("cjs")) {
-        return resolve(cwd(), outdir, directory, "index.cjs");
+        return resolve(cwd(), outDir, directory, "index.cjs");
       }
-      return resolve(cwd(), outdir, directory, "index.mjs");
+      return resolve(cwd(), outDir, directory, "index.mjs");
     });
 
     for (const indexFilePath of indexFilePaths) {

@@ -40,13 +40,18 @@ export const staticBuild = async () => {
     build: {
       outDir: resolveProjectRoot("assetbox-dist"),
     },
+    define: {
+      "process.env.BUILD": "true",
+    },
   });
+
+  global.process.env.BUILD = "true";
 
   template = await readFile(
     resolveProjectRoot("assetbox-dist", "index.html"),
     "utf-8"
   );
-  const html = await renderStaticHtml(template, "/");
+  const html = await renderStaticHtml(template, "/", { onlyCategories: true });
   const staticHtml = normalizeFilePaths.reduce((originHtml, filePath) => {
     const filename = filePath.split(sep).pop();
     if (!filename) {

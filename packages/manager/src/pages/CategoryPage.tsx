@@ -12,6 +12,7 @@ import { AssetModal } from "../components/modal/AssetModal";
 import { AddedFiles, DupeModal } from "../components/modal/DupeModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
+import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
 import { cn } from "../utils";
@@ -255,7 +256,9 @@ export const CategoryPage = () => {
       />
 
       <div className="flex flex-wrap justify-between mb-8 gap-y-4 xxl:gap-0">
-        <div className="w-full lg:w-[550px]">
+        <div
+          className={cn("w-full", !isBuild ? "lg:w-[550px]" : "lg:w-[650px]")}
+        >
           <Input
             noOutline
             className="w-full h-12 group"
@@ -284,22 +287,27 @@ export const CategoryPage = () => {
               Animations
             </ButtonGroup.Button>
           </ButtonGroup>
-
-          <ListBox value={filterOption} onChange={setFilterOption}>
-            <ListBox.Button className={({ open }) => cn(open && "bg-black")}>
-              {filterOption}
-            </ListBox.Button>
-            <ListBox.Options>
-              {filterOptions.map((filterOption) => (
-                <ListBox.Option
-                  key={`option-${filterOption}`}
-                  value={filterOption}
+          {!isBuild ? (
+            <>
+              <ListBox value={filterOption} onChange={setFilterOption}>
+                <ListBox.Button
+                  className={({ open }) => cn(open && "bg-black")}
                 >
                   {filterOption}
-                </ListBox.Option>
-              ))}
-            </ListBox.Options>
-          </ListBox>
+                </ListBox.Button>
+                <ListBox.Options>
+                  {filterOptions.map((filterOption) => (
+                    <ListBox.Option
+                      key={`option-${filterOption}`}
+                      value={filterOption}
+                    >
+                      {filterOption}
+                    </ListBox.Option>
+                  ))}
+                </ListBox.Options>
+              </ListBox>
+            </>
+          ) : null}
         </div>
       </div>
       {assets?.length === 0 ? (
@@ -314,9 +322,9 @@ export const CategoryPage = () => {
           {assets?.map((asset: AssetStat) => (
             <AssetItem
               disabled={usedFiles[asset.filepath]?.length === 0}
-              onClick={() => openModal(asset)}
               key={`asset-${asset.filename}`}
               asset={asset}
+              {...(!isBuild && { onClick: () => openModal(asset) })}
             />
           ))}
         </AssetView>

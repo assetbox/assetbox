@@ -1,3 +1,4 @@
+import { readAssetBoxConfig } from "@assetbox/tools";
 import { appRouter } from "@assetbox/trpc";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import express from "express";
@@ -5,11 +6,13 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 
 import { renderStaticHtml } from "../context/renderStaticHtml";
+import { uploadFileRouter } from "../router/uploadFileRouter";
 import { resolveCliRoot } from "../utils/path";
-import { uploadFileRouter } from "./uploadFileRouter";
 
 // Create Asset Manager Server
-export const manage = async () => {
+export const manage = async (port?: number) => {
+  const { port: configPort = 6001 } = await readAssetBoxConfig();
+
   const app = express();
   const vite = await createViteServer({
     server: { middlewareMode: true },
@@ -51,7 +54,9 @@ export const manage = async () => {
     }
   });
 
-  app.listen(6001, () => {
-    console.log("📦 AssetBox is running at http://localhost:6001");
+  app.listen(port || configPort, () => {
+    console.log(
+      `📦 AssetBox is running at http://localhost:${port || configPort}`
+    );
   });
 };

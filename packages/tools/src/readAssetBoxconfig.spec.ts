@@ -27,7 +27,7 @@ describe("readAssetBoxConfig Test", () => {
           Images: ["/test/normal/public/b.png", "/test/normal/public/a.png"],
         },
         iconBuild: {
-          outdir: "dist",
+          outDir: "dist",
           plugins: [],
         },
         configFilePath: "/test/normal/assetbox.config.json",
@@ -57,7 +57,7 @@ describe("readAssetBoxConfig Test", () => {
       expect(config).toStrictEqual({
         categories: {},
         iconBuild: {
-          outdir: "dist",
+          outDir: "dist",
           plugins: [],
         },
         configFilePath: "/test/emptyConfig/assetbox.config.json",

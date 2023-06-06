@@ -15,7 +15,7 @@ import { Input } from "../components/ui/Input";
 import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
-import { cn } from "../utils";
+import { BlobData, cn, fileToBlob } from "../utils";
 import { compareByName } from "../utils/sort";
 
 type AssetViewType = "Icons" | "Images" | "Animations";
@@ -27,31 +27,6 @@ const mapAssetType: Record<AssetViewType, AssetStat["type"]> = {
   Icons: "icon",
   Images: "image",
   Animations: "animation",
-};
-
-type BlobData = {
-  blob: Blob;
-  filename: string;
-};
-
-const fileToBlob = (file: File): Promise<BlobData> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      if (!reader.result) {
-        reject(new Error("Unable to convert file to blob"));
-        return;
-      }
-      const blob = new Blob([reader.result], { type: file.type });
-      resolve({
-        blob,
-        filename: file.name,
-      });
-    };
-    reader.onerror = reject;
-    reader.readAsArrayBuffer(file);
-  });
 };
 
 const useFilterAsset = ({
@@ -147,7 +122,7 @@ export const CategoryPage = () => {
           await toast.promise(
             async () => {
               const blob = getBlobFromResponse(path.savePath);
-              const saveResponse = await axios.post("addFile", {
+              const saveResponse = await axios.post("upload", {
                 path,
                 blob,
               });
@@ -239,7 +214,7 @@ export const CategoryPage = () => {
           const notDupeFiles: AddedFiles[] = response.data.filter(
             (item: AddedFiles) => item.dupePaths.length === 0
           );
-          // saveFiles(notDupeFiles);
+          saveFiles(notDupeFiles);
 
           const dupeFiles = response.data.filter(
             (item: AddedFiles) => item.dupePaths.length > 0

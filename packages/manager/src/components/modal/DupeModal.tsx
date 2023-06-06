@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { ImgHTMLAttributes } from "react";
+import { useState } from "react";
 
-import Close from "../../assets/close.svg";
 import CodeIcon from "../../assets/code.svg";
 import InformationIcon from "../../assets/information.svg";
-import { Alert, Button, InlineSVG, Modal } from "../ui";
+import { Alert, Button, Modal } from "../ui";
 import { InfoItem } from "../ui/InfoItem";
 import { PathCard } from "../ui/PathCard";
 

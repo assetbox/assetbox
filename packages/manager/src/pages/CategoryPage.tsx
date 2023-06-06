@@ -166,7 +166,6 @@ export const CategoryPage = () => {
     }
   };
 
-  //업로드 파일을 blob으로 변환
   useEffect(() => {
     const getBlobRef = async () => {
       const blobs = await Promise.all(
@@ -178,9 +177,7 @@ export const CategoryPage = () => {
     getBlobRef();
   }, [uploadFiles]);
 
-  //response된 이미지를 업로드 된 원본 파일로 바꿔줌
   const getBlobFromResponse = useCallback((filepath: string) => {
-    console.log(filepath, savePathRef.current, blobRef.current);
     return blobRef.current.find(
       (f) => filepath === [savePathRef.current, f.filename].join("/")
     );
@@ -217,7 +214,6 @@ export const CategoryPage = () => {
               },
             }
           );
-          console.log(response.data);
           const notDupeFiles: AddedFiles[] = response.data.filter(
             (item: AddedFiles) => item.dupePaths.length === 0
           );

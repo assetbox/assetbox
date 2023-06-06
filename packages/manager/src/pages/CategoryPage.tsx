@@ -80,7 +80,7 @@ export const CategoryPage = () => {
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
   const [search, setSearch] = useState("");
   const { usedFiles, folderTree } = useAssetBoxStore();
-  // const [addedFiles, setAddedFiles] = useState<Record<string, AddedFiles>>({});
+
   const assets = useFilterAsset({
     currentCategory: category,
     filterOption,
@@ -114,6 +114,8 @@ export const CategoryPage = () => {
       openFolderSelector(files);
     },
   });
+  const blobRef = useRef<BlobData[]>([]);
+  const savePathRef = useRef<string>("");
 
   const saveFiles = async (files: AddedFiles[]) => {
     try {
@@ -122,11 +124,22 @@ export const CategoryPage = () => {
           await toast.promise(
             async () => {
               const blob = getBlobFromResponse(path.savePath);
-              const saveResponse = await axios.post("upload", {
-                path,
-                blob,
-              });
-              console.log("saveResponse", saveResponse);
+              const formData = new FormData();
+              formData.append("savePath", savePathRef.current);
+
+              if (blob) {
+                formData.append("assets", blob.blob, blob.filename);
+              }
+              const saveResponse = await axios.post(
+                "http://localhost:6001/upload",
+                formData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              );
+
               if (saveResponse?.status !== 201) {
                 throw new Error("파일 저장 실패");
               }
@@ -153,9 +166,6 @@ export const CategoryPage = () => {
     }
   };
 
-  const blobRef = useRef<BlobData[]>([]);
-  const savePathRef = useRef<string>("");
-
   //업로드 파일을 blob으로 변환
   useEffect(() => {
     const getBlobRef = async () => {
@@ -170,6 +180,7 @@ export const CategoryPage = () => {
 
   //response된 이미지를 업로드 된 원본 파일로 바꿔줌
   const getBlobFromResponse = useCallback((filepath: string) => {
+    console.log(filepath, savePathRef.current, blobRef.current);
     return blobRef.current.find(
       (f) => filepath === [savePathRef.current, f.filename].join("/")
     );

@@ -58,10 +58,10 @@ export const DupeModal = ({
     }
   };
 
-  const handleAdd = (files: AddedFiles[]) => {
-    console.log(files);
+  const handleAdd = async (files: AddedFiles[]) => {
+    const response = await handleSaveFile(files);
 
-    if (handleSaveFile(files) === true) {
+    if (response === true) {
       setIsAdded((prev) => {
         const updated = [...prev];
         updated[idx] = true;

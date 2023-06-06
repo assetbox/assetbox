@@ -1,3 +1,3 @@
 export * from "./cn";
 export * from "./noop";
-export * from "./transerFile";
+export * from "./transferBlob";

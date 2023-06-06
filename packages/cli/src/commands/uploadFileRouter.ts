@@ -76,7 +76,6 @@ function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
       );
 
       const savePath = key;
-      console.log(extension);
       const prefix = ["data:image", `${extension};base64`].join(sep);
 
       const base64Image = `${prefix},${fs.readFileSync(
@@ -100,10 +99,9 @@ function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
 
 const getValidationInfo: RequestHandler = async (req, res) => {
   const { categories } = await readAssetBoxConfig();
-  const assetFiles = Object.values(categories).flat(); // 모든파일
+  const assetFiles = Object.values(categories).flat();
 
-  const getAddedFiles = fs.readdirSync(path.join(cwd(), sep, ".assetbox", sep)); // 추가된 파일 watingValidation 폴더에서 가져오기
-  console.log(getAddedFiles);
+  const getAddedFiles = fs.readdirSync(path.join(cwd(), sep, ".assetbox", sep));
   const fileList: { path: string; hash: string }[] = [];
 
   getAddedFiles.map(async (file) => {

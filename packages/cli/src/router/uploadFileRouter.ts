@@ -112,7 +112,6 @@ const getValidationInfo: RequestHandler = async (req, res) => {
     };
     return json;
   });
-  console;
 
   const result = await getDupeFiles(assetFiles, await Promise.all(fileList));
   const convertedResult: ConvertedResult[] = await convertImageObject(result);

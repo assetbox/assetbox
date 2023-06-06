@@ -59,7 +59,8 @@ interface ConvertedResult {
 }
 function getExtension(name: string) {
   const extension = name.slice(name.lastIndexOf("."));
-  if (name === ".svg") return "svg+xml";
+
+  if (extension === ".svg") return "svg+xml";
   return extension.slice(1);
 }
 function convertImageObject(imageObject: ImageObject): ConvertedResult[] {

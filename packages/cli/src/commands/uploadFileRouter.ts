@@ -7,16 +7,20 @@ import {
 import { type RequestHandler, Router } from "express";
 import fs from "fs";
 import multer from "multer";
+import path, { sep } from "path";
 
 export const uploadFileRouter = Router();
-const uploadAsset = (savePath: string) =>
+
+const uploadAsset = (savePath?: string) =>
   multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
-        if (!fs.existsSync(cwd() + savePath)) {
-          fs.mkdirSync(cwd() + savePath);
+        const resolvePath = [cwd(), req.body.savePath].join(sep);
+
+        if (!fs.existsSync(resolvePath)) {
+          fs.mkdirSync(resolvePath);
         }
-        cb(null, cwd() + savePath);
+        cb(null, resolvePath);
       },
       filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -26,17 +30,14 @@ const uploadAsset = (savePath: string) =>
 
 const uploadFile: RequestHandler = async (req, res) => {
   try {
-    const file: any = req.files;
-    // console.log(file);
-    /* 
-    md5 기반 해쉬 구하는 로직
-    */
+    const checkingPath = [cwd(), req.body.savePath, req.file?.originalname]
+      .filter(Boolean)
+      .join(path.sep);
+    if (!fs.existsSync(checkingPath)) {
+      res.status(400).json({ message: "Asset upload Failed" });
+    }
 
-    /*
-    중복 validation check 로직 구현
-    */
-
-    res.status(406).json({ message: "Asset uploaded successfully" });
+    res.status(201).json({ message: "Asset uploaded successfully" });
   } catch (e) {
     throw new Error("Asset upload Error" + e);
   }
@@ -100,11 +101,7 @@ const test: RequestHandler = async (req, res) => {
   }
 };
 
-uploadFileRouter.post(
-  "/",
-  uploadAsset("/.assetbox").array("assets"),
-  uploadFile
-);
+uploadFileRouter.post("/", uploadAsset().single("assets"), uploadFile);
 uploadFileRouter.post(
   "/validation",
   uploadAsset("/.assetbox").array("assets"),

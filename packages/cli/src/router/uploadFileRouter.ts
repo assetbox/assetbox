@@ -79,7 +79,7 @@ const convertImageObject = async (
     );
 
     const savePath = key;
-    const prefix = ["data:image", `${extension};base64`].join(sep);
+    const prefix = ["data:image", `${extension};base64, `].join(sep);
 
     const base64Image = [
       prefix,

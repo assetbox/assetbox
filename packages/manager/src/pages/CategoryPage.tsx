@@ -1,6 +1,5 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
-import axios from "axios";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,7 +14,7 @@ import { Input } from "../components/ui/Input";
 import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { useAssetBoxStore } from "../store";
-import { BlobData, cn, fileToBlob } from "../utils";
+import { BlobData, client, cn, fileToBlob } from "../utils";
 import { compareByName } from "../utils/sort";
 
 type AssetViewType = "Icons" | "Images" | "Animations";
@@ -73,13 +72,15 @@ const useFilterAsset = ({
 
 export const CategoryPage = () => {
   const { category } = useParams();
-
   const [filterOption, setFilterOption] = useState<FilterOption>(
     filterOptions[0]
   );
   const [assetType, setAssetType] = useState<AssetViewType>("Icons");
   const [search, setSearch] = useState("");
   const { usedFiles, folderTree } = useAssetBoxStore();
+
+  const blobRef = useRef<BlobData[]>([]);
+  const savePathRef = useRef<string>("");
 
   const assets = useFilterAsset({
     currentCategory: category,
@@ -114,8 +115,6 @@ export const CategoryPage = () => {
       openFolderSelector(files);
     },
   });
-  const blobRef = useRef<BlobData[]>([]);
-  const savePathRef = useRef<string>("");
 
   const saveFiles = async (files: AddedFiles[]) => {
     try {
@@ -130,15 +129,11 @@ export const CategoryPage = () => {
               if (blob) {
                 formData.append("assets", blob.blob, blob.filename);
               }
-              const saveResponse = await axios.post(
-                "http://localhost:6001/upload",
-                formData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                }
-              );
+              const saveResponse = await client.post("/upload", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              });
 
               if (saveResponse?.status !== 201) {
                 throw new Error("파일 저장 실패");
@@ -156,13 +151,6 @@ export const CategoryPage = () => {
       return true;
     } catch (e) {
       return false;
-    }
-  };
-  const openDupeModal = async (files: AddedFiles[]) => {
-    closeFolderSelector();
-
-    if (files.length > 0) {
-      openDupeFileSelector(files);
     }
   };
 
@@ -196,34 +184,36 @@ export const CategoryPage = () => {
         onClose={closeFolderSelector}
         folderTree={folderTree}
         onSave={async (path) => {
-          savePathRef.current = path;
-
           const formData = new FormData();
+
           formData.append("savePath", path);
+          savePathRef.current = path;
 
           blobRef.current.forEach((asset) => {
             formData.append("assets", asset.blob, asset.filename);
           });
 
-          const response = await axios.post(
-            "http://localhost:6001/upload/validation",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          const response = await client.post("/upload/validation", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
           const notDupeFiles: AddedFiles[] = response.data.filter(
             (item: AddedFiles) => item.dupePaths.length === 0
           );
+
           saveFiles(notDupeFiles);
 
           const dupeFiles = response.data.filter(
             (item: AddedFiles) => item.dupePaths.length > 0
           );
 
-          openDupeModal(dupeFiles);
+          closeFolderSelector();
+
+          if (dupeFiles.length > 0) {
+            openDupeFileSelector(dupeFiles);
+          }
         }}
       />
       <DupeModal

@@ -37,12 +37,12 @@ export const DupeModal = ({
   handleSaveFile,
 }: DupeModalProps) => {
   const [idx, setIdx] = useState(0);
-
   const [isAdded, setIsAdded] = useState<boolean[]>(() =>
     Array(data.length)
       .fill(0)
       .map(() => false)
   );
+
   const handleNext = () => {
     if (idx < data.length - 1) {
       setIdx(idx + 1);
@@ -52,6 +52,7 @@ export const DupeModal = ({
       setIdx(0);
     }
   };
+
   const handlePrev = () => {
     if (idx > 0) {
       setIdx(idx - 1);

@@ -7,7 +7,7 @@ import {
 import { type RequestHandler, Router } from "express";
 import fs from "fs";
 import multer from "multer";
-import { sep } from "path";
+import path from "path";
 
 export const uploadFileRouter = Router();
 
@@ -15,16 +15,19 @@ const uploadAsset = (savePath?: string) =>
   multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
-        const checkPath = [cwd(), savePath].join(sep);
+        const resolvePath = savePath
+          ? path.resolve(cwd(), savePath)
+          : req.body.savePath;
+
         if (typeof savePath == "undefined") {
           savePath = req.body.savePath;
         }
 
-        if (!fs.existsSync(checkPath)) {
+        if (!fs.existsSync(resolvePath)) {
           console.log("create dir");
-          fs.mkdirSync(checkPath);
+          fs.mkdirSync(resolvePath);
         }
-        cb(null, checkPath);
+        cb(null, resolvePath);
       },
       filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -54,7 +57,7 @@ interface ImageObject {
 interface ConvertedResult {
   savePath: string;
   base64Image: string;
-  path: string[];
+  dupePaths: string[];
 }
 function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
   const result: ConvertedResult[] = [];
@@ -64,12 +67,12 @@ function convertImageObject(imageObject: ImageObject): ConvertedResult[] {
     if (imageObject.hasOwnProperty(key)) {
       const savePath = key;
       const base64Image = "";
-      const path = imageObject[key];
+      const dupePaths = imageObject[key];
 
       result.push({
         savePath,
         base64Image,
-        path,
+        dupePaths,
       });
     }
   }

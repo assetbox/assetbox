@@ -28,10 +28,15 @@ export const staticBuild = async () => {
     resolveCliRoot("ssr", "templates", "index.html"),
     "utf-8"
   );
-  template = template.replace(
-    "<!--entry-client-outlet-->",
-    resolveCliRoot("ssr", "entryClient.mjs")
-  );
+  template = template
+    .replace(
+      "<!--css-outlet-->",
+      resolveCliRoot("ssr", "assets", "entryClient.css")
+    )
+    .replace(
+      "<!--entry-client-outlet-->",
+      resolveCliRoot("ssr", "entryClient.mjs")
+    );
   await writeFile(resolveCliRoot("ssr", "templates", "index.html"), template);
 
   await build({
@@ -45,7 +50,9 @@ export const staticBuild = async () => {
     ],
     publicDir: false,
     build: {
+      emptyOutDir: false,
       outDir: resolveProjectRoot(outDir),
+      chunkSizeWarningLimit: 1500,
     },
     define: {
       "process.env.BUILD": "true",

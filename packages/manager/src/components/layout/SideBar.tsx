@@ -77,7 +77,7 @@ const CoverageBar = ({
     <ProgressBar rate={coverage} className={className}>
       <div className="flex justify-between">
         <p className="text-xs">{name}</p>
-        <p className="text-xs">{coverage}%</p>
+        <p className="text-xs">{!Number.isNaN(coverage) ? coverage : 0}%</p>
       </div>
     </ProgressBar>
   );

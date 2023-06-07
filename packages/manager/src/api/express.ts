@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const express = axios.create({
-  baseURL: "http://localhost:6001",
+  baseURL: "/",
   headers: { Accept: "application/json" },
 });

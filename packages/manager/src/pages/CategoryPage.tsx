@@ -14,7 +14,7 @@ import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
 import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
-import { useAssetBoxStore } from "../store";
+import { syncAssetBox, useAssetBoxStore } from "../store";
 import { BlobData, cn, fileToBlob, makeFormData } from "../utils";
 import { compareByName } from "../utils/sort";
 
@@ -122,33 +122,36 @@ export const CategoryPage = () => {
   const saveFiles = async (files: AddedFiles[]) => {
     try {
       if (files.length > 0) {
-        files.forEach(async (path) => {
-          await toast.promise(
-            async () => {
-              const blobData = getBlobFromResponse(path.savePath);
-              const formData = makeFormData({
-                savePath: savePathRef.current,
-                assets: blobData,
-              });
+        await Promise.all(
+          files.map(async (path) => {
+            await toast.promise(
+              async () => {
+                const blobData = getBlobFromResponse(path.savePath);
+                const formData = makeFormData({
+                  savePath: savePathRef.current,
+                  assets: blobData,
+                });
 
-              const saveResponse = await express.post("/upload", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              });
+                const saveResponse = await express.post("/upload", formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                });
 
-              if (saveResponse?.status !== 201) {
-                throw new Error("Failed to save");
+                if (saveResponse?.status !== 201) {
+                  throw new Error("Failed to save");
+                }
+                return saveResponse;
+              },
+              {
+                pending: `Saving ${path.savePath} in progress`,
+                success: `${path.savePath} saved successfully`,
+                error: `Failed to save ${path.savePath}`,
               }
-              return saveResponse;
-            },
-            {
-              pending: `Saving ${path.savePath} in progress`,
-              success: `${path.savePath} saved successfully`,
-              error: `Failed to save ${path.savePath}`,
-            }
-          );
-        });
+            );
+          })
+        );
+        syncAssetBox();
       }
       return true;
     } catch (e) {
@@ -245,15 +248,16 @@ export const CategoryPage = () => {
             value={assetType}
             onValueChange={setAssetType as RadioGroupProps["onValueChange"]}
           >
-            <ButtonGroup.Button value={"Icons"} className="w-24 h-12">
+            <ButtonGroup.Button value="Icons" className="w-24 h-12">
               Icons
             </ButtonGroup.Button>
-            <ButtonGroup.Button value={"Images"} className="w-24 h-12">
+            <ButtonGroup.Button value="Images" className="w-24 h-12">
               Images
             </ButtonGroup.Button>
-            <ButtonGroup.Button value={"Animations"} className="w-24 h-12">
+            {/* support soon */}
+            {/* <ButtonGroup.Button value={"Animations"} className="w-24 h-12">
               Animations
-            </ButtonGroup.Button>
+            </ButtonGroup.Button> */}
           </ButtonGroup>
           {!isBuild ? (
             <>

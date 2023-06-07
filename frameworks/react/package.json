@@ -1,6 +1,6 @@
 {
   "name": "@assetbox/plugin-react-icon",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "exports": {
     "require": "./dist/index.cjs",
     "import": "./dist/index.mjs"

@@ -1,9 +1,10 @@
 {
   "name": "@assetbox/cli",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "module",
   "files": [
     "bin",
+    "src/export.ts",
     "package.json"
   ],
   "types": "./src/export.ts",

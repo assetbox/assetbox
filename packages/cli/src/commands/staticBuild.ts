@@ -1,5 +1,5 @@
 import { cwd, readAssetBoxConfig } from "@assetbox/tools";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import { readFile, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { sep } from "path";

@@ -1,5 +1,5 @@
-import "./input.css";
 import "react-toastify/dist/ReactToastify.css";
+import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -26,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           },
           usedFiles: {},
           dupeFiles: [],
+          folderTree: {},
         }}
       />
     </BrowserRouter>

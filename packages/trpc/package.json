@@ -4,19 +4,13 @@
   "version": "0.1.0",
   "description": "",
   "type": "module",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "package.json"
   ],
+  "types": "./src/index.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
-    }
-  },
-  "scripts": {
-    "build": "tsc && node esbuild.config.js"
+    ".": "./src/index.ts"
   },
   "keywords": [],
   "author": "",

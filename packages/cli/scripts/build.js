@@ -26,7 +26,6 @@ const cliBuild = () =>
     platform: "node",
     external: Object.keys({
       ...packageJson.dependencies,
-      ...packageJson.devDependencies,
     }),
     outfile: "./bin/main.cjs",
   });

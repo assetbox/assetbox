@@ -50,7 +50,7 @@
   "devDependencies": {
     "@assetbox/manager": "workspace:^",
     "@assetbox/tools": "workspace:^",
-    "@assetbox/trpc": "workspace:^1.0.0",
+    "@assetbox/trpc": "workspace:^",
     "@types/express": "^4.17.17",
     "@types/multer": "^1.4.7",
     "@types/node": "^18.15.3",

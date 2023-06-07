@@ -9,7 +9,7 @@
     }
   },
   "types": "./dist/index.d.ts",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "scripts": {
     "build": "tsc --emitDeclarationOnly && node esbuild.config.js",
     "test:type": "tsc --noEmit",

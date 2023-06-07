@@ -5,10 +5,10 @@ import {
   readAssetBoxConfig,
 } from "@assetbox/tools";
 import { type RequestHandler, Router } from "express";
-import fs from "fs";
-import { mkdir, readdir, readFile, rmdir } from "fs/promises";
+import { existsSync } from "fs";
+import { mkdir, readdir, readFile, rm } from "fs/promises";
 import multer from "multer";
-import path, { join, sep } from "path";
+import { join, resolve, sep } from "path";
 
 interface ImageObject {
   [key: string]: string[];
@@ -22,15 +22,17 @@ interface ConvertedResult {
 
 export const uploadFileRouter = Router();
 
+const tmpDir = resolve(cwd(), "node_modules", ".assetbox", "tmp");
+
 const uploadAsset = (savePath?: string) =>
   multer({
     storage: multer.diskStorage({
       destination: function (req, file, cb) {
         const resolvePath = savePath
-          ? join(cwd(), sep, savePath)
-          : join(cwd(), sep, req.body.savePath);
+          ? join(cwd(), savePath)
+          : join(cwd(), req.body.savePath);
 
-        if (!fs.existsSync(resolvePath)) {
+        if (!existsSync(resolvePath)) {
           mkdir(resolvePath);
         }
         cb(null, resolvePath);
@@ -45,9 +47,9 @@ const uploadFile: RequestHandler = async (req, res) => {
   try {
     const checkingPath = [cwd(), req.body.savePath, req.file?.originalname]
       .filter(Boolean)
-      .join(path.sep);
+      .join(sep);
 
-    if (!fs.existsSync(checkingPath)) {
+    if (!existsSync(checkingPath)) {
       res.status(400).json({ message: "Asset upload Failed" });
     }
 
@@ -69,69 +71,61 @@ const getExtension = (name: string) => {
 const convertImageObject = async (
   imageObject: ImageObject
 ): Promise<ConvertedResult[]> => {
-  const result: ConvertedResult[] = [];
+  const imageObjects: ConvertedResult[] = [];
 
   for (const key in imageObject) {
     const fileName = key.split(sep).pop()!;
 
-    const extension = getExtension(
-      path.join(cwd(), sep, ".assetbox", sep, fileName)
-    );
+    const extension = getExtension(join(tmpDir, fileName));
 
     const savePath = key;
     const prefix = ["data:image", `${extension};base64, `].join(sep);
 
     const base64Image = [
       prefix,
-      await readFile(path.join(cwd(), sep, ".assetbox", sep, fileName), {
+      await readFile(join(tmpDir, fileName), {
         encoding: "base64",
       }),
     ].join("");
 
     const dupePaths = imageObject[key];
 
-    result.push({
+    imageObjects.push({
       savePath,
       base64Image,
       dupePaths,
     });
   }
-  return result;
+  return imageObjects;
 };
 
 const getValidationInfo: RequestHandler = async (req, res) => {
   const { categories } = await readAssetBoxConfig();
+
   const assetFiles = Object.values(categories).flat();
+  const getAddedFiles = await readdir(tmpDir);
 
-  const getAddedFiles = await readdir(path.join(cwd(), sep, ".assetbox", sep));
+  const addedFileHashes = await Promise.all(
+    getAddedFiles.map(async (file) => {
+      return {
+        path: resolve(req.body.savePath, file),
+        hash: await createFileHash(join(tmpDir, file)),
+      };
+    })
+  );
 
-  const fileList = getAddedFiles.map(async (file: string) => {
-    const json = {
-      path: join(req.body.savePath, file),
-      hash: await createFileHash(path.join(cwd(), sep, ".assetbox", sep, file)),
-    };
-    return json;
-  });
+  const dupeFiles = await getDupeFiles(assetFiles, addedFileHashes);
+  const convertedResult: ConvertedResult[] = await convertImageObject(
+    dupeFiles
+  );
 
-  const result = await getDupeFiles(assetFiles, await Promise.all(fileList));
-  const convertedResult: ConvertedResult[] = await convertImageObject(result);
-
-  rmdir(path.join(cwd(), sep, ".assetbox"), { recursive: true });
+  rm(tmpDir, { recursive: true });
   res.status(201).json(convertedResult);
-};
-
-const test: RequestHandler = async (req, res) => {
-  try {
-    res.status(200).send("Asset upload Test");
-  } catch (e) {
-    throw new Error("Asset upload Test Error" + e);
-  }
 };
 
 uploadFileRouter.post("/", uploadAsset().single("assets"), uploadFile);
 uploadFileRouter.post(
   "/validation",
-  uploadAsset("/.assetbox").array("assets"),
+  uploadAsset(join("node_modules", ".assetbox", "tmp")).array("assets"),
   getValidationInfo
 );
-uploadFileRouter.get("/", test);

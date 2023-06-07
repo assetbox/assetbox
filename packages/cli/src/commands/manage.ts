@@ -21,6 +21,7 @@ export const manage = async (port?: number) => {
     define: {
       "process.env.BUILD": "false",
     },
+    cacheDir: "node_modules/.assetbox",
   });
   app.use(vite.middlewares);
 
@@ -40,6 +41,10 @@ export const manage = async (port?: number) => {
     try {
       let template = fs
         .readFileSync(resolveCliRoot("ssr", "templates", "index.html"), "utf-8")
+        .replace(
+          "<!--css-outlet-->",
+          resolveCliRoot("ssr", "assets", "entryClient.css")
+        )
         .replace(
           "<!--entry-client-outlet-->",
           resolveCliRoot("ssr", "entryClient.mjs")

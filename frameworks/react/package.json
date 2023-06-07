@@ -6,6 +6,15 @@
     "import": "./dist/index.mjs"
   },
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://assetbox.github.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/assetbox/assetbox.git"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "node esbuild.config.js"
   },

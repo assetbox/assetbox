@@ -184,7 +184,7 @@ importers:
         specifier: workspace:^
         version: link:../tools
       '@assetbox/trpc':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../trpc
       '@types/express':
         specifier: ^4.17.17

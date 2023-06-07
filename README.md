@@ -28,21 +28,21 @@
 - **pnpm**
 
 ```sh
-$ pnpm install @assetbox/cli @assetbox/manager -D
+$ pnpm install @assetbox/cli -D
 $ pnpm assetbox -v
 ```
 
 - **yarn**
 
 ```sh
-$ yarn add @assetbox/cli @assetbox/manager -D
+$ yarn add @assetbox/cli -D
 $ yarn assetbox -v
 ```
 
 - **npm**
 
 ```sh
-$ npm install @assetbox/cli @assetbox/manager --save-dev
+$ npm install @assetbox/cli --save-dev
 $ npm assetbox -v
 ```
 

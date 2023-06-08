@@ -40,21 +40,13 @@ export const readAssetBoxConfig: () => Promise<AssetBoxConfig> = async () => {
     throw new Error("Couldn't find assetbox.config.js.");
   }
 
-  const {
-    categories,
-    trackingPaths,
-    iconBuild = {
-      outDir: "dist",
-      plugins: [],
-    },
-    ...configs
-  }: AssetBoxScheme = value.config;
+  const { categories, trackingPaths, ...configs }: AssetBoxScheme =
+    value.config;
 
   return {
     configFilePath: value.filepath,
     trackingPaths: await findFilePathsFromGlob(trackingPaths),
     categories: await getCategoryFileList(categories),
-    iconBuild,
     ...configs,
   };
 };

@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "declaration": true,
+    "emitDeclarationOnly": true
+  },
+  "include": ["../tools/src/types.ts", "../../reset.d.ts"]
+}

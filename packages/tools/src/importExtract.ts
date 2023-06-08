@@ -5,7 +5,7 @@ import { cwd } from "./cwd";
 
 export type ExtractImport = {
   path: string;
-  codeDatas: {
+  codeData: {
     code: string;
     line: number;
     isReal: boolean;
@@ -16,7 +16,7 @@ const extractImportedFiles = async (
   assetFiles: string[],
   assetFileNames: string[],
   file: string
-) => {
+): Promise<ExtractImport[]> => {
   const fileContent = await readFile(file, "utf-8");
   const regex = new RegExp(
     assetFileNames
@@ -34,7 +34,7 @@ const extractImportedFiles = async (
       const lineNumber = lineRegex.findIndex((codeLine) =>
         codeLine.includes(match)
       );
-      const codeDatas = [lineNumber - 1, lineNumber, lineNumber + 1]
+      const codeData = [lineNumber - 1, lineNumber, lineNumber + 1]
         .filter((lineNumber) => lineRegex[lineNumber])
         .map((line) => ({
           code: lineRegex[line],
@@ -52,7 +52,7 @@ const extractImportedFiles = async (
 
           return {
             path: relative(cwd(), originPath),
-            codeDatas,
+            codeData,
           };
         }
         default:
@@ -65,7 +65,7 @@ const extractImportedFiles = async (
           }
           return {
             path: relative(cwd(), originPath),
-            codeDatas,
+            codeData,
           };
         }
       }
@@ -117,12 +117,15 @@ export const findImportFileSet = async (
       ),
     }))
   );
-  const importFileMap = importFiles.reduce((acc, curr) => {
-    return {
-      ...acc,
-      ...curr,
-    };
-  }, {});
+  const importFileMap = importFiles.reduce<Record<string, ExtractImport[]>>(
+    (acc, curr) => {
+      return {
+        ...acc,
+        ...curr,
+      };
+    },
+    {}
+  );
 
   return mapFileReferences(normalizeAssetFiles, importFileMap);
 };

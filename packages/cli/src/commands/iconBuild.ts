@@ -2,11 +2,12 @@ import { readAssetBoxConfig } from "@assetbox/tools";
 import pc from "picocolors";
 
 export const iconBuild = async () => {
-  const { iconBuild, ...context } = await readAssetBoxConfig();
+  const { iconBuild = {}, ...context } = await readAssetBoxConfig();
 
-  const plugins = iconBuild?.plugins ?? [];
+  iconBuild.outDir = iconBuild.outDir ?? "dist";
+  iconBuild.plugins = iconBuild.plugins ?? [];
 
-  for (const plugin of plugins) {
+  for (const plugin of iconBuild.plugins) {
     await plugin.build({
       iconBuild,
       ...context,

@@ -10,13 +10,9 @@ import { renderStaticHtml } from "../context/renderStaticHtml";
 import { resolveCliRoot, resolveProjectRoot } from "../utils/path";
 
 export const staticBuild = async () => {
-  const {
-    categories,
-    staticBuild = {
-      outDir: "assetbox-dist",
-    },
-  } = await readAssetBoxConfig();
-  const outDir = staticBuild.outDir!;
+  const { categories, staticBuild = {} } = await readAssetBoxConfig();
+
+  const outDir = staticBuild.outDir ?? "assetbox-dist";
 
   const assetFiles = Object.values(categories).flat();
 

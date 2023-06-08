@@ -1,8 +1,8 @@
 import fs from "fs/promises";
 import { resolve } from "path";
 import prompts from "prompts";
-import detent from "ts-dedent";
 import { findPackageRoot } from "workspace-tools";
+
 export const initialize = async () => {
   let trackingPath = "";
 
@@ -28,7 +28,10 @@ export const initialize = async () => {
 
   await fs.writeFile(
     resolve(packageRoot, "assetbox.config.cjs"),
-    detent`
+    `
+/**
+ * @type {import('@assetbox/cli').AssetBoxScheme}
+*/
 module.exports = {
   categories: {},
   trackingPaths: [${`"${trackingPath}"`}],

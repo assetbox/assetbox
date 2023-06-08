@@ -1,10 +1,10 @@
 {
   "name": "@assetbox/cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "files": [
     "bin",
-    "src/export.ts",
+    "dist",
     "package.json"
   ],
   "types": "./dist/types.d.ts",
@@ -12,7 +12,7 @@
     "assetbox": "./bin/main.cjs"
   },
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "node scripts/build.js && tsc --project tsconfig.build.json",
     "test:type": "tsc --noEmit"
   },
   "publishConfig": {

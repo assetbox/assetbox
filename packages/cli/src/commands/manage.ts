@@ -1,6 +1,7 @@
 import { readAssetBoxConfig } from "@assetbox/tools";
 import { appRouter } from "@assetbox/trpc";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
+import react from "@vitejs/plugin-react";
 import express from "express";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
@@ -15,6 +16,8 @@ export const manage = async (port?: number) => {
 
   const app = express();
   const vite = await createViteServer({
+    configFile: false,
+    plugins: [react()],
     server: { middlewareMode: true },
     appType: "custom",
     publicDir: false,

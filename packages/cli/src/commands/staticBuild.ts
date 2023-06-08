@@ -37,6 +37,7 @@ export const staticBuild = async () => {
 
   await build({
     root: resolveCliRoot("ssr", "templates"),
+    configFile: false,
     plugins: [
       react(),
       copy({

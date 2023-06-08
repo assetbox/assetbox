@@ -26,10 +26,6 @@ describe("readAssetBoxConfig Test", () => {
           ],
           Images: ["/test/normal/public/b.png", "/test/normal/public/a.png"],
         },
-        iconBuild: {
-          outDir: "dist",
-          plugins: [],
-        },
         configFilePath: "/test/normal/assetbox.config.json",
         trackingPaths: [
           "/test/normal/src/assets/icons/d.svg",
@@ -56,10 +52,6 @@ describe("readAssetBoxConfig Test", () => {
       const config = await readAssetBoxConfig();
       expect(config).toStrictEqual({
         categories: {},
-        iconBuild: {
-          outDir: "dist",
-          plugins: [],
-        },
         configFilePath: "/test/emptyConfig/assetbox.config.json",
         trackingPaths: [],
       });

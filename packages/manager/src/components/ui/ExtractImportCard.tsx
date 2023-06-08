@@ -19,7 +19,7 @@ const ExtractImportItem = ({
   data: ExtractImport;
 }) => {
   const [open, setOpen] = useState(false);
-  const code = data.codeDatas.map(({ code }) => code).join("\n");
+  const code = data.codeData.map(({ code }) => code).join("\n");
 
   return (
     <div className="flex flex-nowrap">
@@ -42,7 +42,7 @@ const ExtractImportItem = ({
         >
           <SyntaxHighlighter
             showLineNumbers
-            startingLineNumber={data.codeDatas[0].line + 1}
+            startingLineNumber={data.codeData[0].line + 1}
             style={tomorrow}
             wrapLines
             lineProps={(lineNumber) => {
@@ -50,7 +50,7 @@ const ExtractImportItem = ({
                 backgroundColor: "rgb(94 255 94 / 20%)",
               };
 
-              return data.codeDatas.some(
+              return data.codeData.some(
                 (code) => code.line === lineNumber - 1 && code.isReal
               )
                 ? { style }

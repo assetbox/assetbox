@@ -7,7 +7,7 @@
     "src/export.ts",
     "package.json"
   ],
-  "types": "./src/export.ts",
+  "types": "./dist/types.d.ts",
   "bin": {
     "assetbox": "./bin/main.cjs"
   },

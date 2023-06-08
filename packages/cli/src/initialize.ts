@@ -16,7 +16,7 @@ export const initialize = async () => {
   });
 
   if (isTrackingPathDefault) {
-    trackingPath = "./src/**/*.*";
+    trackingPath = "./src/**/*";
   } else {
     console.log("Please write assetbox.config.js yourself.");
   }
@@ -32,10 +32,12 @@ export const initialize = async () => {
 /**
  * @type {import('@assetbox/cli').AssetBoxScheme}
 */
-module.exports = {
+const config = {
   categories: {},
   trackingPaths: [${`"${trackingPath}"`}],
 };
+
+module.exports = config;
 `
   );
 };

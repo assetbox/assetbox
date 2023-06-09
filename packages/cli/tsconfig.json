@@ -10,5 +10,6 @@
       "@trpc/server": ["node_modules/@trpc/server"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

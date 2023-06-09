@@ -113,11 +113,16 @@ export const CategoryPage = () => {
     closeModal: closeDupeFileSelector,
   } = useModal<AddedFiles[]>();
 
-  const { isDrag, dragRef } = useFileUpload({
-    onDrop: (files) => {
-      openFolderSelector(files);
-    },
-  });
+  const { isDrag, dragRef } = !isBuild
+    ? useFileUpload({
+        onDrop: (files) => {
+          openFolderSelector(files);
+        },
+      })
+    : {
+        isDrag: false,
+        dragRef: null,
+      };
 
   const saveFiles = async (files: AddedFiles[]) => {
     try {

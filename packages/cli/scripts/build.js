@@ -20,8 +20,6 @@ const cliBuild = () =>
       }),
     ],
     bundle: true,
-    minify: true,
-    sourcemap: true,
     format: "cjs",
     platform: "node",
     external: Object.keys({
@@ -57,8 +55,6 @@ const managerBuild = async () => {
   await esbuild({
     entryPoints: ["./src/ssr/entryServer.tsx"],
     bundle: true,
-    minify: true,
-    sourcemap: true,
     format: "cjs",
     external: ["isomorphic-dompurify", "react", "react-router-dom"],
     platform: "node",

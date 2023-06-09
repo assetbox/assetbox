@@ -1,3 +1,5 @@
+import "cross-fetch/polyfill";
+
 import type { AssetBoxData } from "@assetbox/tools";
 import { useEffect, useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";

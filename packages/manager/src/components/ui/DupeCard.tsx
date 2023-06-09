@@ -74,10 +74,10 @@ const MultipleDeleteModal = ({
         </div>
 
         <div className="mb-5">
-          <p className="mb-3 text-base font-bold">Paths In Use</p>
+          <p className="mb-3 text-base font-bold">Used File Path</p>
           <ExtractImportCard
             data={pathsInUse}
-            fallback="There are no codes of concern."
+            fallback="Used File path not found."
             className="h-40 mb-4"
           />
           <Alert {...alertProps[pathsInUse.length === 0 ? "info" : "danger"]} />

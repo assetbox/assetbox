@@ -16,7 +16,6 @@ import { isBuild } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { syncAssetBox, useAssetBoxStore } from "../store";
 import { BlobData, cn, fileToBlob, makeFormData } from "../utils";
-import { compareByName } from "../utils/sort";
 
 type AssetViewType = "Icons" | "Images" | "Animations";
 type FilterOption = "All" | "Used" | "Not Used";
@@ -46,7 +45,21 @@ const useFilterAsset = ({
     if (!currentCategory || !categories[currentCategory]) return [];
 
     const sortedAssets = categories[currentCategory]
-      .sort(compareByName("ASC"))
+      .sort((a, b) => {
+        if (
+          usedFiles[a.filepath].length > 0 &&
+          usedFiles[b.filepath].length === 0
+        ) {
+          return -1;
+        } else if (
+          usedFiles[a.filepath].length === 0 &&
+          usedFiles[b.filepath].length > 0
+        ) {
+          return 1;
+        } else {
+          return a.filename.localeCompare(b.filename);
+        }
+      })
       .filter((asset) => asset.type === mapAssetType[assetType])
       .filter((asset) =>
         asset.filename.toLowerCase().includes(search.toLowerCase())
@@ -60,7 +73,7 @@ const useFilterAsset = ({
       }
       case "Not Used": {
         return sortedAssets.filter(
-          (asset) => usedFiles[asset.filepath]?.length == 0
+          (asset) => usedFiles[asset.filepath]?.length === 0
         );
       }
       default:
@@ -299,7 +312,7 @@ export const CategoryPage = () => {
           {assets?.map((asset: AssetStat) => (
             <AssetItem
               disabled={usedFiles[asset.filepath]?.length === 0}
-              key={`asset-${asset.filename}`}
+              key={`asset-${asset.filepath}`}
               asset={asset}
               {...(!isBuild && { onClick: () => openModal(asset) })}
             />

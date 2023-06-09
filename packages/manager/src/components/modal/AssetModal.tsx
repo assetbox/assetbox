@@ -129,7 +129,7 @@ export const AssetModal = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Modal.Panel className={"max-w-6xl p-7"}>
+      <Modal.Panel className="max-w-6xl p-7">
         {data ? (
           <div>
             <div className="flex gap-6 mb-9">
@@ -151,11 +151,11 @@ export const AssetModal = ({
                 <div className="mb-7">
                   <div className="flex items-center gap-2 mb-2">
                     <CodeIcon />
-                    <p className="text-sm font-bold">Used Code Path</p>
+                    <p className="text-sm font-bold">Used File Path</p>
                   </div>
                   <ExtractImportCard
                     data={usedFiles[data.filepath] ?? []}
-                    fallback="There are no codes of concern."
+                    fallback="Used File path not found."
                     className="h-48"
                   />
                 </div>
@@ -166,7 +166,7 @@ export const AssetModal = ({
                   </div>
 
                   <div className="px-5 py-6 rounded bg-gray-light">
-                    <InfoItem label="File Name">{data.filename}</InfoItem>
+                    <InfoItem label="File Name">{data.filepath}</InfoItem>
                     <InfoItem label="Used Count">
                       {usedFiles[data.filepath]?.length}
                     </InfoItem>

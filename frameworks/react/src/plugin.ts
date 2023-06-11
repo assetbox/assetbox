@@ -44,6 +44,8 @@ const buildSvg = async ({
           icon: true,
           ref: true,
           titleProp: true,
+          exportType: "named",
+          namedExport: componentName,
           plugins: ["@svgr/plugin-jsx"],
         },
         { componentName }
@@ -93,20 +95,18 @@ const buildSvg = async ({
         });
       }
 
-      const esmCodePath = join(esmPath, `${componentName}.mjs`);
+      const esmCodePath = join(esmPath, `${componentName}.js`);
       const cjsCodePath = join(cjsPath, `${componentName}.cjs`);
 
       await Promise.all([
-        writeFile(
-          join(esmPath, `${componentName}.mjs`),
-          transformESM.code
-        ).then(() =>
-          console.log(
-            "Processing (ESM)",
-            pc.yellow(`${relative(cwd(), filePath)}`),
-            " => ",
-            pc.green(join(outDir, "esm", `${componentName}.mjs`))
-          )
+        writeFile(join(esmPath, `${componentName}.js`), transformESM.code).then(
+          () =>
+            console.log(
+              "Processing (ESM)",
+              pc.yellow(`${relative(cwd(), filePath)}`),
+              " => ",
+              pc.green(join(outDir, "esm", `${componentName}.js`))
+            )
         ),
         writeFile(
           join(cjsPath, `${componentName}.cjs`),
@@ -143,14 +143,17 @@ export const react = (): IconBuildPlugin => ({
       })
     );
 
-    const directories = await getAllDirectoriesRecursive(
-      resolve(cwd(), outDir)
+    const directories = (
+      await getAllDirectoriesRecursive(resolve(cwd(), outDir))
+    ).filter(
+      (directory) => !["esm", "cjs"].some((format) => format === directory)
     );
+
     const indexFilePaths = directories.map((directory) => {
       if (directory.includes("cjs")) {
         return resolve(cwd(), outDir, directory, "index.cjs");
       }
-      return resolve(cwd(), outDir, directory, "index.mjs");
+      return resolve(cwd(), outDir, directory, "index.js");
     });
 
     for (const indexFilePath of indexFilePaths) {
@@ -169,6 +172,7 @@ export const react = (): IconBuildPlugin => ({
         .filter(Boolean)
         .join("\n");
 
+      // TODO: support require("icon.cjs")
       if (indexFilePath.includes("cjs")) {
         const indexContextCJS = await transformAsync(indexContent, {
           plugins: [[require("@babel/plugin-transform-modules-commonjs")]],

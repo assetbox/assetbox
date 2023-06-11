@@ -44,13 +44,10 @@ export const manage = async (port?: number) => {
     try {
       let template = fs
         .readFileSync(resolveCliRoot("ssr", "templates", "index.html"), "utf-8")
-        .replace(
-          "<!--css-outlet-->",
-          resolveCliRoot("ssr", "assets", "entryClient.css")
-        )
+        .replace("<!--css-outlet-->", resolveCliRoot("ssr", "style.css"))
         .replace(
           "<!--entry-client-outlet-->",
-          resolveCliRoot("ssr", "entryClient.mjs")
+          resolveCliRoot("ssr", "entryClient.js")
         );
       template = await vite.transformIndexHtml(url, template);
 

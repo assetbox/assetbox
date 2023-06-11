@@ -53,13 +53,13 @@ const useFilterAsset = ({
           return 0;
         }
         if (
-          usedFiles[a.filepath].length > 0 &&
-          usedFiles[b.filepath].length === 0
+          usedFiles[a.filepath]?.length > 0 &&
+          usedFiles[b.filepath]?.length === 0
         ) {
           return -1;
         } else if (
-          usedFiles[a.filepath].length === 0 &&
-          usedFiles[b.filepath].length > 0
+          usedFiles[a.filepath]?.length === 0 &&
+          usedFiles[b.filepath]?.length > 0
         ) {
           return 1;
         } else {

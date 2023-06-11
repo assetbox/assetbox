@@ -25,13 +25,10 @@ export const staticBuild = async () => {
     "utf-8"
   );
   template = template
-    .replace(
-      "<!--css-outlet-->",
-      resolveCliRoot("ssr", "assets", "entryClient.css")
-    )
+    .replace("<!--css-outlet-->", resolveCliRoot("ssr", "style.css"))
     .replace(
       "<!--entry-client-outlet-->",
-      resolveCliRoot("ssr", "entryClient.mjs")
+      resolveCliRoot("ssr", "entryClient.js")
     );
   await writeFile(resolveCliRoot("ssr", "templates", "index.html"), template);
 

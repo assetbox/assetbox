@@ -37,15 +37,12 @@ const managerBuild = async () => {
       }),
     ],
     build: {
-      rollupOptions: {
-        input: "./src/ssr/entryClient.tsx",
-        output: {
-          dir: "bin/ssr",
-          assetFileNames: "assets/[name].[ext]",
-          entryFileNames: "entryClient.mjs",
-          format: "esm",
-        },
+      lib: {
+        entry: "./src/ssr/entryClient.tsx",
+        formats: ["es"],
+        fileName: "entryClient",
       },
+      outDir: "./bin/ssr",
     },
     define: {
       "process.env": "process.env",

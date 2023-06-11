@@ -1,3 +1,4 @@
+import "react-toastify/dist/ReactToastify.css";
 import "@assetbox/manager/dist/index.css";
 
 import { App } from "@assetbox/manager";

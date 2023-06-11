@@ -13,6 +13,7 @@ export const staticBuild = async () => {
   const { categories, staticBuild = {} } = await readAssetBoxConfig();
 
   const outDir = staticBuild.outDir ?? "assetbox-dist";
+  const base = staticBuild.base ?? "/";
 
   const assetFiles = Object.values(categories).flat();
 
@@ -34,6 +35,7 @@ export const staticBuild = async () => {
 
   await build({
     root: resolveCliRoot("ssr", "templates"),
+    base,
     configFile: false,
     plugins: [
       react(),

@@ -10,6 +10,7 @@ export type AssetBoxScheme = {
   trackingPaths: string[];
   staticBuild?: {
     outDir?: string;
+    base?: string;
   };
   iconBuild?: {
     outDir?: string;

@@ -9,7 +9,7 @@
     "preinstall": "npx only-allow pnpm",
     "test:type": "turbo test:type",
     "build": "turbo build --filter='./packages/*' --filter='./frameworks/*'",
-    "lint": "eslint . --ext .ts,.tsx,.js,.json --fix",
+    "lint": "eslint . --ext .ts,.tsx --fix",
     "test": "turbo test --filter='./packages/*'"
   },
   "devDependencies": {

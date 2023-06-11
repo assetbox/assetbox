@@ -1,3 +1,6 @@
-dist
+dist/
+bin/
 packages/tools/__mocks__/
-docs
+node_modules/
+.assetbox/
+.turbo/

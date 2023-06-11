@@ -5,10 +5,9 @@ import { client } from "../api";
 
 interface AssetBoxStore extends AssetBoxData {
   isLoaded: boolean;
-  appendCategories: (categoryName: string, category: AssetStat) => void;
 }
 
-export const useAssetBoxStore = create<AssetBoxStore>((set, get) => ({
+export const useAssetBoxStore = create<AssetBoxStore>(() => ({
   categories: {},
   usedFiles: {},
   dupeFiles: [],
@@ -22,16 +21,6 @@ export const useAssetBoxStore = create<AssetBoxStore>((set, get) => ({
   },
   folderTree: {},
   isLoaded: false,
-  appendCategories: (categoryName: string, category: AssetStat) => {
-    const { categories } = get();
-
-    set({
-      categories: {
-        ...categories,
-        [categoryName]: [...categories[categoryName], category],
-      },
-    });
-  },
 }));
 
 export const syncAssetBox = async () => {

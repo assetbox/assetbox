@@ -39,13 +39,19 @@ const useFilterAsset = ({
   assetType: AssetViewType;
   search: string;
 }) => {
-  const { categories, usedFiles } = useAssetBoxStore();
+  const { categories, usedFiles, isLoaded } = useAssetBoxStore();
 
   return useMemo(() => {
-    if (!currentCategory || !categories[currentCategory]) return [];
+    if (!currentCategory || !categories[currentCategory]) {
+      return [];
+    }
 
     const sortedAssets = categories[currentCategory]
       .sort((a, b) => {
+        // TODO: isLoaded support <suspense />
+        if (!isLoaded) {
+          return 0;
+        }
         if (
           usedFiles[a.filepath].length > 0 &&
           usedFiles[b.filepath].length === 0

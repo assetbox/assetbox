@@ -40,8 +40,11 @@ export const readAssetBoxConfig: () => Promise<AssetBoxConfig> = async () => {
     throw new Error("Couldn't find assetbox.config.js.");
   }
 
-  const { categories, trackingPaths, ...configs }: AssetBoxScheme =
-    value.config;
+  const {
+    categories = {},
+    trackingPaths = [],
+    ...configs
+  }: AssetBoxScheme = value.config;
 
   return {
     configFilePath: value.filepath,

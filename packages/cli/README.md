@@ -13,15 +13,16 @@
     Static analysis also tracks where the asset is being used.
   </p>
   
-  [Visit Docs](https://assetbox.github.io)
+  [Visit Docs](https://assetbox.github.io)  
+  [Demo](https://github.com/assetbox/demo)
   
 </div>
 
 * [Installation](#Installation)  
-* [Getting Started for manage](#Getting-Started-for-manage)  
-* [Static Build](#Static-Build)
-* [Coverage](#Coverage) 
-* [How does it work?](#How-does-it-work?)
+* [Manage](#Manage) 
+* [Static Build](#Static-Build) 
+* [Icon Build](#Icon-Build) 
+* [Contributor Guide](#Contributor-Guide) 
 
 ## Installation
 
@@ -46,48 +47,13 @@ $ npm install @assetbox/cli --save-dev
 $ npm assetbox -v
 ```
 
-## Getting Started for manage
+## Manage
+The local management server runs.
+You can check if the asset that exists in the project is being used or duplicated.
 
-Create config file
-```sh
-$ pnpm assetbox init # (or yarn or npm)
-```
+[Getting Started](https://assetbox.github.io/docs/getting-started)  
+[Duplicated Assets Guide](https://assetbox.github.io/docs/category/duplicated-assets-guide)  
 
-**Assume that you have the following folder structures.**
-* src
-  * assets/icons
-    * heart.svg
-    * fill-heart.svg
-    * ...
-  * assets/images
-    * background.png
-    * background.jpeg
-    * ...
-  * assets/animations
-    * person.json (lottie)
-    * ...
-  * ...
-
-
-* **assetbox.config.cjs**
-```js
-/**
- * @type {import('@assetbox/cli').AssetBoxScheme}
- */
-const config = {
-  categories: {
-    Icons: ["./src/assets/icons/**/*"],
-    Images: ["./public/images/**/*"],
-  },
-  trackingPaths: ["./src/**/*"],
-};
-
-module.exports = config;
-```
-
-```sh
-$ pnpm assetbox manage
-```
 
 ## Static Build
 Create a static file in the `assetbox.config.cjs` file based on the `category`.
@@ -96,31 +62,17 @@ Build output folder is `assetbox-dist`
 In this case, the administrative portion is lost and replaced with read-only.
 Can be used as an icon viewer
 
-```sh
-$ pnpm assetbox static-build 
-```
-
-## Coverage
-<img width="234" alt="image" src="https://github.com/assetbox/assetbox/assets/41789633/c98eaeda-079a-424b-bdfc-487a6aac5fdf">
-
-`Used Coverage` quantifies whether all assets are used.  
-* (Used assets count / All assets count)  
-  
-`Unique Coverage` quantifies whether all assets have no duplicates.  
-* ((All assets count - Duplicated assets count) / All assets count)  
+[Static Build Demo](https://assetbox.github.io/demo)  
+[Static Build Guide](https://assetbox.github.io/docs/static-build)    
 
 
-## How does it work?
+## Icon Build
+Transfiles SVG files to component code for SVG code sharing.
 
-### How does where an asset is being used work?
-Search for all strings `"`, `'` with a regular expression and match them with the paths to the assets in the assetbox. 
+You can create an common icon library by using Monorepo or by distributing it to npm.
 
-For example
-```js
-import Example from "../../example.svg";
-```
-
-Finds `"../../example.svg"`, converts it to a relative path, and matches it with the paths of the assets in the assetbox. 
+[Icon Build Demo](https://www.npmjs.com/package/@assetbox/demo?activeTab=code)  
+[Icon Build Guide](https://assetbox.github.io/docs/icon-build)  
 
 
 ## Contributor Guide

@@ -5,8 +5,8 @@
   
   [![NPM](https://img.shields.io/npm/v/@assetbox/cli)](https://www.npmjs.com/package/@assetbox/cli)
   
-  <img width="1419" alt="image" src="https://github.com/assetbox/assetbox/assets/41789633/b6458ff1-f5a5-4f74-984d-f80b9dac83c2">
-
+  <img width="1419" alt="image" src="https://github.com/assetbox/assetbox/assets/41789633/9a3a72a2-52ee-4e22-a2e6-ab80fab64cf9">
+  
   <p>
     Visualizes and manages icon and image files within your frontend project.
     <br />

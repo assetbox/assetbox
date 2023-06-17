@@ -129,7 +129,7 @@ export const compileDts = (
 
   host.readFile = (fileName: string, ...args) => {
     if (sourceMap[fileName]) {
-      return sourceMap[fileName].componentCode.esm;
+      return sourceMap[fileName].componentCode.typescript;
     }
     return originReadFile(fileName, ...args);
   };

@@ -2,5 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["DOM", "ESNext"]
-  }
+  },
+  "include": ["./src", "../../reset.d.ts"],
+  "exclude": ["node_modules"]
 }

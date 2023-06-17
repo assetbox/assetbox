@@ -13,7 +13,4 @@ export const iconBuild = async () => {
       ...context,
     });
   }
-
-  console.log();
-  console.log(pc.green("Icon Build complete."));
 };

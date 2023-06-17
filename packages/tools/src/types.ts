@@ -13,7 +13,6 @@ export type AssetBoxScheme = {
     base?: string;
   };
   iconBuild?: {
-    outDir?: string;
     plugins?: IconBuildPlugin[];
   };
   port?: number;

@@ -11,8 +11,11 @@ const config = {
   },
   trackingPaths: ["./src/**/*"],
   iconBuild: {
-    plugins: [react()],
-    outDir: "./icon-dist",
+    plugins: [
+      react({
+        outDir: "icon-dist",
+      }),
+    ],
   },
 };
 

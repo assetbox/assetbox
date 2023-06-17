@@ -14,11 +14,17 @@ import {
 } from "./core";
 import { pipe } from "./utils";
 
-export const react = (): IconBuildPlugin => ({
-  name: "react-icon",
-  build: async ({ categories, iconBuild }) => {
-    const outDir = iconBuild!.outDir!;
+export type ReactPluginOptions = {
+  outDir: string;
+};
 
+export const react = (
+  { outDir }: ReactPluginOptions = {
+    outDir: "dist",
+  }
+): IconBuildPlugin => ({
+  name: "react-icon",
+  build: async ({ categories }) => {
     const progress = new cliProgress.SingleBar(
       {
         format: " {bar} | {task} | {value}/{total}",

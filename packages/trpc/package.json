@@ -1,7 +1,6 @@
 {
   "name": "@assetbox/trpc",
   "private": true,
-  "version": "0.0.0",
   "description": "",
   "type": "module",
   "files": [

@@ -1,7 +1,6 @@
 {
   "name": "@assetbox/root",
   "type": "module",
-  "version": "0.0.0",
   "description": "Assets (svg, img, etc.) management tools to help you develop the web",
   "license": "MIT",
   "scripts": {

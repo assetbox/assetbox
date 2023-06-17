@@ -53,7 +53,6 @@ export const createMockRepository = (
       "./package.json": detent`
       {
         "name": "test",
-        "version": "0.1.0",
       }`,
       "./pnpm-lock.yaml": ``,
     },

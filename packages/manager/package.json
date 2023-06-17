@@ -1,7 +1,6 @@
 {
   "name": "@assetbox/manager",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "types": "./src/entry.ts",
   "exports": {

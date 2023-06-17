@@ -10,7 +10,7 @@ export type GetAssetBoxOptions = {
 };
 
 export const getAssetBoxData = async (options?: GetAssetBoxOptions) => {
-  const { categories, trackingPaths } = await readAssetBoxConfig();
+  const { categories, trackingPaths, staticBuild } = await readAssetBoxConfig();
 
   const categoryStats = await getCategoryStats(categories);
 
@@ -27,6 +27,7 @@ export const getAssetBoxData = async (options?: GetAssetBoxOptions) => {
 
   if (options?.onlyCategories) {
     return {
+      base: staticBuild?.base ?? "/",
       categories: categoryStats,
       usedFiles: {},
       usedCoverage: {
@@ -43,6 +44,7 @@ export const getAssetBoxData = async (options?: GetAssetBoxOptions) => {
   }
 
   return {
+    base: staticBuild?.base ?? "/",
     categories: categoryStats,
     usedFiles,
     usedCoverage: {

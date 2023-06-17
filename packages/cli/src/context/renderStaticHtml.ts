@@ -5,6 +5,7 @@ import { resolveCliRoot } from "../utils/path";
 
 export const renderStaticHtml = async (
   template: string,
+  base: string,
   url: string,
   options?: GetAssetBoxOptions
 ) => {
@@ -13,7 +14,7 @@ export const renderStaticHtml = async (
   const ssrData = await getAssetBoxData(options);
 
   const { render } = await import(entryServerModulePath);
-  const appHtml = await render(url, ssrData);
+  const appHtml = await render(base, url, ssrData);
 
   return template
     .replace("<!--ssr-outlet-->", appHtml)

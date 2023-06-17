@@ -26,12 +26,9 @@ export const getComponentNamesFromFilePaths = (
         return null;
       }
 
-      const componentName = [
-        camelCase(fileNameTokens[0], {
-          pascalCase: true,
-        }),
-        "Icon",
-      ].join("");
+      const componentName = camelCase(fileNameTokens[0], {
+        pascalCase: true,
+      });
 
       return {
         categoryName: categoryName.toLocaleLowerCase(),
@@ -113,10 +110,10 @@ export const compileDts = (
     emitDeclarationOnly: true,
   };
   const sourceMap = sources.reduce<Record<string, (typeof sources)[0]>>(
-    (acc, source) => {
-      acc[`${source.componentName}.ts`] = source;
-      return acc;
-    },
+    (acc, source) => ({
+      ...acc,
+      [`${source.categoryName}/${source.componentName}.ts`]: source,
+    }),
     {}
   );
 
@@ -152,7 +149,6 @@ export const saveComponents =
     ];
 
     const categoryPaths = [];
-
     for (const categoryName of categoryNames) {
       const path = {
         esm: resolve(cwd(), outDir, "esm", categoryName),
@@ -212,6 +208,7 @@ export const saveComponents =
         };
       })
     );
+
     return { components: componentsWithSavePath, categoryPaths };
   };
 
@@ -244,9 +241,7 @@ export const indexTemplate = async ({
           .filter((component) =>
             indexPath.types.includes(component.categoryName)
           )
-          .map(
-            (component) => `export * from './${component.componentName}.d.ts';`
-          )
+          .map((component) => `export * from './${component.componentName}';`)
           .join("\n"),
       };
 

@@ -11,6 +11,7 @@ export type AssetBoxScheme = {
   staticBuild?: {
     outDir?: string;
     base?: string;
+    mode?: "library" | "app";
   };
   iconBuild?: {
     plugins?: IconBuildPlugin[];
@@ -54,6 +55,7 @@ export interface AssetBoxData {
     totalCount: number;
   };
   folderTree: FolderTree;
+  base: string;
 }
 
 export type FolderTree = {

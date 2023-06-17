@@ -23,6 +23,7 @@ export const manage = async (port?: number) => {
     publicDir: false,
     define: {
       "process.env.BUILD": "false",
+      "process.env.MODE": "'app'",
     },
     cacheDir: "node_modules/.assetbox",
   });
@@ -51,7 +52,7 @@ export const manage = async (port?: number) => {
         );
       template = await vite.transformIndexHtml(url, template);
 
-      const html = await renderStaticHtml(template, url);
+      const html = await renderStaticHtml(template, "/", url);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       vite.ssrFixStacktrace(e as any);

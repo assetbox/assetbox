@@ -14,6 +14,7 @@ export const staticBuild = async () => {
 
   const outDir = staticBuild.outDir ?? "assetbox-dist";
   const base = staticBuild.base ?? "/";
+  const mode = staticBuild.mode ?? "app";
 
   const assetFiles = Object.values(categories).flat();
 
@@ -52,13 +53,17 @@ export const staticBuild = async () => {
     },
     define: {
       "process.env.BUILD": "true",
+      "process.env.MODE": `'${mode}'`,
     },
   });
 
   global.process.env.BUILD = "true";
+  global.process.env.BUILD = `'${mode}'`;
 
   template = await readFile(resolveProjectRoot(outDir, "index.html"), "utf-8");
-  const html = await renderStaticHtml(template, "/", { onlyCategories: true });
+  const html = await renderStaticHtml(template, base, "/", {
+    onlyCategories: true,
+  });
   const staticHtml = normalizeFilePaths.reduce((originHtml, filePath) => {
     const filename = filePath.split(sep).pop();
     if (!filename) {

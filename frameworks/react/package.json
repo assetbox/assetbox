@@ -46,5 +46,8 @@
     "@types/prompts": "^2.4.3",
     "camelcase": "^7.0.1",
     "esbuild": "^0.17.19"
+  },
+  "peerDependencies": {
+    "@types/react": "*"
   }
 }

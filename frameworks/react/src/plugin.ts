@@ -53,7 +53,7 @@ export const react = (
       .then(getComponentNamesFromCategories)
       .then(updateProgress("Convert to React Component"))
       .then(convertToReactComponent)
-      .then(updateProgress("Compile Dts"))
+      .then(updateProgress("Compile d.ts"))
       .then(compileDts)
       .then(updateProgress("Save Components"))
       .then(saveComponents(outDir))
@@ -65,9 +65,9 @@ export const react = (
         const exportsField = categoryPaths
           .map((categoryPath) => ({
             [`./${categoryPath.categoryName}`]: {
-              types: `./${relative(cwd(), categoryPath.types)}`,
-              import: `./${relative(cwd(), categoryPath.esm)}`,
-              require: `./${relative(cwd(), categoryPath.cjs)}`,
+              types: `./${relative(cwd(), categoryPath.types)}/index.d.ts`,
+              import: `./${relative(cwd(), categoryPath.esm)}/index.js`,
+              require: `./${relative(cwd(), categoryPath.cjs)}/index.cjs`,
             },
           }))
           .reduce((acc, cur) => ({ ...acc, ...cur }), {});

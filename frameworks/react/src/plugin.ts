@@ -1,193 +1,109 @@
-import {
-  cwd,
-  getAllDirectoriesRecursive,
-  type IconBuildPlugin,
-} from "@assetbox/tools";
-import { transformAsync } from "@babel/core";
-import { transform } from "@svgr/core";
-import camelCase from "camelcase";
-import { existsSync } from "fs";
-import { mkdir, readdir, readFile, writeFile } from "fs/promises";
-import { join, relative, resolve, sep } from "path";
+import { cwd, type IconBuildPlugin } from "@assetbox/tools";
+import cliProgress from "cli-progress";
+import { readFile, writeFile } from "fs/promises";
+import { relative } from "path";
 import pc from "picocolors";
+import prompts from "prompts";
 
-const buildSvg = async ({
-  outDir,
-  categoryName,
-  filePaths,
-}: {
-  outDir: string;
-  categoryName: string;
-  filePaths: string[];
-}) => {
-  const generatedPaths = await Promise.all(
-    filePaths.map(async (filePath) => {
-      const extension = filePath.split(".").pop();
-      if (extension && !["svg"].includes(extension)) {
-        return [];
-      }
-
-      const filename = filePath.split(sep).pop()?.split(".").shift();
-
-      const componentName = [
-        camelCase(filename!, {
-          pascalCase: true,
-        }),
-        "Icon",
-      ].join("");
-
-      const svg = await readFile(resolve(filePath), "utf-8");
-
-      const component = await transform(
-        svg,
-        {
-          icon: true,
-          ref: true,
-          titleProp: true,
-          exportType: "named",
-          namedExport: componentName,
-          plugins: ["@svgr/plugin-jsx"],
-        },
-        { componentName }
-      );
-
-      const transformESM = await transformAsync(component, {
-        plugins: [[require("@babel/plugin-transform-react-jsx")]],
-      });
-
-      if (!transformESM || !transformESM.code) {
-        throw new Error(
-          `'${filePath}' @babel/plugin-transform-react-jsx failed`
-        );
-      }
-
-      const transformCJS = await transformAsync(transformESM.code, {
-        plugins: [[require("@babel/plugin-transform-modules-commonjs")]],
-      });
-
-      if (!transformCJS || !transformCJS.code) {
-        throw new Error(
-          `'${filePath}' @babel/plugin-transform-react-jsx failed`
-        );
-      }
-
-      const esmPath = resolve(
-        cwd(),
-        outDir,
-        "esm",
-        categoryName.toLocaleLowerCase()
-      );
-      const cjsPath = resolve(
-        cwd(),
-        outDir,
-        "cjs",
-        categoryName.toLocaleLowerCase()
-      );
-
-      if (!existsSync(esmPath)) {
-        await mkdir(esmPath, {
-          recursive: true,
-        });
-      }
-      if (!existsSync(cjsPath)) {
-        await mkdir(cjsPath, {
-          recursive: true,
-        });
-      }
-
-      const esmCodePath = join(esmPath, `${componentName}.js`);
-      const cjsCodePath = join(cjsPath, `${componentName}.cjs`);
-
-      await Promise.all([
-        writeFile(join(esmPath, `${componentName}.js`), transformESM.code).then(
-          () =>
-            console.log(
-              "Processing (ESM)",
-              pc.yellow(`${relative(cwd(), filePath)}`),
-              " => ",
-              pc.green(join(outDir, "esm", `${componentName}.js`))
-            )
-        ),
-        writeFile(
-          join(cjsPath, `${componentName}.cjs`),
-          transformCJS.code
-        ).then(() =>
-          console.log(
-            "Processing (CJS)",
-            pc.yellow(`${relative(cwd(), filePath)}`),
-            " => ",
-            pc.green(join(outDir, "cjs", `${componentName}.cjs`))
-          )
-        ),
-      ]);
-
-      return [esmCodePath, cjsCodePath];
-    })
-  );
-
-  return generatedPaths.flat();
-};
+import {
+  compileDts,
+  convertToReactComponent,
+  getComponentNamesFromCategories,
+  indexTemplate,
+  saveComponents,
+} from "./core";
+import { pipe } from "./utils";
 
 export const react = (): IconBuildPlugin => ({
   name: "react-icon",
   build: async ({ categories, iconBuild }) => {
     const outDir = iconBuild!.outDir!;
 
-    await Promise.all(
-      Object.entries(categories).map(async ([categoryName, filePaths]) => {
-        return buildSvg({
-          outDir,
-          categoryName,
-          filePaths,
-        });
-      })
+    const progress = new cliProgress.SingleBar(
+      {
+        format: " {bar} | {task} | {value}/{total}",
+      },
+      cliProgress.Presets.shades_classic
     );
 
-    const directories = (
-      await getAllDirectoriesRecursive(resolve(cwd(), outDir))
-    ).filter(
-      (directory) => !["esm", "cjs"].some((format) => format === directory)
-    );
-
-    const indexFilePaths = directories.map((directory) => {
-      if (directory.includes("cjs")) {
-        return resolve(cwd(), outDir, directory, "index.cjs");
-      }
-      return resolve(cwd(), outDir, directory, "index.js");
-    });
-
-    for (const indexFilePath of indexFilePaths) {
-      const root = indexFilePath.split(sep).slice(0, -1).join(sep);
-      const iconPaths = await readdir(root);
-
-      const indexContent = iconPaths
-        .map((iconPath) => {
-          const [filename] = iconPath.split(".");
-          if (filename === "index") {
-            return null;
-          }
-
-          return `export * from "./${filename}"`;
-        })
-        .filter(Boolean)
-        .join("\n");
-
-      // TODO: support require("icon.cjs")
-      if (indexFilePath.includes("cjs")) {
-        const indexContextCJS = await transformAsync(indexContent, {
-          plugins: [[require("@babel/plugin-transform-modules-commonjs")]],
+    const startProgress =
+      (task: string) =>
+      async <T>(value: T) => {
+        progress.start(4, 0, {
+          task,
         });
+        return value;
+      };
 
-        if (!indexContextCJS?.code) {
-          throw new Error(
-            `'${indexFilePath}' @babel/plugin-transform-modules-commonjs failed`
-          );
+    const updateProgress = (task: string) => {
+      return async <T>(value: T) => {
+        progress.increment({ task });
+        return value;
+      };
+    };
+
+    await pipe(categories)
+      .then(startProgress("Get Component Names From Categories"))
+      .then(getComponentNamesFromCategories)
+      .then(updateProgress("Convert to React Component"))
+      .then(convertToReactComponent)
+      .then(updateProgress("Compile Dts"))
+      .then(compileDts)
+      .then(updateProgress("Save Components"))
+      .then(saveComponents(outDir))
+      .then(updateProgress("Generate Index"))
+      .then(indexTemplate)
+      .then(async (categoryPaths) => {
+        progress.stop();
+
+        const exportsField = categoryPaths
+          .map((categoryPath) => ({
+            [`./${categoryPath.categoryName}`]: {
+              types: `./${relative(cwd(), categoryPath.types)}`,
+              import: `./${relative(cwd(), categoryPath.esm)}`,
+              require: `./${relative(cwd(), categoryPath.cjs)}`,
+            },
+          }))
+          .reduce((acc, cur) => ({ ...acc, ...cur }), {});
+
+        console.log(pc.green("Icon Build complete."));
+        console.log();
+        console.log(pc.green("Please write the output on `package.json`"));
+        console.log(
+          JSON.stringify(
+            {
+              files: [relative(cwd(), outDir), "package.json"],
+              exports: exportsField,
+            },
+            null,
+            2
+          )
+        );
+
+        const { shouldChange } = await prompts({
+          type: "confirm",
+          name: "shouldChange",
+          message: "Can you change your package.json?",
+          initial: true,
+        });
+        if (shouldChange) {
+          const packageJson = JSON.parse(
+            await readFile("package.json", "utf-8")
+          ) as Record<string, any>;
+
+          packageJson["files"] = [
+            ...new Set([
+              ...(packageJson?.["files"] ?? []),
+              relative(cwd(), outDir),
+            ]),
+          ];
+          packageJson["exports"] = {
+            ...(packageJson?.["exports"] ?? {}),
+            ...exportsField,
+          };
+
+          await writeFile("package.json", JSON.stringify(packageJson, null, 2));
         }
-
-        writeFile(indexFilePath, indexContextCJS.code);
-      } else {
-        writeFile(indexFilePath, indexContent);
-      }
-    }
+      });
   },
 });

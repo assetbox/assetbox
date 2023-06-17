@@ -1,4 +1,4 @@
-import type { AssetBoxData, AssetStat } from "@assetbox/tools";
+import type { AssetBoxData } from "@assetbox/tools";
 import { create } from "zustand";
 
 import { client } from "../api";
@@ -8,6 +8,7 @@ interface AssetBoxStore extends AssetBoxData {
 }
 
 export const useAssetBoxStore = create<AssetBoxStore>(() => ({
+  base: "/",
   categories: {},
   usedFiles: {},
   dupeFiles: [],

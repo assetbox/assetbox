@@ -1,5 +1,6 @@
 import { AssetStat } from "@assetbox/tools";
 import type { RadioGroupProps } from "@radix-ui/react-radio-group";
+import camelCase from "camelcase";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,7 +13,7 @@ import { AssetModal } from "../components/modal/AssetModal";
 import { AddedFiles, DupeModal } from "../components/modal/DupeModal";
 import { ButtonGroup } from "../components/ui/ButtonGroup";
 import { Input } from "../components/ui/Input";
-import { isBuild } from "../env";
+import { isBuild, isLibraryMode } from "../env";
 import { useFileUpload, useModal } from "../hooks";
 import { syncAssetBox, useAssetBoxStore } from "../store";
 import { BlobData, cn, fileToBlob, makeFormData } from "../utils";
@@ -321,6 +322,26 @@ export const CategoryPage = () => {
               key={`asset-${asset.filepath}`}
               asset={asset}
               {...(!isBuild && { onClick: () => openModal(asset) })}
+              {...(isLibraryMode && {
+                onClick: () => {
+                  const [filename] = asset.filename.split(".");
+
+                  const iconName = camelCase(filename, {
+                    pascalCase: true,
+                  });
+
+                  toast.promise(
+                    navigator.clipboard.writeText(iconName),
+                    {
+                      success: `Copied '${iconName}' to clipboard`,
+                      error: "Failed to copy to clipboard",
+                    },
+                    {
+                      position: "bottom-center",
+                    }
+                  );
+                },
+              })}
             />
           ))}
         </AssetView>

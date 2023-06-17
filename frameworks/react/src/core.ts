@@ -26,12 +26,9 @@ export const getComponentNamesFromFilePaths = (
         return null;
       }
 
-      const componentName = [
-        camelCase(fileNameTokens[0], {
-          pascalCase: true,
-        }),
-        "Icon",
-      ].join("");
+      const componentName = camelCase(fileNameTokens[0], {
+        pascalCase: true,
+      });
 
       return {
         categoryName: categoryName.toLocaleLowerCase(),

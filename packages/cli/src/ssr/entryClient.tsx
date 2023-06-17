@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.hydrateRoot(
   document.getElementById("root") as Element,
-  <BrowserRouter>
+  <BrowserRouter basename={window.__ASSET_DATA__.base}>
     <App data={window.__ASSET_DATA__} />
   </BrowserRouter>
 );

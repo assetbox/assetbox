@@ -3,9 +3,9 @@ import type { AssetBoxData } from "@assetbox/tools";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 
-export const render = (url: string, data: AssetBoxData) => {
+export const render = (base: string, url: string, data: AssetBoxData) => {
   return ReactDOMServer.renderToString(
-    <StaticRouter location={url}>
+    <StaticRouter location={url} basename={base}>
       <App data={data} />
     </StaticRouter>
   );

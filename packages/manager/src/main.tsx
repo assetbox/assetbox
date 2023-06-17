@@ -12,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <BrowserRouter>
       <App
         data={{
+          base: "/",
           uniqueCoverage: {
             count: 90,
             totalCount: 100,

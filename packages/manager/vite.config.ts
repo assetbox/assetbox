@@ -5,6 +5,7 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   define: {
     "process.env.BUILD": "false",
+    "process.env.MODE": "'app'",
   },
   plugins: [
     react(),
